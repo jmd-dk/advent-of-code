@@ -15,7 +15,6 @@ def minimize(measure):
         fuel_rght = measure(target + 1)
         grad_left = fuel - fuel_left
         grad_rght = fuel_rght - fuel
-        grad_left = fuel - fuel_left
         if grad_left < 0 < grad_rght:
             return target, fuel
         if 0 < grad_left:
