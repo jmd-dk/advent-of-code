@@ -33,9 +33,6 @@ def dijkstra(start, goal, n_tiles=1):
             if visited:
                 unvisited_set.add(new)
                 heapq.heappush(unvisited_heap, (dist, new))
-        if not unvisited_set:
-            # Exhausted
-            return distances
         # Visit
         cur = heapq.heappop(unvisited_heap)[1]
         unvisited_set.remove(cur)
