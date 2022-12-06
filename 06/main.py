@@ -6,12 +6,16 @@ with open('input.txt', 'r') as f:
 
 # Part 1
 def find_marker(signal, width):
+    def update(c, diff):
+        window[c] += diff
+        return (window[c] == 1) - (window[c] == 1 + diff)
     window = collections.Counter(signal[:width-1])
+    n_singles = sum(1 for val in window.values() if val == 1)
     for i in range(width, len(signal) + 1):
-        window[signal[i - 1]] += 1
-        if window.most_common(1)[0][1] == 1:
+        n_singles += update(signal[i - 1], +1)
+        if n_singles == width:
             return i
-        window[signal[i - width]] -= 1
+        n_singles += update(signal[i - width], -1)
 print('part one:', find_marker(signal, 4))
 
 # Part 2
