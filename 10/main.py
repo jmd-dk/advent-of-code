@@ -12,7 +12,7 @@ def execute(instructions, readout_times):
     def check():
         nonlocal readout
         if cycle != readout:
-            return readout
+            return
         yield x
         readout = next(readout_times)
     x = cycle = 1
