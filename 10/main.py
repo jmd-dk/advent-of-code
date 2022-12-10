@@ -28,7 +28,7 @@ def execute(instructions, readout_times):
         cycle += 1
         x += n
 # Part 1
-def get_signal_strength(instructions, radouts):
+def get_signal_strength(instructions, readout_times):
     return sum(
         cycle*x
         for cycle, x in zip(readout_times, execute(instructions, readout_times))
