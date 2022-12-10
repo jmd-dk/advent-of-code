@@ -36,11 +36,11 @@ with open('input.txt', 'r') as f:
         else:
             cwd = cwd[cd_dir]
 
-# Part 1
+# Part one
 size_max = 100_000
 print('part one:', sum(len(d) for d in root if len(d) <= size_max))
 
-# Part 2
+# Part two
 size_tot, size_req = 70_000_000, 30_000_000
 size_del = size_req - (size_tot - len(root))
 print('part two:', min(len(d) for d in root if len(d) >= size_del))

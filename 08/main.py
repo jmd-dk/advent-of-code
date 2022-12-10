@@ -5,7 +5,7 @@ with open('input.txt', 'r') as f:
         grid.append(list(map(int, line.rstrip())))
 shape = len(grid), len(grid[0])
 
-# Part 1
+# Part one
 visible = set()
 identity = lambda x: x
 for transpose in range(2):
@@ -22,7 +22,7 @@ for transpose in range(2):
                     highest = height
 print('part one:', len(visible))
 
-# Part 2
+# Part two
 def get_score(i, j):
     score = 1
     height = grid[i][j]

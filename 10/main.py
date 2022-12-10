@@ -27,7 +27,7 @@ def execute(instructions, readout_times):
         yield from check()
         cycle += 1
         x += n
-# Part 1
+# Part one
 def get_signal_strength(instructions, readout_times):
     return sum(
         cycle*x

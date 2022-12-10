@@ -28,7 +28,7 @@ with open('input.txt') as f:
 stacks_ori = stacks
 reset_stacks = lambda: copy.deepcopy(stacks_ori)
 
-# Part 1
+# Part one
 stacks = reset_stacks()
 for r in procedure:
     for _ in range(r.num):
@@ -36,7 +36,7 @@ for r in procedure:
 get_top = lambda stacks: ''.join(stack[-1] for stack in stacks)
 print('part one:', get_top(stacks))
 
-# Part 2
+# Part two
 stacks = reset_stacks()
 for r in procedure:
     stacks[r.dst] += stacks[r.src][ -r.num:]

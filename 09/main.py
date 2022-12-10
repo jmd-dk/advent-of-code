@@ -15,7 +15,7 @@ with open('input.txt', 'r') as f:
         }[direction]
         steps.append(step)
 
-# Part 1
+# Part one
 def move(steps, n_knots=2):
     knots = tuple([0, 0] for i in range(n_knots))
     head, tail = knots[0], knots[-1]

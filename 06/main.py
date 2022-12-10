@@ -4,7 +4,7 @@ import collections
 with open('input.txt', 'r') as f:
     signal = f.read().strip()
 
-# Part 1
+# Part one
 def find_marker(signal, width):
     def update(c, diff):
         window[c] += diff
@@ -18,6 +18,6 @@ def find_marker(signal, width):
         n_singles += update(signal[i - width], -1)
 print('part one:', find_marker(signal, 4))
 
-# Part 2
+# Part two
 print('part two:', find_marker(signal, 14))
 
