@@ -8,6 +8,8 @@ with open('input.txt', 'r') as f:
         if n is not None:
             n = int(n)
         instructions.append((opcode, n))
+
+# Part one
 def execute(instructions, readout_times):
     def check():
         nonlocal readout
@@ -27,7 +29,6 @@ def execute(instructions, readout_times):
         yield from check()
         cycle += 1
         x += n
-# Part one
 def get_signal_strength(instructions, readout_times):
     return sum(
         cycle*x
