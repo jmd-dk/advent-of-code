@@ -2,11 +2,16 @@ import math, re
 
 # Read in data
 class Int(int):
-    for op, fun in {'<': 'lt', '>': 'gt', '==': 'eq'}.items():
-        exec(
-            f'__{fun}__ = lambda self, other: [self] {op} other '
+    pass
+for op, fun in {'<': 'lt', '>': 'gt', '==': 'eq'}.items():
+    setattr(
+        Int,
+        f'__{fun}__',
+        eval(
+            f'lambda self, other: [self] {op} other '
             f'if isinstance(other, list) else int(self) {op} other'
         )
+    )
 read_packet = lambda f: eval(
     re.sub(r'\d+', lambda m: 'Int({})'.format(m.group()), f.readline())
 )
