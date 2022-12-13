@@ -1,4 +1,4 @@
-import math, re
+import bisect, math, re
 
 # Read in data
 class Int(int):
@@ -38,7 +38,7 @@ packets.sort()
 print(
     'part two:',
     math.prod(
-        1 + packets.index(packet)
+        1 + bisect.bisect_left(packets, packet)
         for packet in divider_packets
     )
 )
