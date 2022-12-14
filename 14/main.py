@@ -1,5 +1,3 @@
-import itertools
-
 # Read in data
 rocks = set()
 xmin = +float('inf')
@@ -19,45 +17,36 @@ with open('input.txt') as f:
             xmin = min(x0, xmin)
             xmax = max(x1, xmax)
             ymax = max(y1, ymax)
-def reset_rocks():
-    rocks.clear()
-    rocks.update(rocks_ori)
-rocks_ori = rocks.copy()
+rocks_ori = rocks
 
 # Part one
-def pour(bottomless=True):
-    sand = spawn
-    while True:
-        if bottomless and not (xmin <= sand[0] <= xmax):
-            return
-        for dx, dy in [(0, 1), (-1, 1), (1, 1)]:
-            sand_new = (sand[0] + dx, sand[1] + dy)
-            if sand_new not in rocks:
-                sand = sand_new
-                break
-        else:
-            break
+def reset():
+    rocks.clear()
+    rocks.update(rocks_ori)
+def pour(sand, bottomless):
+    if bottomless and not (xmin <= sand[0] <= xmax):
+        return True
+    for dx, dy in [(0, 1), (-1, 1), (1, 1)]:
+        sand_new = (sand[0] + dx, sand[1] + dy)
+        if sand_new not in rocks and pour(sand_new, bottomless):
+            return True
     rocks.add(sand)
-    if not bottomless and sand == spawn:
-        return
-    return True
+def measure_sand(bottomless):
+    n = len(rocks)
+    pour(spawn, bottomless)
+    return len(rocks) - n
+rocks = set()
 spawn = (500, 0)
-reset_rocks()
-for n in itertools.count():
-    if not pour():
-        break
-print('part one:', n)
+reset()
+print('part one:', measure_sand(bottomless=True))
 
 # Part two
-reset_rocks()
+reset()
 y_floor = 2 + ymax
 height = y_floor - spawn[1]
 rocks |= {
     (x_floor, y_floor)
     for x_floor in range(spawn[0] - height, spawn[0] + height + 1)
 }
-for n in itertools.count(1):
-    if not pour(False):
-        break
-print('part two:', n)
+print('part one:', measure_sand(bottomless=False))
 
