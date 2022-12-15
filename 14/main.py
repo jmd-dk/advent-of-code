@@ -48,5 +48,5 @@ rocks |= {
     (x_floor, y_floor)
     for x_floor in range(spawn[0] - height, spawn[0] + height + 1)
 }
-print('part one:', measure_sand(bottomless=False))
+print('part two:', measure_sand(bottomless=False))
 
