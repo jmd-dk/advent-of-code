@@ -65,8 +65,36 @@ def count_ruled_out(row):
 print('part one:', count_ruled_out(2_000_000))
 
 # Part two
+def get_rows_cross(lim):
+    lines = []
+    rows_cross = set()
+    for sensor, beacon in sensors.items():
+        d = dist(sensor, beacon)
+        y = sensor[1]
+        for a in range(-1, 2, 2):
+            for sign in range(-1, 2, 2):
+                x0 = sensor[0]
+                x1 = x0 + sign*d
+                b = y - a*x1
+                if sign == -1:
+                    x0, x1 = x1, x0
+                if a == -1:
+                    lines.append((a, b, x0, x1))
+                    continue
+                for (a_other, b_other, x0_other, x1_other) in lines:
+                    db = b - b_other
+                    da = a - a_other
+                    x_cross = -db//da
+                    if x_cross*da != -db:
+                        continue
+                    if not (x0 <= x_cross <= x1) or not (x0_other <= x_cross <= x1_other):
+                        continue
+                    y_cross = a*x_cross + b
+                    if 0 <= y_cross <= lim:
+                        rows_cross.add(y_cross)
+    return rows_cross
 def find_tuning_frequency(lim):
-    for row in range(lim):
+    for row in get_rows_cross(lim):
         ranges = construct_ranges(row)
         if len(ranges) > 1:
             return ranges[0].stop*lim + row
