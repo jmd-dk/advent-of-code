@@ -30,8 +30,8 @@ the solutions:
 
 The magic can be removed simply by commenting out the `memoize()`
 and `analyze()` decorators and replacing the `open_input_file()` call with
-`open('input.txt')`, useful for quick copy-pasting of the code, without having
-to deal with the additional [`magic.py`](magic.py) file.
+`open('input.txt')`, useful for quick copy-pasting of the solution code,
+without having to deal with the additional [`magic.py`](magic.py) file.
 
 
 ### Running with Docker
