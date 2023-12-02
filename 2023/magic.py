@@ -4,7 +4,8 @@ should import what it needs internally.
 """
 
 
-# Context manager for opening the input file
+# Function returning an open context manager
+# for the reading of the input file.
 def open_input_file():
     """The input file is determined as follows:
     Default: input.txt
@@ -43,9 +44,9 @@ def memoize(func):
     return wrapper
 
 
-# Decorator for automatically timing solutions.
+# Decorator for automatically timing solutions and handling exceptions.
 # The return value will be wrapped in a nice Solution container.
-def timer(func):
+def analyze(func):
     import datetime, functools, inspect, pathlib, time, traceback, typing
 
     class Solution(typing.NamedTuple):

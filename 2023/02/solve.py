@@ -29,7 +29,7 @@ def get_initial(part=None):
 
 
 # Solution to part one
-@timer
+@analyze
 def solve_one(games, bag):
     sum_id = 0
     for game_id, game in games.items():
@@ -42,7 +42,7 @@ def solve_one(games, bag):
 
 
 # Solution to part two
-@timer
+@analyze
 def solve_two(games, bag):
     sum_power = 0
     for game_id, game in games.items():

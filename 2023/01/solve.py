@@ -14,7 +14,7 @@ def read():
 
 
 # Solution to part one
-@timer
+@analyze
 def solve_one(lines):
     sum_calibration = 0
     for line in lines:
@@ -26,7 +26,7 @@ def solve_one(lines):
 
 
 # Solution to part two
-@timer
+@analyze
 def solve_two(lines):
     numbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
     values = {number: str(index) for index, number in enumerate(numbers, 1)}
