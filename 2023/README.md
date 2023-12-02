@@ -33,3 +33,12 @@ and `analyze()` decorators and replacing the `open_input_file()` call with
 `open('input.txt')`, useful for quick copy-pasting of the code, without having
 to deal with the additional [`magic.py`](magic.py) file.
 
+
+### Running with Docker
+The solutions may be run through [Docker](https://www.docker.com/).
+To e.g. run day 1, do
+```bash
+cd advent-of-code/2023/
+docker run --rm -v "${PWD}:/mnt" python:3.12 python /mnt/01/solve.py
+```
+
