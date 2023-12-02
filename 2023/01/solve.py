@@ -1,7 +1,11 @@
 import re
 
-import pathlib, sys
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
+# Summon magic
+(
+    lambda: __import__('sys').path.append(
+        str(__import__('pathlib').Path(__file__).parent.parent)
+    )
+)()
 from magic import *
 
 
