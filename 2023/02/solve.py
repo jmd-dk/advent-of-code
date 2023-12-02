@@ -1,4 +1,4 @@
-import collections, math, re
+import collections, math
 
 # Summon magic
 __import__('sys').path.append(str(__import__('pathlib').Path(__file__).parent.parent))
@@ -11,13 +11,13 @@ def read():
     games = collections.defaultdict(list)
     with open_input_file() as file:
         for line in file:
-            game_id = int(re.search(r'\d+', line)[0])
-            for many in line.partition(':')[-1].split(';'):
+            heading, _, rounds = line.partition(':')
+            game_id = int(heading.partition(' ')[-1])
+            for many in rounds.split(';'):
                 subset = collections.Counter()
                 for single in many.split(','):
                     n, gem = single.strip().split()
-                    n = int(n)
-                    subset[gem] += n
+                    subset[gem] += int(n)
                 games[game_id].append(subset)
     return games
 
@@ -33,11 +33,9 @@ def get_initial(part=None):
 def solve_one(games, bag):
     sum_id = 0
     for game_id, game in games.items():
-        for subset in game:
-            if any(n > bag[gem] for gem, n in subset.items()):
-                break
-        else:
-            sum_id += game_id
+        sum_id += game_id * all(
+            n <= bag[gem] for subset in game for gem, n in subset.items()
+        )
     return sum_id
 
 
