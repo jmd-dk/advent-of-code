@@ -39,6 +39,6 @@ The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
 ```bash
 cd advent-of-code/2023/
-docker run --rm -v "${PWD}:/mnt" python:3.12 python /mnt/01/solve.py
+docker run --rm -v "${PWD}:/mnt" python:3.12 python -B /mnt/01/solve.py
 ```
 
