@@ -1,14 +1,15 @@
-import pathlib, sys
-sys.path.append(str(pathlib.Path(__file__).parent.parent))
-from helper import get_input_file
-
 import collections, math, re
 
+import pathlib, sys
+sys.path.append(str(pathlib.Path(__file__).parent.parent))
+from magic import *
 
-# Read data
+
+# Reading in data
+@memoize
 def read():
     games = collections.defaultdict(list)
-    with open(get_input_file()) as file:
+    with open_input_file() as file:
         for line in file:
             game_id = int(re.search(r'\d+', line)[0])
             for many in line.partition(':')[-1].split(';'):
@@ -19,11 +20,17 @@ def read():
                     subset[gem] += n
                 games[game_id].append(subset)
     return games
-games = read()
 
 
-# Part one
-def solve1(games, bag):
+# Initial conditions
+@memoize
+def get_initial(part=None):
+    return (bag := {'red': 12, 'green': 13, 'blue': 14})
+
+
+# Solution to part one
+@timer
+def solve_one(games, bag):
     sum_id = 0
     for game_id, game in games.items():
         for subset in game:
@@ -32,12 +39,11 @@ def solve1(games, bag):
         else:
             sum_id += game_id
     return sum_id
-bag = {'red': 12, 'green': 13, 'blue': 14}
-print('part one:', solve1(games, bag))
 
 
-# Part two
-def solve2(games, bag):
+# Solution to part two
+@timer
+def solve_two(games, bag):
     sum_power = 0
     for game_id, game in games.items():
         minimum = collections.Counter()
@@ -46,5 +52,8 @@ def solve2(games, bag):
                 minimum[gem] = max(minimum[gem], n)
         sum_power += math.prod(minimum.values())
     return sum_power
-print('part two:', solve2(games, bag))
 
+
+# Solve
+print(solve_one(read(), get_initial()))
+print(solve_two(read(), get_initial()))
