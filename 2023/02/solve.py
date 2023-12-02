@@ -31,12 +31,11 @@ def get_initial(part=None):
 # Solution to part one
 @analyze
 def solve_one(games, bag):
-    sum_id = 0
-    for game_id, game in games.items():
-        sum_id += game_id * all(
-            n <= bag[gem] for subset in game for gem, n in subset.items()
-        )
-    return sum_id
+    return sum(
+        game_id
+        for game_id, game in games.items()
+        if all(n <= bag[gem] for subset in game for gem, n in subset.items())
+    )
 
 
 # Solution to part two
