@@ -57,9 +57,14 @@ def analyze(func):
 
         def __str__(self):
             width = 36
+            esc = '\x1b'
+            esc_normal = f'{esc}[0m'
+            esc_gray = f'{esc}[37m'
             s = f'day {self.day}, part {self.part}: {self.value}'
             t = '({})'.format(pretty_time(self.time))
-            return s + ' ' * (width - len(s) - max(len(t), 9)) + t
+            spacing = ' ' * (width - len(s) - max(len(t), 9))
+            t = f'{esc_gray}{t}{esc_normal}'
+            return f'{s}{spacing}{t}'
 
     def pretty_time(t):
         if t <= 0:
