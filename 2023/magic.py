@@ -10,7 +10,7 @@ def open_input_file():
     """The input file is determined as follows:
     Default: input.txt
     DEMO environment variable set to 1: demo-input.txt
-    DEMO environment variable set to 2: demo2-input.txt
+    DEMO environment variable set to <n> > 1: demo<2>-input.txt
     """
     import contextlib, inspect, os, pathlib
 
@@ -21,6 +21,7 @@ def open_input_file():
     filename = ''
     filename += 'demo-' * is_demo1
     filename += 'demo2-' * is_demo2
+    filename += f'demo{demo}-' * (not filename and demo.isdecimal())
     filename += 'input.txt'
 
     @contextlib.contextmanager
@@ -86,13 +87,14 @@ def analyze(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        tic = time.perf_counter()
         value = 'error'
         try:
+            tic = time.perf_counter()
             value = func(*args, **kwargs)
+            toc = time.perf_counter()
         except Exception:
+            toc = time.perf_counter()
             traceback.print_exc()
-        toc = time.perf_counter()
         day = int(pathlib.Path(inspect.getfile(func)).parent.name)
         part = func.__name__.split('_')[-1]
         return Solution(day, part, value, toc - tic)
