@@ -1,6 +1,6 @@
 ## Advent of code 2023
-My solutions to the [2023 advent of code](https://adventofcode.com/2023/),
-written in Python 3.12.
+My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
+puzzles, written in Python 3.12.
 
 
 ### Guidelines adopted
@@ -35,6 +35,16 @@ and `analyze()` decorators and replacing the `open_input_file()` call with
 without having to deal with the additional [`magic.py`](magic.py) file.
 
 
+### Makefile
+With the [`Makefile`](Makefile) you can do the following:
+* `make`: Run all solutions.
+* `make <n>`: Run solution for day `n`.
+* `make format`: Format all solution files using the
+  [Black](https://github.com/psf/black) formatter.
+* `make format-<n>`: Format solution file for day `n`.
+* `make clean`: Cleanup common unwanted, auto-generated files.
+
+
 ### Running with Docker
 The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
@@ -42,4 +52,8 @@ To e.g. run day 1, do
 cd advent-of-code/2023/
 docker run --rm -v "${PWD}:/mnt" python:3.12 python -B /mnt/01/solve.py
 ```
-
+To run all puzzles, you can use
+```bash
+cd advent-of-code/2023/
+docker run --rm -v "${PWD}:/mnt" python:3.12 make -C /mnt
+```
