@@ -36,7 +36,7 @@ dist:
 	@echo
 	@$(MAKE) check
 	@[ -z "$(shell git status -s 2>/dev/null)" ] || git status
-	@[ -n $(git status -s) ] || echo All good! ✨
+	@[ -n "$(shell git status -s 2>/dev/null)" ] || echo All good! ✨
 
 clean:
 	$(RM) -r *__pycache__ */__pycache__
