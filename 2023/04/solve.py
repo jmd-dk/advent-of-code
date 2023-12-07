@@ -14,7 +14,7 @@ def read():
             heading, numbers = line.split(':')
             card_id = int(re.search(r'\d+', heading)[0])
             cards[card_id] = tuple(
-                set(map(int, re.findall('\d+', nums))) for nums in numbers.split('|')
+                set(map(int, re.findall(r'\d+', nums))) for nums in numbers.split('|')
             )
     return cards
 
