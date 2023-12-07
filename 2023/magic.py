@@ -130,7 +130,7 @@ def analyze(func):
                     if not line.strip():
                         continue
                     filename, values_correct = map(str.strip, line.split(':'))
-                    if filename != filename_input:
+                    if filename != filename_input or not values_correct.strip():
                         continue
                     value_correct = (values_correct.split(',') * 2)[
                         ['one', 'two'].index(part)
