@@ -57,7 +57,7 @@ def analyze(func):
         time: float
 
         def __str__(self):
-            width = 36
+            width = 40
             esc = '\x1b'
             esc_normal = f'{esc}[0m'
             esc_gray = f'{esc}[37m'
@@ -67,7 +67,7 @@ def analyze(func):
             v = str(self.value if self.value is not None else 'error')
             t = '({})'.format(pretty_time(self.time))
             spacing = ' ' * (width - len(s) - len(v) - max(len(t), 9))
-            spacing = ' ' * (not spacing)
+            spacing += ' ' * (not spacing)
             v = (esc_red if self.value is None else esc_green) + f'{v}{esc_normal}'
             t = f'{esc_gray}{t}{esc_normal}'
             return f'{s}{v}{spacing}{t}'
