@@ -30,9 +30,13 @@ define perform_check
 endef
 
 dist:
+	@$(MAKE) clean
+	@echo
 	@$(MAKE) format
+	@echo
 	@$(MAKE) check
-	@echo All good! ✨
+	@[ -z "$(shell git status -s 2>/dev/null)" ] || git status
+	@[ -n $(git status -s) ] || echo All good! ✨
 
 clean:
 	$(RM) -r *__pycache__ */__pycache__
