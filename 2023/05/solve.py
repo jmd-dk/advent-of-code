@@ -48,12 +48,6 @@ def solve_two(seeds, maps):
         def __lt__(self, other):
             return self.src_start < other.src_start
 
-    seed_ranges = [
-        range(start, start + length) for start, length in zip(seeds[::2], seeds[1::2])
-    ]
-
-    maps = [sorted(Mapping(*mapping) for mapping in mappings) for mappings in maps]
-
     def apply_mapping(mapping, index=0):
         if index == len(maps):
             return mapping.start
@@ -82,6 +76,10 @@ def solve_two(seeds, maps):
         recurse(identity_pointer, mapping.stop)
         return value_min
 
+    seed_ranges = [
+        range(start, start + length) for start, length in zip(seeds[::2], seeds[1::2])
+    ]
+    maps = [sorted(Mapping(*mapping) for mapping in mappings) for mappings in maps]
     return min(apply_mapping(mapping) for mapping in seed_ranges)
 
 
