@@ -45,6 +45,7 @@ With the [`Makefile`](Makefile) you can do the following:
 * `make check`: Run all solutions and compare the results to known answers.
   * `make check-<n>`: Run solution for day `n` and compare the result to
     known answer.
+* `make dist`: Run `make format` and `make check`.
 * `make clean`: Cleanup common unwanted, auto-generated files.
 
 

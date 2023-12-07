@@ -38,4 +38,4 @@ clean:
 	$(RM) -r *__pycache__ */__pycache__
 	$(RM) *.swp */*.swp
 
-.PHONY: $(puzzles) $(format) format $(check) check clean
+.PHONY: $(puzzles) $(format) format $(check) check dist clean

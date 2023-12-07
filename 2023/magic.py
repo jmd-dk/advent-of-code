@@ -110,7 +110,7 @@ def analyze(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        filename_solutions = 'solutions.txt'
+        filename_answer = 'answer.txt'
         directory = pathlib.Path(inspect.getfile(func)).parent
         day = int(directory.name)
         part = func.__name__.split('_')[-1]
@@ -123,7 +123,7 @@ def analyze(func):
             toc = time.perf_counter()
             traceback.print_exc()
         correct = None
-        if (path := directory / filename_solutions).is_file():
+        if (path := directory / filename_answer).is_file():
             filename_input = get_input_filename()
             with open(path) as file:
                 for line in file:
