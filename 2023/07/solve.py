@@ -91,20 +91,18 @@ def solve_two(hands):
                 yield from check((0, 4))
                 yield from check((0, 5))
 
-            def attempt_replacements():
-                for label in self.labels:
-                    if label == 'J':
-                        continue
-                    with self.replace_jokers(label):
-                        set_card_values()
-                        self.kind = next(determine_kind())
-                    yield self.kind
-
-            self.kind = max(attempt_replacements())
+            with self.replace_jokers():
+                set_card_values()
+            self.kind = next(determine_kind())
             set_card_values()
 
         @contextlib.contextmanager
-        def replace_jokers(self, label):
+        def replace_jokers(self):
+            most_common = collections.Counter(self.cards).most_common(2)
+            get_label = lambda replacement: {'J': replacement}.get(
+                most_common[0][0], most_common[0][0]
+            )
+            label = get_label('A' if len(most_common) == 1 else most_common[1][0])
             self.cards = (cards := self.cards).replace('J', label)
             yield
             self.cards = cards
