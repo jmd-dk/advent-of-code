@@ -99,10 +99,10 @@ def solve_two(hands):
         @contextlib.contextmanager
         def replace_jokers(self):
             most_common = collections.Counter(self.cards).most_common(2)
-            get_label = lambda replacement: {'J': replacement}.get(
-                most_common[0][0], most_common[0][0]
+            label = {'J': ('A' if len(most_common) == 1 else most_common[1][0])}.get(
+                most_common[0][0],
+                most_common[0][0],
             )
-            label = get_label('A' if len(most_common) == 1 else most_common[1][0])
             self.cards = (cards := self.cards).replace('J', label)
             yield
             self.cards = cards
