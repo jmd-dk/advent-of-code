@@ -4,7 +4,7 @@ puzzles, written in Python 3.12.
 
 
 ### Guidelines adopted
-* Python standard library only (no additional packages).
+* Python standard library only (no external packages).
 * Parts one and two are to be solved separately.
 
 Each day gets its own subdirectory with a single Python script
@@ -45,8 +45,8 @@ With the [`Makefile`](Makefile) you can do the following:
 * `make check`: Run all solutions and compare the results to known answers.
   * `make check-<n>`: Run solution for day `n` and compare the result to
     known answer.
-* `make dist`: Run `make format` and `make check`.
 * `make clean`: Cleanup common unwanted, auto-generated files.
+* `make dist`: Run `make clean`, `make format`, `make check` and `git status`.
 
 
 ### Running with Docker
@@ -60,4 +60,10 @@ To run all puzzles, you can use
 ```bash
 cd advent-of-code/2023/
 docker run --rm -v "${PWD}:/mnt" python:3.12 make -C /mnt
+```
+To run the exhaustive `dist` target on the newest Python 3.12 with upgraded
+packages:
+```bash
+cd advent-of-code/2023/
+docker run -t --rm -v "${PWD}:/mnt" python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && git config --global --add safe.directory /mnt && make -C /mnt/2023 dist"
 ```
