@@ -54,16 +54,16 @@ The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
 ```bash
 cd advent-of-code/2023/
-docker run --rm -v "${PWD}:/mnt" python:3.12 python -B /mnt/01/solve.py
+docker run --rm -v "${PWD}:/mnt" -w /mnt python:3.12 make 01
 ```
 To run all puzzles, you can use
 ```bash
 cd advent-of-code/2023/
-docker run --rm -v "${PWD}:/mnt" python:3.12 make -C /mnt
+docker run --rm -v "${PWD}:/mnt" -w /mnt python:3.12 make
 ```
 To run the exhaustive `dist` target on the newest Python 3.12 with upgraded
 packages:
 ```bash
 cd advent-of-code/
-docker run -t --rm -v "${PWD}:/mnt" python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && git config --global --add safe.directory /mnt && make -C /mnt/2023 dist"
+docker run -t --rm -v "${PWD}:/mnt" -w /mnt/2023 python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && git config --global --add safe.directory /mnt && make dist"
 ```
