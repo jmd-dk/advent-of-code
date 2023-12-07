@@ -8,7 +8,7 @@ from magic import *
 # Reading in data
 @memoize
 def read():
-    Mapping = collections.namedtuple('Mapping', ('dst_start', 'src_range'))
+    Mapping = collections.namedtuple('Mapping', ('dst_start', 'src_start', 'length'))
     with open_input_file() as file:
         seeds = list(map(int, re.findall(r'\d+', file.readline())))
         maps = []
@@ -17,9 +17,7 @@ def read():
                 maps.append(mappings := [])
                 file.readline()
                 continue
-            dst_start, src_start, length = map(int, re.findall(r'\d+', line))
-            src_range = range(src_start, src_start + length)
-            mappings.append(Mapping(dst_start, src_range))
+            mappings.append(Mapping(*map(int, re.findall(r'\d+', line))))
     return seeds, maps
 
 
@@ -29,26 +27,62 @@ def solve_one(seeds, maps):
     numbers = seeds
     for mappings in maps:
         for i, number in enumerate(numbers):
-            for mapping in mappings:
-                if number in mapping.src_range:
-                    numbers[i] += mapping.dst_start - mapping.src_range.start
+            for dst_start, src_start, length in mappings:
+                if src_start <= number < src_start + length:
+                    numbers[i] += dst_start - src_start
                     break
     return min(numbers)
 
 
 # Solution to part two
 @analyze
-def solve_two(seed_ranges, maps):
-    number_min = float('inf')
-    for start, length in zip(seed_ranges[::2], seed_ranges[1::2]):
-        for number in range(start, start + length):
-            for mappings in maps:
-                for mapping in mappings:
-                    if number in mapping.src_range:
-                        number += mapping.dst_start - mapping.src_range.start
-                        break
-            number_min = min(number_min, number)
-    return number_min
+def solve_two(seeds, maps):
+    class Mapping:
+        def __init__(self, start, src_start, length):
+            self.start = start  # dst_start
+            self.src_start = src_start
+            self.stop = start + length  # dst_stop
+            self.src_stop = src_start + length
+            self.Δ = start - src_start
+
+        def __lt__(self, other):
+            return self.src_start < other.src_start
+
+    seed_ranges = [
+        range(start, start + length) for start, length in zip(seeds[::2], seeds[1::2])
+    ]
+
+    maps = [sorted(Mapping(*mapping) for mapping in mappings) for mappings in maps]
+
+    def apply_mapping(mapping, index=0):
+        if index == len(maps):
+            return mapping.start
+
+        def recurse(mapping, stop=None):
+            nonlocal value_min
+            if stop is None:
+                value = apply_mapping(mapping, index + 1)
+            elif (start := mapping) < stop:
+                value = apply_mapping(range(start, stop), index + 1)
+            else:
+                return
+            value_min = min(value_min, value)
+
+        value_min = float('inf')
+        identity_pointer = mapping.start
+        for mapping_next in maps[index]:
+            start = max(mapping_next.src_start, mapping.start)
+            stop = min(mapping_next.src_stop, mapping.stop)
+            if stop <= start:
+                continue
+            mapping_next_reduced = Mapping(start + mapping_next.Δ, start, stop - start)
+            recurse(identity_pointer, start)
+            identity_pointer = stop
+            recurse(mapping_next_reduced)
+        recurse(identity_pointer, mapping.stop)
+        return value_min
+
+    return min(apply_mapping(mapping) for mapping in seed_ranges)
 
 
 # Solve
