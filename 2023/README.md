@@ -65,5 +65,5 @@ To run the exhaustive `dist` target on the newest Python 3.12 with upgraded
 packages:
 ```bash
 cd advent-of-code/
-docker run -t --rm -v "${PWD}:/mnt" -w /mnt/2023 python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && git config --global --add safe.directory /mnt && make dist"
+docker run -t --rm -v "${PWD}:/mnt" -w /mnt/2023 python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && rm requirements.txt && git config --global --add safe.directory /mnt && make dist"
 ```
