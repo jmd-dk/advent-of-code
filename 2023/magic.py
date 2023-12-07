@@ -61,11 +61,16 @@ def analyze(func):
             esc = '\x1b'
             esc_normal = f'{esc}[0m'
             esc_gray = f'{esc}[37m'
-            s = f'day {self.day}, part {self.part}: {self.value}'
+            esc_red = f'{esc}[91m'
+            esc_green = f'{esc}[92m'
+            s = f'day {self.day}, part {self.part}: '
+            v = str(self.value if self.value is not None else 'error')
             t = '({})'.format(pretty_time(self.time))
-            spacing = ' ' * (width - len(s) - max(len(t), 9))
+            spacing = ' ' * (width - len(s) - len(v) - max(len(t), 9))
+            spacing = ' ' * (not spacing)
+            v = (esc_red if self.value is None else esc_green) + f'{v}{esc_normal}'
             t = f'{esc_gray}{t}{esc_normal}'
-            return f'{s}{spacing}{t}'
+            return f'{s}{v}{spacing}{t}'
 
     def pretty_time(t):
         if t <= 0:
@@ -87,7 +92,7 @@ def analyze(func):
 
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
-        value = 'error'
+        value = None
         try:
             tic = time.perf_counter()
             value = func(*args, **kwargs)
