@@ -65,7 +65,7 @@ def analyze(func):
         time: float
 
         def __str__(self):
-            width = 38
+            width = 42
             esc = '\x1b'
             esc_normal = f'{esc}[0m'
             esc_gray = f'{esc}[37m'

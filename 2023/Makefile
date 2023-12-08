@@ -24,6 +24,7 @@ check: $(check)
 $(check):
 	@echo Demo: && DEMO=1 $(call perform_check)
 	@test ! -f $(subst check-,,$@)/demo2-input.txt || (echo Demo2: && DEMO=2 $(call perform_check))
+	@test ! -f $(subst check-,,$@)/demo3-input.txt || (echo Demo3: && DEMO=3 $(call perform_check))
 	@echo Full input: && $(call perform_check)
 define perform_check
     $(MAKE) $(subst check-,,$@) 2>/dev/null | tee /dev/tty | grep ✔ | wc -l | grep 2 >/dev/null
