@@ -21,7 +21,7 @@ def solve_one(histories):
             return [n - m for m, n in zip(numbers, numbers[1:])]
 
         sum_right = 0
-        while not all(n == 0 for n in numbers):
+        while any(numbers):
             sum_right += numbers[-1]
             numbers = diff(numbers)
         return sum_right
@@ -38,7 +38,7 @@ def solve_two(histories):
 
         sum_left = 0
         sign = -1
-        while not all(n == 0 for n in numbers):
+        while any(numbers):
             sum_left += (sign := -sign) * numbers[0]
             numbers = diff(numbers)
         return sum_left
