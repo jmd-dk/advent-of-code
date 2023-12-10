@@ -35,8 +35,9 @@ used by the solutions:
 * `analyze()`: For easily timing the solution algorithms, comparing the
   solutions to the correct answers and pretty printing the results.
 
-> [!TIP] The magic can be removed simply by commenting out the `memoize()`
-> and `analyze()` decorators and replacing the `open_input_file()` call with
+> [!TIP]
+> The magic can be removed simply by commenting out the `memoize()` and
+> `analyze()` decorators and replacing the `open_input_file()` call with
 > `open('input.txt')`, useful for quick copy-pasting of the solution code,
 > without having to deal with the additional [`magic.py`](magic.py) file.
 
