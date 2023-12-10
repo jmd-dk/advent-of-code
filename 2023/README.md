@@ -1,4 +1,4 @@
-# 🎄 Advent of code :christmas_tree: 2023
+# :christmas_tree: Advent of code 2023 :jigsaw:
 My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
 puzzles, :christmas_tree: written in **Python 3.12**. :snake:
 
@@ -22,7 +22,7 @@ called `solve.py`, defining the following functions:
 > code share.
 
 
-## :magic_wand: Magic
+## :sparkles: Magic
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
 * `open_input_file()`: For opening input files (full puzzle input by default,
