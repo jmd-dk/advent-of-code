@@ -35,12 +35,10 @@ def solve_two(lines):
     pattern_spelling = '|'.join(numbers)
     pattern_forward = '{}|{}'.format(pattern_digit, pattern_spelling)
     pattern_backward = '{}|{}'.format(pattern_digit, pattern_spelling[::-1])
-    regex_forward = re.compile(pattern_forward)
-    regex_backward = re.compile(pattern_backward)
     sum_calibration = 0
     for line in lines:
-        m = values.get(m := re.search(regex_forward, line)[0], m)
-        n = values.get(n := re.search(regex_backward, line[::-1])[0], n)
+        m = values.get(m := re.search(pattern_forward, line)[0], m)
+        n = values.get(n := re.search(pattern_backward, line[::-1])[0], n)
         calibration = int(m + n)
         sum_calibration += calibration
     return sum_calibration

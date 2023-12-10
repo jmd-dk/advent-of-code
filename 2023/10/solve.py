@@ -20,9 +20,8 @@ def solve_one(sketch):
 
     @functools.cache
     def get_start():
-        regex = re.compile(r'S')
         for i, row in enumerate(sketch):
-            if match := re.search(regex, row):
+            if match := re.search(r'S', row):
                 return i, match.start()
 
     @functools.cache
@@ -78,9 +77,8 @@ def solve_two(sketch):
 
     @functools.cache
     def get_start():
-        regex = re.compile(r'S')
         for i, row in enumerate(sketch):
-            if match := re.search(regex, row):
+            if match := re.search(r'S', row):
                 return i, match.start()
 
     @functools.cache
