@@ -1,0 +1,4 @@
+demo-input.txt: 8, None
+demo2-input.txt: None, 4
+demo3-input.txt: None, 8
+input.txt: 6942, 297
