@@ -4,6 +4,7 @@ puzzles, written in **Python 3.12*** 🐍
 
 
 </br>
+
 ## 📜 Guidelines adopted
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
@@ -24,6 +25,7 @@ called `solve.py`, defining the following functions:
 
 
 </br>
+
 ## ✨ Magic
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
@@ -46,6 +48,7 @@ used by the solutions:
 
 
 </br>
+
 ## 🤖 Makefile
 With the [`Makefile`](Makefile) you can do the following:
 * `make`: Run all solutions.
@@ -61,6 +64,7 @@ With the [`Makefile`](Makefile) you can do the following:
 
 
 </br>
+
 ## 🐋 Running with Docker
 The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
