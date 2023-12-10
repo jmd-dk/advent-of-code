@@ -1,4 +1,5 @@
-demo-input.txt: 8, None
-demo2-input.txt: None, 4
-demo3-input.txt: None, 8
+demo-input.txt: 4, None
+demo2-input.txt: 8, None
+demo3-input.txt: None, 4
+demo4-input.txt: None, 8
 input.txt: 6942, 297
