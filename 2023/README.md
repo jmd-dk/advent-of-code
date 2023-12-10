@@ -9,10 +9,10 @@ puzzles, written in **Python 3.12**.
 
 Each day gets its own subdirectory with a single Python script
 called `solve.py`, defining the following functions:
-* `read()`: For reading **input** into some appropriate data structure.
+* `read()`: For **reading input** into some appropriate data structure.
   Further data processing should be avoided.
-* `solve_one()`: Solution algorithm for part **one**.
-* `solve_two()`: Solution algorithm for part **two**.
+* `solve_one()`: Solution algorithm for **part one**.
+* `solve_two()`: Solution algorithm for **part two**.
 * `get_initial()` (optional): For setting **initial conditions**.
 
 > [!NOTE]
@@ -35,10 +35,10 @@ used by the solutions:
 * `analyze()`: For easily timing the solution algorithms, comparing the
   solutions to the correct answers and pretty printing the results.
 
-The magic can be removed simply by commenting out the `memoize()`
-and `analyze()` decorators and replacing the `open_input_file()` call with
-`open('input.txt')`, useful for quick copy-pasting of the solution code,
-without having to deal with the additional [`magic.py`](magic.py) file.
+> [!TIP] The magic can be removed simply by commenting out the `memoize()`
+> and `analyze()` decorators and replacing the `open_input_file()` call with
+> `open('input.txt')`, useful for quick copy-pasting of the solution code,
+> without having to deal with the additional [`magic.py`](magic.py) file.
 
 
 ### Makefile
