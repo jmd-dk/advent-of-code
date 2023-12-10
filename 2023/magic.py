@@ -66,29 +66,41 @@ def analyze(func):
 
         def __str__(self):
             width = 42
-            esc = '\x1b'
-            esc_normal = f'{esc}[0m'
-            esc_gray = f'{esc}[37m'
-            esc_red = f'{esc}[91m'
-            esc_green = f'{esc}[92m'
-            esc_yellow = f'{esc}[93m'
             s = f'day {self.day}, part {self.part}: '
             v = str(self.value if self.value is not None else 'error')
             t = '({})'.format(pretty_time(self.time))
             spacing = ' ' * (width - len(s) - len(v) - max(len(t), 9))
             spacing += ' ' * (not spacing)
-            v = (
-                esc_red
-                if self.value is None
-                else (esc_green if self.correct else esc_yellow)
-            ) + f'{v}{esc_normal}'
+            v = escape(
+                (
+                    'red'
+                    if self.value is None
+                    else ('green' if self.correct else 'yellow')
+                ),
+                v,
+            )
             c = {
                 None: ' ',
-                False: f'{esc_red}✘{esc_normal}',
-                True: f'{esc_green}✔{esc_normal}',
+                False: escape('red', '✘'),
+                True: escape('green', '✔'),
             }[self.correct]
-            t = f'{esc_gray}{t}{esc_normal}'
+            t = escape('gray', t)
             return f'{s}{v}{spacing}{c} {t}'
+
+    def escape(kind, s=None):
+        escapes = {
+            'normal': '0m',
+            'up': '1A',
+            'gray': '37m',
+            'red': '91m',
+            'green': '92m',
+            'yellow': '93m',
+        }
+        code = f'\x1b[{escapes[kind]}'
+        if s is None:
+            return code
+        code_normal = escape('normal')
+        return f'{code}{s}{code_normal}'
 
     def pretty_time(t):
         if t <= 0:
@@ -108,6 +120,10 @@ def analyze(func):
                 return f'{num} {unit}'
         return str(datetime.timedelta(seconds=int(round(t)))).removeprefix('0:')
 
+    class DontPrint:
+        def __str__(self):
+            return escape('up')
+
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         filename_answer = 'answer.txt'
@@ -115,13 +131,7 @@ def analyze(func):
         day = int(directory.name)
         part = func.__name__.split('_')[-1]
         value = None
-        try:
-            tic = time.perf_counter()
-            value = func(*args, **kwargs)
-            toc = time.perf_counter()
-        except Exception:
-            toc = time.perf_counter()
-            traceback.print_exc()
+        value_correct = '?'
         correct = None
         if (path := directory / filename_answer).is_file():
             filename_input = get_input_filename()
@@ -135,8 +145,18 @@ def analyze(func):
                     value_correct = (values_correct.split(',') * 2)[
                         ['one', 'two'].index(part)
                     ].strip()
-                    correct = str(value) == value_correct
                     break
+        if value_correct == 'None':
+            return DontPrint()
+        try:
+            tic = time.perf_counter()
+            value = func(*args, **kwargs)
+            toc = time.perf_counter()
+        except Exception:
+            toc = time.perf_counter()
+            traceback.print_exc()
+        if value_correct != '?':
+            correct = str(value) == value_correct
         return Solution(day, part, value, correct, toc - tic)
 
     return wrapper

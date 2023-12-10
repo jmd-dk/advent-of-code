@@ -27,7 +27,7 @@ $(check):
 	@test ! -f $(subst check-,,$@)/demo3-input.txt || (echo Demo3: && DEMO=3 $(call perform_check))
 	@echo Full input: && $(call perform_check)
 define perform_check
-    $(MAKE) $(subst check-,,$@) 2>/dev/null | tee /dev/tty | grep ✔ | wc -l | grep 2 >/dev/null
+    $(MAKE) $(subst check-,,$@) 2>/dev/null | tee /dev/tty | grep ✘ | wc -l | grep 0 >/dev/null
 endef
 
 dist:
@@ -40,7 +40,7 @@ dist:
 	@[ -n "$(shell git status -s 2>/dev/null)" ] || echo All good! ✨
 
 clean:
-	$(RM) -r *__pycache__ */__pycache__
+	$(RM) -r __pycache__ */__pycache__
 	$(RM) *.swp */*.swp
 
 .PHONY: $(puzzles) $(format) format $(check) check dist clean
