@@ -22,9 +22,10 @@ $(format):
 check = $(addprefix check-,$(puzzles))
 check: $(check)
 $(check):
-	@echo Demo: && DEMO=1 $(call perform_check)
-	@test ! -f $(subst check-,,$@)/demo2-input.txt || (echo Demo2: && DEMO=2 $(call perform_check))
-	@test ! -f $(subst check-,,$@)/demo3-input.txt || (echo Demo3: && DEMO=3 $(call perform_check))
+	@for demo in $(shell grep -i '# *demo *' $(subst check-,,$@)/demo-input.txt | awk '{print $$NF}'); do \
+	    echo Demo $${demo}; \
+	    DEMO=$${demo} $(call perform_check); \
+	done
 	@echo Full input: && $(call perform_check)
 define perform_check
     $(MAKE) $(subst check-,,$@) 2>/dev/null | tee /dev/tty | grep ✘ | wc -l | grep 0 >/dev/null

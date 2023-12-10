@@ -1,2 +1,2 @@
-demo-input.txt: 288, 71503
-input.txt: 505494, 23632299
+Demo 1: 288, 71503
+Full input: 505494, 23632299

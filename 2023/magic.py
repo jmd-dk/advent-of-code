@@ -7,36 +7,23 @@ should import what it needs internally.
 # Function returning an open context manager
 # for the reading of the input file.
 def open_input_file():
-    import contextlib, inspect, pathlib
+    import contextlib, inspect, io, pathlib
 
     @contextlib.contextmanager
     def open_file(path):
         with open(path) as file:
             yield file
 
+    @contextlib.contextmanager
+    def open_text(text):
+        with io.StringIO(text) as file:
+            yield file
+
     directory = pathlib.Path(inspect.stack()[1][1]).parent
-    return open_file(directory / get_input_filename())
-
-
-# Function returning the input data file in accordance
-# with to the DEMO environment variable.
-def get_input_filename():
-    """The input file name is determined as follows:
-    Default: input.txt
-    DEMO environment variable set to 1: demo-input.txt
-    DEMO environment variable set to <n> > 1: demo<2>-input.txt
-    """
-    import os
-
-    demo = os.environ.get('DEMO', '').lower()
-    is_demo1 = demo in {'1', 'one', 't', 'true', 'y', 'yes'}
-    is_demo2 = demo in {'2', 'two'}
-    filename = ''
-    filename += 'demo-' * is_demo1
-    filename += 'demo2-' * is_demo2
-    filename += f'demo{demo}-' * (not filename and demo.isdecimal())
-    filename += 'input.txt'
-    return filename
+    filename, demo = _get_input_info()
+    if not demo:
+        return open_file(directory / filename)
+    return open_text(_get_demo(directory))
 
 
 # Decorator cache which always returns a fresh copy
@@ -87,20 +74,30 @@ def analyze(func):
             t = escape('gray', t)
             return f'{s}{v}{spacing}{c} {t}'
 
-    def escape(kind, s=None):
-        escapes = {
-            'normal': '0m',
-            'up': '1A',
-            'gray': '37m',
-            'red': '91m',
-            'green': '92m',
-            'yellow': '93m',
-        }
-        code = f'\x1b[{escapes[kind]}'
-        if s is None:
-            return code
-        code_normal = escape('normal')
-        return f'{code}{s}{code_normal}'
+    class DontPrint:
+        def __str__(self):
+            return escape('up')
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        directory = pathlib.Path(inspect.getfile(func)).parent
+        day = int(directory.name)
+        part = func.__name__.split('_')[-1]
+        value_correct = _get_answers(directory)[['one', 'two'].index(part)]
+        if value_correct is None:
+            return DontPrint()
+        value = None
+        try:
+            tic = time.perf_counter()
+            value = func(*args, **kwargs)
+            toc = time.perf_counter()
+        except Exception:
+            toc = time.perf_counter()
+            traceback.print_exc()
+        correct = None
+        if value_correct != '?':
+            correct = str(value) == value_correct
+        return Solution(day, part, value, correct, toc - tic)
 
     def pretty_time(t):
         if t <= 0:
@@ -120,43 +117,96 @@ def analyze(func):
                 return f'{num} {unit}'
         return str(datetime.timedelta(seconds=int(round(t)))).removeprefix('0:')
 
-    class DontPrint:
-        def __str__(self):
-            return escape('up')
-
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        filename_answer = 'answer.txt'
-        directory = pathlib.Path(inspect.getfile(func)).parent
-        day = int(directory.name)
-        part = func.__name__.split('_')[-1]
-        value = None
-        value_correct = '?'
-        correct = None
-        if (path := directory / filename_answer).is_file():
-            filename_input = get_input_filename()
-            with open(path) as file:
-                for line in file:
-                    if not line.strip():
-                        continue
-                    filename, values_correct = map(str.strip, line.split(':'))
-                    if filename != filename_input or not values_correct.strip():
-                        continue
-                    value_correct = (values_correct.split(',') * 2)[
-                        ['one', 'two'].index(part)
-                    ].strip()
-                    break
-        if value_correct == 'None':
-            return DontPrint()
-        try:
-            tic = time.perf_counter()
-            value = func(*args, **kwargs)
-            toc = time.perf_counter()
-        except Exception:
-            toc = time.perf_counter()
-            traceback.print_exc()
-        if value_correct != '?':
-            correct = str(value) == value_correct
-        return Solution(day, part, value, correct, toc - tic)
+    def escape(kind, s=None):
+        escapes = {
+            'normal': '0m',
+            'up': '1A',
+            'gray': '37m',
+            'red': '91m',
+            'green': '92m',
+            'yellow': '93m',
+        }
+        code = f'\x1b[{escapes[kind]}'
+        if s is None:
+            return code
+        code_normal = escape('normal')
+        return f'{code}{s}{code_normal}'
 
     return wrapper
+
+
+# Function returning the input data file as well as the demo number
+# in accordance with to the DEMO environment variable.
+def _get_input_info(*, info=[]):
+    import os, warnings
+
+    if info:
+        return info
+    demo = os.environ.get('DEMO', '').strip().lower().removeprefix('demo')
+    if demo.isdecimal():
+        demo = int(demo)
+    elif demo:
+        warnings.warn(f'Did not understand DEMO={demo!r}')
+        demo = None
+    filename = 'input.txt'
+    if demo:
+        filename = f'demo-{filename}'
+    info += filename, demo
+    return _get_input_info()
+
+
+# Function for reading in demos
+def _get_demo(directory, *, demos={}):
+    import re
+
+    filename, demo = _get_input_info()
+    texts = demos.get(directory)
+    if texts is not None:
+        return texts[demo]
+    with open(directory / filename) as file:
+        texts = {}
+        text = None
+        for line in file:
+            if match := re.search(r'# *demo *(\d+)', line.lower()):
+                texts[int(match[1])] = text = []
+                continue
+            if text is None:
+                continue
+            text.append(line)
+    for demo, text in texts.items():
+        while not text[-1].strip():
+            text.pop()
+        texts[demo] = ''.join(text)
+    demos[directory] = texts
+    return _get_demo(directory)
+
+
+# Function for reading in correct answers
+def _get_answers(directory, *, answers={}):
+    import re
+
+    values = answers.get(directory)
+    if values is not None:
+        return values
+    filename = 'answer.txt'
+    values = ('?', '?')
+    if not (path := directory / filename).is_file():
+        answers[directory] = values
+        return _get_answers(directory)
+    _, demo = _get_input_info()
+    with open(path) as file:
+        for line in file:
+            if not line.strip():
+                continue
+            kind, values_line = line.split(':')
+            if demo and not re.match(rf'demo *{demo}\s*$', kind.lower()):
+                continue
+            if not demo and 'demo' in kind.lower():
+                continue
+            values = (tuple(map(str.strip, values_line.split(','))) * 2)[:2]
+            values = tuple(
+                None if value.lower() == 'none' else value for value in values
+            )
+            break
+    answers[directory] = values
+    return _get_answers(directory)
