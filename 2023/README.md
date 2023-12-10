@@ -1,24 +1,30 @@
 ## Advent of code 2023
 My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
-puzzles, written in Python 3.12.
+puzzles, written in **Python 3.12**.
 
 
 ### Guidelines adopted
-* Python standard library only (no external packages).
-* Parts one and two are to be solved separately.
+* Python **standard library** only (no external packages).
+* Parts one and two are to be solved **separately**.
 
 Each day gets its own subdirectory with a single Python script
 called `solve.py`, defining the following functions:
-* `read()`: For reading input into some appropriate data structure.
-  As far as possible, further data processing should be avoided.
-* `solve_one()`: Solution algorithm for part one.
-* `solve_two()`: Solution algorithm for part two.
-* `get_initial()` (optional): For setting initial conditions.
+* `read()`: For reading **input** into some appropriate data structure.
+  Further data processing should be avoided.
+* `solve_one()`: Solution algorithm for part **one**.
+* `solve_two()`: Solution algorithm for part **two**.
+* `get_initial()` (optional): For setting **initial conditions**.
+
+> **Note**
+> Having `solve_one()` and `solve_two()` be separate with no code shared
+> naturally leads to code repetition. However, previous year's experience
+> has shown that the simplicity of part one is often ruined by allowing
+> code share.
 
 
 ### Magic
-In [`magic.py`](magic.py) we define helper functionality used by
-the solutions:
+In [`magic.py`](magic.py) we define helper functionality
+used by the solutions:
 * `open_input_file()`: For opening input files (full puzzle input by default,
   demo input selectable through the `DEMO` environment variable).
 * `memoize()`: Caching functionality, always emitting fresh copies. This is
