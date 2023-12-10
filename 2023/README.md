@@ -15,10 +15,10 @@ called `solve.py`, defining the following functions:
 * `solve_two()`: Solution algorithm for part **two**.
 * `get_initial()` (optional): For setting **initial conditions**.
 
-> **Note**
+> [!NOTE]
 > Having `solve_one()` and `solve_two()` be separate with no code shared
 > naturally leads to code repetition. However, previous year's experience
-> has shown that the simplicity of part one is often ruined by allowing
+> has shown that the simplicity of part one is often tainted by allowing
 > code share.
 
 
