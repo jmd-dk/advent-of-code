@@ -59,9 +59,9 @@ def solve_one(sketch):
             if pipe == 'S' and count:
                 return count
             backwards = negate(direction)
-            for direction in pipes[pipe]:
-                if direction != backwards:
-                    break
+            direction = next(
+                direction for direction in pipes[pipe] if direction != backwards
+            )
             position = add(position, direction)
 
     lookup = lambda position: sketch[position[0]][position[1]]
@@ -117,12 +117,12 @@ def solve_two(sketch):
             pipe = lookup(position)
             if pipe not in '|-':
                 vertices.append(position)
-            if pipe == 'S' and len(vertices) > 1:
+            if pipe == 'S' and count:
                 return count, vertices
             backwards = negate(direction)
-            for direction in pipes[pipe]:
-                if direction != backwards:
-                    break
+            direction = next(
+                direction for direction in pipes[pipe] if direction != backwards
+            )
             position = add(position, direction)
 
     lookup = lambda position: sketch[position[0]][position[1]]
