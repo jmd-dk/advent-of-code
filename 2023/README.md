@@ -1,6 +1,6 @@
-# 🎄 Advent of code 2023 :whale2:
+# 🎄 Advent of code :christmas_tree: 2023
 My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
-puzzles, written in **Python 3.12**. :snake:
+puzzles, :christmas_tree: written in **Python 3.12**. :snake:
 
 
 ## Guidelines adopted
