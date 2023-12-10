@@ -26,7 +26,8 @@ called `solve.py`, defining the following functions:
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
 * `open_input_file()`: For opening input files (full puzzle input by default,
-  demo input selectable through the `DEMO` environment variable).
+  demo input selectable through the `DEMO` environment variable; `DEMO=1`,
+  `DEMO=2`, ...).
 * `memoize()`: Caching functionality, always emitting fresh copies. This is
   used with e.g. `read()` so that both part one and two can simply call this
   function, without the input file being read twice. As fresh copies are used,
