@@ -1,9 +1,9 @@
-## 🎄 Advent of code 2023 🧩
+# 🎄 Advent of code 2023 🧩
 *My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
 puzzles, written in **Python 3.12*** 🐍
 
 
-### 📜 Guidelines adopted
+## 📜 Guidelines adopted
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
 
@@ -22,7 +22,7 @@ called `solve.py`, defining the following functions:
 > code share.
 
 
-### ✨ Magic
+## ✨ Magic
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
 * `open_input_file()`: For opening input files (full puzzle input by default,
@@ -42,7 +42,7 @@ used by the solutions:
 > without having to deal with the additional [`magic.py`](magic.py) file.
 
 
-### 🤖 Makefile
+## 🤖 Makefile
 With the [`Makefile`](Makefile) you can do the following:
 * `make`: Run all solutions.
   * `make <n>`: Run solution for day `n`.
@@ -56,7 +56,7 @@ With the [`Makefile`](Makefile) you can do the following:
 * `make dist`: Run `make clean`, `make format`, `make check` and `git status`.
 
 
-### 🐋 Running with Docker
+## 🐋 Running with Docker
 The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
 ```bash
