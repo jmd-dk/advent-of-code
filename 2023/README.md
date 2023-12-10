@@ -3,6 +3,7 @@
 puzzles, written in **Python 3.12*** 🐍
 
 
+</br>
 ## 📜 Guidelines adopted
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
@@ -22,6 +23,7 @@ called `solve.py`, defining the following functions:
 > code share.
 
 
+</br>
 ## ✨ Magic
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
@@ -43,6 +45,7 @@ used by the solutions:
 > without having to deal with the additional [`magic.py`](magic.py) file.
 
 
+</br>
 ## 🤖 Makefile
 With the [`Makefile`](Makefile) you can do the following:
 * `make`: Run all solutions.
@@ -57,6 +60,7 @@ With the [`Makefile`](Makefile) you can do the following:
 * `make dist`: Run `make clean`, `make format`, `make check` and `git status`.
 
 
+</br>
 ## 🐋 Running with Docker
 The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
