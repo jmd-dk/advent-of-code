@@ -22,7 +22,7 @@ $(format):
 check = $(addprefix check-,$(puzzles))
 check: $(check)
 $(check):
-	@for demo in $(shell grep -i '# *demo *' solution/$(subst check-,,$@)/demo-input.txt | awk '{print $$NF}'); do \
+	@for demo in $(shell grep -i '# *demo *' solution/$(subst check-,,$@)/demo-input | awk '{print $$NF}'); do \
 	    echo Demo $${demo}; \
 	    DEMO=$${demo} $(call perform_check); \
 	done

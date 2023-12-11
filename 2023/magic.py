@@ -148,7 +148,7 @@ def _get_input_info(*, info=[]):
     elif demo:
         warnings.warn(f'Did not understand DEMO={demo!r}')
         demo = None
-    filename = 'input.txt'
+    filename = 'input'
     if demo:
         filename = f'demo-{filename}'
     info += filename, demo
@@ -188,7 +188,7 @@ def _get_answers(directory, *, answers={}):
     values = answers.get(directory)
     if values is not None:
         return values
-    filename = 'answer.txt'
+    filename = 'answer'
     values = ('?', '?')
     if not (path := directory / filename).is_file():
         answers[directory] = values
