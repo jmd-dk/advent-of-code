@@ -41,7 +41,7 @@ dist:
 	@[ -n "$(shell git status -s 2>/dev/null)" ] || echo All good! ✨
 
 clean:
-	$(RM) -r __pycache__ */__pycache__
-	$(RM) *.swp */*.swp
+	$(RM) -r __pycache__ */__pycache__ */*/__pycache__
+	$(RM) *.swp */*.swp */*/*.swp
 
 .PHONY: $(puzzles) $(format) format $(check) check dist clean
