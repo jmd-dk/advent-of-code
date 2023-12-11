@@ -2,13 +2,13 @@ python ?= python3.12
 
 MAKEFLAGS += --no-print-directory
 
-puzzles = $(shell for d in $$(seq -w 1 25); do [ -d $$d ] && echo $$d; done)
+puzzles = $(shell for d in $$(seq -w 1 25); do [ -d solution/$$d ] && echo $$d; done)
 
 all: puzzles
 
 puzzles: $(puzzles)
 $(puzzles):
-	@$(python) -B $@/solve.py
+	@$(python) -B solution/$@/solve.py
 	@echo
 $(addprefix puzzle-,$(puzzles)):
 	@$(MAKE) $(subst puzzle-,,$@)
@@ -17,12 +17,12 @@ format = $(addprefix format-,$(puzzles))
 format:
 	@$(python) -B -m black -S .
 $(format):
-	@$(python) -B -m black -S $(subst format-,,$@)/solve.py
+	@$(python) -B -m black -S solution/$(subst format-,,$@)/solve.py
 
 check = $(addprefix check-,$(puzzles))
 check: $(check)
 $(check):
-	@for demo in $(shell grep -i '# *demo *' $(subst check-,,$@)/demo-input.txt | awk '{print $$NF}'); do \
+	@for demo in $(shell grep -i '# *demo *' solution/$(subst check-,,$@)/demo-input.txt | awk '{print $$NF}'); do \
 	    echo Demo $${demo}; \
 	    DEMO=$${demo} $(call perform_check); \
 	done

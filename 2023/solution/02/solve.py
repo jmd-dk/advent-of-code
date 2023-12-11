@@ -1,7 +1,7 @@
 import collections, math
 
 # Summon magic
-__import__('sys').path.append(str(__import__('pathlib').Path(__file__).parent.parent))
+__import__('sys').path.append(str(__import__('pathlib').Path(__file__).parents[2]))
 from magic import *
 
 
