@@ -2,8 +2,31 @@
 *My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
 puzzles, written in **Python 3.12*** 🐍
 
-    01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25
-    🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 🟢 ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫ ⚫
+[🟢](solution/01/solve.py)
+[🟢](solution/02/solve.py)
+[🟢](solution/03/solve.py)
+[🟢](solution/04/solve.py)
+[🟢](solution/05/solve.py)
+[🟢](solution/06/solve.py)
+[🟢](solution/07/solve.py)
+[🟢](solution/08/solve.py)
+[🟢](solution/09/solve.py)
+[🟢](solution/10/solve.py)
+[⚫](https://adventofcode.com/2022/day/11)
+[⚫](https://adventofcode.com/2022/day/12)
+[⚫](https://adventofcode.com/2022/day/13)
+[⚫](https://adventofcode.com/2022/day/14)
+[⚫](https://adventofcode.com/2022/day/15)
+[⚫](https://adventofcode.com/2022/day/16)
+[⚫](https://adventofcode.com/2022/day/17)
+[⚫](https://adventofcode.com/2022/day/18)
+[⚫](https://adventofcode.com/2022/day/19)
+[⚫](https://adventofcode.com/2022/day/20)
+[⚫](https://adventofcode.com/2022/day/21)
+[⚫](https://adventofcode.com/2022/day/22)
+[⚫](https://adventofcode.com/2022/day/23)
+[⚫](https://adventofcode.com/2022/day/24)
+[⚫](https://adventofcode.com/2022/day/25)
 
 
 </br>
