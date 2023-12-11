@@ -35,7 +35,7 @@ puzzles, written in **Python 3.12*** 🐍
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
 
-With the [solution](solution) directory, each day gets its own subdirectory
+Within the [solution](solution) directory, each day gets its own subdirectory
 with a single Python script `solve.py`, defining the following functions:
 * `read()`: For **reading input** into some appropriate data structure.
   Further data processing should be avoided.
