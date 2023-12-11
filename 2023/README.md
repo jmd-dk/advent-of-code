@@ -12,7 +12,7 @@ puzzles, written in **Python 3.12*** 🐍
 [🟢](solution/08/solve.py)
 [🟢](solution/09/solve.py)
 [🟢](solution/10/solve.py)
-[⚫](https://adventofcode.com/2023/day/11)
+[🟢](solution/11/solve.py)
 [⚫](https://adventofcode.com/2023/day/12)
 [⚫](https://adventofcode.com/2023/day/13)
 [⚫](https://adventofcode.com/2023/day/14)
