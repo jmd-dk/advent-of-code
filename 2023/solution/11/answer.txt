@@ -1,2 +1,4 @@
 Demo 1: 374, None
+Demo 2: None, 1030
+Demo 3: None, 8410
 Full input: 10231178, 622120986954
