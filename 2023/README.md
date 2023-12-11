@@ -2,6 +2,15 @@
 *My solutions to the [2023 advent of code](https://adventofcode.com/2023/)
 puzzles, written in **Python 3.12*** 🐍
 
+```
+01 02 03 04 05
+🟢 🟢 🟢 🟢 🟢 🟢🟢🟢🟢🟢⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡⚪
+```
+
+🟢 🟢 🟢 🟢 🟢 🟢🟢🟢🟢🟢⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫⚫
+🟡🟡🟡🟡🟡🟡🟡🟡🟡🟡⚪
+
 
 </br>
 
@@ -9,8 +18,8 @@ puzzles, written in **Python 3.12*** 🐍
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
 
-Each day gets its own subdirectory with a single Python script
-called `solve.py`, defining the following functions:
+With the [solution](solution) directory, each day gets its own subdirectory
+with a single Python script `solve.py`, defining the following functions:
 * `read()`: For **reading input** into some appropriate data structure.
   Further data processing should be avoided.
 * `solve_one()`: Solution algorithm for **part one**.
@@ -77,8 +86,8 @@ To run all puzzles, you can use
 cd advent-of-code/2023/
 docker run --rm -v "${PWD}:/mnt" -w /mnt python:3.12 make
 ```
-To run the exhaustive `dist` target on the newest Python 3.12 with upgraded
-packages:
+To run the exhaustive `dist` target on the newest Python 3.12
+with upgraded packages:
 ```bash
 cd advent-of-code/
 docker run -t --rm -v "${PWD}:/mnt" -w /mnt/2023 python:3.12 bash -c "pip install -U pip && pip freeze > requirements.txt && sed -i 's/==/>=/' requirements.txt && echo black >> requirements.txt && pip install -U -r requirements.txt && rm requirements.txt && git config --global --add safe.directory /mnt && make dist"
