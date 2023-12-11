@@ -2,7 +2,7 @@
 My solutions to the [2022 advent of code](https://adventofcode.com/2022/),
 written in Python and only making use of the standard library.
 
-[🟢](https://adventofcode.com/2022/day/1)
+[🟢](01/main.py)
 [🟢](https://adventofcode.com/2022/day/2)
 [🟢](https://adventofcode.com/2022/day/3)
 [🟢](https://adventofcode.com/2022/day/4)
