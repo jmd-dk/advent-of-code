@@ -34,8 +34,8 @@ puzzles, written in **Python 3.12*** 🐍
 ## 📜 Guidelines adopted
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
-* Clean code, with optimizations only as far as needed
-  to reach runtimes < 1 second.
+* **Clean code**, with optimizations only as far as needed
+  to reach **execution times < 1 second**.
 
 Within the [solution](solution) directory, each day gets its own subdirectory
 with a single Python script `solve.py`, defining the following functions:
