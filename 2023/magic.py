@@ -205,7 +205,7 @@ def _get_answers(directory, *, answers={}):
                 continue
             values = (tuple(map(str.strip, values_line.split(','))) * 2)[:2]
             values = tuple(
-                None if value.lower() == 'none' else value for value in values
+                {'none': None, '': '?'}.get(value.lower(), value) for value in values
             )
             break
     answers[directory] = values
