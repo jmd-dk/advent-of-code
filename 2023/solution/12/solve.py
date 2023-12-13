@@ -26,13 +26,11 @@ def solve_one(rows):
         if not springs:
             return 0
         sum_arrangements = 0
-        spring = springs[0]
+        spring, size = springs[0], sizes[0]
         if spring in '.?':
             sum_arrangements += count(springs[1:], sizes)
-        if spring in '#?':
-            size = sizes[0]
-            if re.match(rf'^(#|\?){{{size}}}(\.|\?|$)', springs):
-                sum_arrangements += count(springs[size + 1 :], sizes[1:])
+        if re.match(rf'^(#|\?){{{size}}}(\.|\?|$)', springs):
+            sum_arrangements += count(springs[size + 1 :], sizes[1:])
         return sum_arrangements
 
     return sum(count(springs, sizes) for springs, sizes in rows)
@@ -48,13 +46,11 @@ def solve_two(rows):
         if not springs:
             return 0
         sum_arrangements = 0
-        spring = springs[0]
+        spring, size = springs[0], sizes[0]
         if spring in '.?':
             sum_arrangements += count(springs[1:], sizes)
-        if spring in '#?':
-            size = sizes[0]
-            if re.match(rf'^(#|\?){{{size}}}(\.|\?|$)', springs):
-                sum_arrangements += count(springs[size + 1 :], sizes[1:])
+        if re.match(rf'^(#|\?){{{size}}}(\.|\?|$)', springs):
+            sum_arrangements += count(springs[size + 1 :], sizes[1:])
         return sum_arrangements
 
     def unfold(springs, sizes, n=5):
