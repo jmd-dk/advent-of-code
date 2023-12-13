@@ -14,7 +14,7 @@ puzzles, written in **Python 3.12*** 🐍
 [🌟](solution/10/solve.py)
 [🌟](solution/11/solve.py)
 [🌟](solution/12/solve.py)
-[⚫](https://adventofcode.com/2023/day/13)
+[🌟](solution/13/solve.py)
 [⚫](https://adventofcode.com/2023/day/14)
 [⚫](https://adventofcode.com/2023/day/15)
 [⚫](https://adventofcode.com/2023/day/16)
@@ -34,7 +34,7 @@ puzzles, written in **Python 3.12*** 🐍
 ## 📜 Guidelines adopted
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
-* **Clean code**, with optimizations only as far as needed
+* **Clean code**, with complex optimizations only as far as needed
   to reach **execution times < 1 second**.
 
 Within the [solution](solution) directory, each day gets its own subdirectory
