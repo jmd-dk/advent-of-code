@@ -25,7 +25,6 @@ def solve_one(rows):
             return '#' not in springs
         if not springs:
             return 0
-
         sum_arrangements = 0
         spring = springs[0]
         if spring in '.?':
@@ -48,7 +47,6 @@ def solve_two(rows):
             return '#' not in springs
         if not springs:
             return 0
-
         sum_arrangements = 0
         spring = springs[0]
         if spring in '.?':
