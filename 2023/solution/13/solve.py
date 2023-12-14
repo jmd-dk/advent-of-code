@@ -25,32 +25,20 @@ def read():
 # Solution to part one
 @analyze
 def solve_one(patterns):
-    def summarize(pattern):
-        def check_reflection(pattern, transpose=False):
-            shape = (len(pattern), len(pattern[0]))
-            if transpose:
-                shape = (shape[1], shape[0])
-            possibilities = set(range(shape[1] - 1))
-            for i in range(shape[0]):
-                for possibility in possibilities.copy():
-                    j_bgn = max(0, 2 - shape[1] + 2 * possibility)
-                    j_end = possibility + 1
-                    for j in range(j_bgn, j_end):
-                        i_left, j_left = i, j
-                        i_right, j_right = i_left, -j_left + 2 * possibility + 1
-                        if transpose:
-                            i_left, j_left = j_left, i_left
-                            i_right, j_right = j_right, i_right
-                        if pattern[i_left][j_left] != pattern[i_right][j_right]:
-                            possibilities.remove(possibility)
-                            break
-            if len(possibilities) == 1:
-                return 1 + next(iter(possibilities))
-            return 0
+    def check_reflections(pattern, transpose=False):
+        if transpose:
+            pattern = list(zip(*pattern))
+        for i in range(1, len(pattern)):
+            block1 = pattern[2 * i - 1 : i - 1 : -1]
+            block0 = pattern[i - len(block1) : i]
+            if block0 == block1:
+                return i
+        return 0
 
-        points = {False: 1, True: 100}
+    def summarize(pattern):
+        points = {False: 100, True: 1}
         return sum(
-            n * check_reflection(pattern, transpose) for transpose, n in points.items()
+            n * check_reflections(pattern, transpose) for transpose, n in points.items()
         )
 
     return sum(summarize(pattern) for pattern in patterns)
@@ -59,36 +47,25 @@ def solve_one(patterns):
 # Solution to part two
 @analyze
 def solve_two(patterns):
-    def summarize(pattern):
-        def check_reflection(pattern, transpose=False):
-            shape = (len(pattern), len(pattern[0]))
-            if transpose:
-                shape = (shape[1], shape[0])
-            possibilities = set(range(shape[1] - 1))
-            violations = collections.Counter()
-            for i in range(shape[0]):
-                for possibility in possibilities.copy():
-                    j_bgn = max(0, 2 - shape[1] + 2 * possibility)
-                    j_end = possibility + 1
-                    for j in range(j_bgn, j_end):
-                        i_left, j_left = i, j
-                        i_right, j_right = i_left, -j_left + 2 * possibility + 1
-                        if transpose:
-                            i_left, j_left = j_left, i_left
-                            i_right, j_right = j_right, i_right
-                        if pattern[i_left][j_left] != pattern[i_right][j_right]:
-                            violations[possibility] -= 1
-                            if violations[possibility] == -2:
-                                possibilities.remove(possibility)
-                                break
-            possibility, violation = violations.most_common(1)[0]
-            if violation == -1:
-                return 1 + possibility
-            return 0
+    def check_reflections(pattern, transpose=False, violations_required=1):
+        if transpose:
+            pattern = [''.join(row) for row in zip(*pattern)]
+        for i in range(1, len(pattern)):
+            block0 = ''.join(pattern[max(0, 2 * i - len(pattern)) : i])
+            block1 = ''.join(pattern[2 * i - 1 : i - 1 : -1])
+            violations = 0
+            for c0, c1 in zip(block0, block1):
+                violations += c0 != c1
+                if violations > violations_required:
+                    break
+            if violations == violations_required:
+                return i
+        return 0
 
-        points = {False: 1, True: 100}
+    def summarize(pattern):
+        points = {False: 100, True: 1}
         return sum(
-            n * check_reflection(pattern, transpose) for transpose, n in points.items()
+            n * check_reflections(pattern, transpose) for transpose, n in points.items()
         )
 
     return sum(summarize(pattern) for pattern in patterns)
