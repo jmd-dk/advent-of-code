@@ -30,9 +30,7 @@ def solve_one(grid):
                 grid[k][j] = 'O'
 
     tilt()
-    return sum(
-        len(grid) - i for i, row in enumerate(grid) for stone in row if stone == 'O'
-    )
+    return sum(row.count('O') * (len(grid) - i) for i, row in enumerate(grid))
 
 
 # Solution to part two
@@ -59,15 +57,13 @@ def solve_two(grid):
             tilt()
             rotate()
 
-    def record():
-        stones = []
-        for i, row in enumerate(grid):
-            for j, stone in enumerate(row):
-                if stone == 'O':
-                    stones.append((i, j))
-        return tuple(stones)
-
-    def run(n=1_000_000_000):
+    def run(n):
+        record = lambda: tuple(
+            (i, j)
+            for i, row in enumerate(grid)
+            for j, stone in enumerate(row)
+            if stone == 'O'
+        )
         records = {0: record()}
         for i in range(1, n + 1):
             cycle()
@@ -78,10 +74,8 @@ def solve_two(grid):
                 cycle()
             return
 
-    run()
-    return sum(
-        len(grid) - i for i, row in enumerate(grid) for stone in row if stone == 'O'
-    )
+    run(1_000_000_000)
+    return sum(row.count('O') * (len(grid) - i) for i, row in enumerate(grid))
 
 
 # Solve
