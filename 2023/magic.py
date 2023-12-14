@@ -105,6 +105,7 @@ def analyze(func):
         if t == float('inf'):
             return '∞'
         units = {
+            'ps': 1e-12,
             'ns': 1e-9,
             'μs': 1e-6,
             'ms': 1e-3,
