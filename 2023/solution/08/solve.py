@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     nodes = {}
-    with open_input_file() as file:
+    with open_input() as file:
         turns = ['LR'.index(choice) for choice in file.readline().strip()]
         file.readline()
         for line in file:

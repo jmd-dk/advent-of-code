@@ -11,7 +11,7 @@ def read():
     Number = collections.namedtuple('Number', ('value', 'i_span', 'j'))
     numbers = set()
     symbols = {}
-    with open_input_file() as file:
+    with open_input() as file:
         for j, line in enumerate(file):
             for match in re.finditer(r'\d+|[^.\s]', line):
                 value = match[0]

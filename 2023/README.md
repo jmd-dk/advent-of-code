@@ -57,7 +57,7 @@ with a single Python script `solve.py`, defining the following functions:
 ## ✨ Magic
 In [`magic.py`](magic.py) we define helper functionality
 used by the solutions:
-* `open_input_file()`: For opening input files (full puzzle input by default,
+* `open_input()`: For opening input files (full puzzle input by default,
   demo input selectable through the `DEMO` environment variable; `DEMO=1`,
   `DEMO=2`, ...).
 * `memoize()`: Caching functionality, always emitting fresh copies. This is
@@ -70,7 +70,7 @@ used by the solutions:
 
 > [!TIP]
 > The magic can be removed simply by commenting out the `memoize()` and
-> `analyze()` decorators and replacing the `open_input_file()` call with
+> `analyze()` decorators and replacing the `open_input()` call with
 > `open('input')`, useful for quick copy-pasting of the solution code,
 > without having to deal with the additional [`magic.py`](magic.py) file.
 

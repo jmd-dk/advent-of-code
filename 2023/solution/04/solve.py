@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     cards = {}
-    with open_input_file() as file:
+    with open_input() as file:
         for line in file:
             heading, numbers = line.split(':')
             card_id = int(re.search(r'\d+', heading)[0])

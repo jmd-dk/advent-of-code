@@ -10,7 +10,7 @@ from magic import *
 def read():
     Hand = collections.namedtuple('Hand', ['cards', 'bid'])
     hands = []
-    with open_input_file() as file:
+    with open_input() as file:
         for line in file:
             cards, bid = line.split()
             bid = int(bid)

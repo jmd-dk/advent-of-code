@@ -6,7 +6,7 @@ should import what it needs internally.
 
 # Function returning an open context manager
 # for the reading of the input file.
-def open_input_file():
+def open_input():
     import contextlib, inspect, io, pathlib
 
     @contextlib.contextmanager
@@ -21,9 +21,9 @@ def open_input_file():
 
     directory = pathlib.Path(inspect.stack()[1][1]).parent
     filename, demo = _get_input_info()
-    if not demo:
-        return open_file(directory / filename)
-    return open_text(_get_demo(directory))
+    if demo:
+        return open_text(_get_demo(directory))
+    return open_file(directory / filename)
 
 
 # Decorator cache which always returns a fresh copy

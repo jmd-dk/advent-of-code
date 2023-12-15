@@ -8,7 +8,7 @@ from magic import *
 # Reading in data
 @memoize
 def read():
-    with open_input_file() as file:
+    with open_input() as file:
         sequence = file.read().rstrip().split(',')
     return sequence
 

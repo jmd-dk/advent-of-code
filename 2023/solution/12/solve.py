@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     rows = []
-    with open_input_file() as file:
+    with open_input() as file:
         for line in file:
             springs, sizes = line.rstrip().split()
             rows.append((springs, tuple(map(int, sizes.split(',')))))

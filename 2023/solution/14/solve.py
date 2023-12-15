@@ -6,7 +6,7 @@ from magic import *
 # Reading in data
 @memoize
 def read():
-    with open_input_file() as file:
+    with open_input() as file:
         grid = [list(line.rstrip()) for line in file]
     while not grid[-1]:
         grid.pop()

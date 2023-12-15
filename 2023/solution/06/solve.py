@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     find_ints = lambda: list(map(int, re.findall(r'\d+', file.readline())))
-    with open_input_file() as file:
+    with open_input() as file:
         times = find_ints()
         dists = find_ints()
     return times, dists

@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     games = collections.defaultdict(list)
-    with open_input_file() as file:
+    with open_input() as file:
         for line in file:
             heading, _, rounds = line.partition(':')
             game_id = int(heading.partition(' ')[-1])

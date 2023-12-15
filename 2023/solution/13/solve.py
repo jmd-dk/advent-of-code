@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     patterns = []
-    with open_input_file() as file:
+    with open_input() as file:
         patterns.append(pattern := [])
         for line in file:
             line = line.rstrip()

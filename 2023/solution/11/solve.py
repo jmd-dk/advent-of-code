@@ -10,7 +10,7 @@ from magic import *
 def read():
     factor = None
     galaxies = []
-    with open_input_file() as file:
+    with open_input() as file:
         for i, line in enumerate(file):
             for match in re.finditer(r'#', line):
                 j = match.start()

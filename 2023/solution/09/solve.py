@@ -6,7 +6,7 @@ from magic import *
 # Reading in data
 @memoize
 def read():
-    with open_input_file() as file:
+    with open_input() as file:
         histories = [list(map(int, line.split())) for line in file]
     return histories
 

@@ -9,7 +9,7 @@ from magic import *
 @memoize
 def read():
     Mapping = collections.namedtuple('Mapping', ('dst_start', 'src_start', 'length'))
-    with open_input_file() as file:
+    with open_input() as file:
         seeds = list(map(int, re.findall(r'\d+', file.readline())))
         maps = []
         for line in file:
