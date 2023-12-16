@@ -9,145 +9,125 @@ from magic import *
 @memoize
 def read():
     with open_input() as file:
-        grid = [line.rstrip() for line in file]
+        grid = {
+            complex(j, i): ch
+            for i, line in enumerate(file)
+            for j, ch in enumerate(line.rstrip())
+        }
     return grid
 
 
 # Solution to part one
 @analyze
 def solve_one(grid):
-    shape = (len(grid), len(grid[0]))
-
-    def construct_space():
-        space = {
-            direction: [direction] for direction in [(-1, 0), (+1, 0), (0, -1), (0, +1)]
-        }
-        return space
-
-    def construct_mirror(mirror):
-        for key, val in mirror.copy().items():
-            mirror[negate(key)] = negate(val)
-        for key, val in mirror.copy().items():
-            mirror[val] = key
-        mirror = {key: [val] for key, val in mirror.items()}
-        return mirror
-
-    def construct_splitter(direction):
-        direction_perp = (direction[1], direction[0])
-        splitter = {
-            direction: [direction],
-            direction_perp: [direction, negate(direction)],
-        }
-        for direction_in, directions_out in splitter.copy().items():
-            splitter[negate(direction_in)] = [
-                negate(direction_out) for direction_out in directions_out
-            ]
-        return splitter
-
-    def step(beams):
-        beams_next = set()
-        for position, direction in beams:
-            position = add(position, direction)
-            if not all(0 <= position[dim] < shape[dim] for dim in range(2)):
-                continue
-            for direction in tiles[lookup(position)][direction]:
-                if direction in energized[position]:
-                    continue
-                energized[position].add(direction)
-                beams_next.add((position, direction))
-        return beams_next
-
-    lookup = lambda position: grid[position[0]][position[1]]
-    negate = lambda direction: tuple(-value for value in direction)
-    add = lambda position, direction: tuple(p + d for p, d in zip(position, direction))
-
-    tiles = {
-        '.': construct_space(),
-        '/': construct_mirror({(+1, 0): (0, -1)}),
-        '\\': construct_mirror({(+1, 0): (0, +1)}),
-        '|': construct_splitter((1, 0)),
-        '-': construct_splitter((0, 1)),
-    }
+    size = int(len(grid) ** 0.5)
+    beams = {(complex(-1), complex(+1))}
     energized = collections.defaultdict(set)
-    beams = {((0, -1), (0, 1))}
     while beams:
-        beams = step(beams)
+        beams_next = set()
+        for pos, vel in beams:
+            pos += vel
+            if not (0 <= pos.imag < size) or not (0 <= pos.real < size):
+                continue
+            if vel in energized[pos]:
+                continue
+            energized[pos].add(vel)
+            match grid[pos], vel:
+                case ('.', _) | ('|', -1j | 1j) | ('-', -1 | 1):
+                    vels = [vel]
+                case '/', _:
+                    vels = [-complex(vel.imag, vel.real)]
+                case '\\', _:
+                    vels = [+complex(vel.imag, vel.real)]
+                case '|', _:
+                    vels = [-1j, +1j]
+                case '-', _:
+                    vels = [-1, +1]
+            for vel in vels:
+                beams_next.add((pos, vel))
+        beams = beams_next
     return len(energized)
 
 
 # Solution to part two
 @analyze
 def solve_two(grid):
-    shape = (len(grid), len(grid[0]))
+    size = int(len(grid) ** 0.5)
 
-    def construct_space():
-        space = {
-            direction: [direction] for direction in [(-1, 0), (+1, 0), (0, -1), (0, +1)]
-        }
-        return space
-
-    def construct_mirror(mirror):
-        for key, val in mirror.copy().items():
-            mirror[negate(key)] = negate(val)
-        for key, val in mirror.copy().items():
-            mirror[val] = key
-        mirror = {key: [val] for key, val in mirror.items()}
-        return mirror
-
-    def construct_splitter(direction):
-        direction_perp = (direction[1], direction[0])
-        splitter = {
-            direction: [direction],
-            direction_perp: [direction, negate(direction)],
-        }
-        for direction_in, directions_out in splitter.copy().items():
-            splitter[negate(direction_in)] = [
-                negate(direction_out) for direction_out in directions_out
-            ]
-        return splitter
-
-    def step(beams, energized):
-        beams_next = set()
-        for position, direction in beams:
-            position = add(position, direction)
-            if not all(0 <= position[dim] < shape[dim] for dim in range(2)):
-                continue
-            for direction in tiles[lookup(position)][direction]:
-                if direction in energized[position]:
-                    continue
-                energized[position].add(direction)
-                beams_next.add((position, direction))
-        return beams_next
-
-    def count(position, direction):
-        energized = collections.defaultdict(set)
-        beams = {(position, direction)}
+    def shine(*beam, trace_splitters=False):
+        beams = {tuple(map(complex, beam))}
+        energized = set()
+        connected_splitters = set()
         while beams:
-            beams = step(beams, energized)
-        return len(energized)
+            beams_next = set()
+            for pos, vel in beams:
+                pos += vel
+                if not (0 <= pos.imag < size) or not (0 <= pos.real < size):
+                    continue
+                if (pos, vel) in energized:
+                    continue
+                energized.add((pos, vel))
+                match (tile := grid[pos]), vel:
+                    case ('.', _) | ('|', -1j | 1j) | ('-', -1 | 1):
+                        vels = [vel]
+                    case '/', _:
+                        vels = [-complex(vel.imag, vel.real)]
+                    case '\\', _:
+                        vels = [+complex(vel.imag, vel.real)]
+                    case '|' | '-', _:
+                        if not trace_splitters:
+                            energized |= splitters[pos].energized
+                            continue
+                        elif len(energized) > 1:
+                            connected_splitters.add(pos)
+                            continue
+                        energized.add((pos, -vel))
+                        vel = {'-': 1, '|': 1j}[tile]
+                        vels = [vel, -vel]
+                for vel in vels:
+                    beams_next.add((pos, vel))
+            beams = beams_next
+        return energized, connected_splitters
 
     def test():
-        for direction in [(-1, 0), (+1, 0), (0, -1), (0, +1)]:
-            position = [
-                {-1: shape[dim], +1: -1, 0: 0}[direction[dim]] for dim in range(2)
-            ]
-            index = direction.index(0)
-            for x in range(shape[index]):
-                position[index] = x
-                yield count(tuple(position), direction)
+        for i in range(size):
+            yield measure(*shine(complex(-1, i), +1))
+            yield measure(*shine(complex(size, i), -1))
+            yield measure(*shine(complex(i, -1), +1j))
+            yield measure(*shine(complex(i, size), -1j))
 
-    lookup = lambda position: grid[position[0]][position[1]]
-    negate = lambda direction: tuple(-value for value in direction)
-    add = lambda position, direction: tuple(p + d for p, d in zip(position, direction))
+    def measure(energized, connected_splitters):
+        return len({pos for pos, vel in energized})
 
-    tiles = {
-        '.': construct_space(),
-        '/': construct_mirror({(+1, 0): (0, -1)}),
-        '\\': construct_mirror({(+1, 0): (0, +1)}),
-        '|': construct_splitter((1, 0)),
-        '-': construct_splitter((0, 1)),
+    class Splitter:
+        def __init__(self, pos, energized, connections):
+            self.pos = pos
+            self.energized = energized
+            self.connections = connections
+            self.connected = {self.pos}
+
+        def connect(self, splitters):
+            connections = self.connections - self.connected
+            for pos in connections:
+                if pos in self.connected:
+                    continue
+                splitter = splitters[pos]
+                self.energized |= splitter.energized
+                self.connections |= splitter.connections
+                self.connected |= splitter.connected
+            if connections:
+                self.connect(splitters)
+
+    splitters = {
+        pos: Splitter(
+            pos,
+            *shine(pos - (vel := {'|': 1, '-': 1j}[tile]), vel, trace_splitters=True),
+        )
+        for pos, tile in grid.items()
+        if tile in '|-'
     }
-
+    for splitter in splitters.values():
+        splitter.connect(splitters)
     return max(test())
 
 
