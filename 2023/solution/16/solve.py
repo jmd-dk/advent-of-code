@@ -32,19 +32,16 @@ def solve_one(grid):
             if vel in energized[pos]:
                 continue
             energized[pos].add(vel)
-            match grid[pos], vel:
+            match (tile := grid[pos]), vel:
                 case ('.', _) | ('|', -1j | 1j) | ('-', -1 | 1):
-                    vels = [vel]
-                case '/', _:
-                    vels = [-complex(vel.imag, vel.real)]
-                case '\\', _:
-                    vels = [+complex(vel.imag, vel.real)]
-                case '|', _:
-                    vels = [-1j, +1j]
-                case '-', _:
-                    vels = [-1, +1]
-            for vel in vels:
-                beams_next.add((pos, vel))
+                    beams_next.add((pos, vel))
+                case '/' | '\\', _:
+                    vel = {'/': -1, '\\': +1}[tile] * complex(vel.imag, vel.real)
+                    beams_next.add((pos, vel))
+                case '|' | '-', _:
+                    vel = {'|': 1j, '-': 1}[tile]
+                    beams_next.add((pos, -vel))
+                    beams_next.add((pos, +vel))
         beams = beams_next
     return len(energized)
 
@@ -70,10 +67,9 @@ def solve_two(grid):
                 match (tile := grid[pos]), vel:
                     case ('.', _) | ('|', -1j | 1j) | ('-', -1 | 1):
                         beams_next.add((pos, vel))
-                    case '/', _:
-                        beams_next.add((pos, -complex(vel.imag, vel.real)))
-                    case '\\', _:
-                        beams_next.add((pos, +complex(vel.imag, vel.real)))
+                    case '/' | '\\', _:
+                        vel = {'/': -1, '\\': +1}[tile] * complex(vel.imag, vel.real)
+                        beams_next.add((pos, vel))
                     case '|' | '-', _:
                         if not trace_splitters:
                             energized |= splitters[pos].energized
