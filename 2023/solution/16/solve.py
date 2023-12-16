@@ -104,18 +104,32 @@ def solve_two(grid):
             self.pos = pos
             self.energized = energized
             self.connections = connections
-            self.connected = {self.pos}
+            self.fully_connected = False
+            self.fully_energized = False
 
         def connect(self, splitters):
-            for pos in (connections := self.connections - self.connected):
-                if pos in self.connected:
-                    continue
+            missing = self.connections.copy()
+            while missing:
+                pos = missing.pop()
+                splitter = splitters[pos]
+                if splitter.fully_connected:
+                    self.connections |= splitter.connections
+                    missing -= splitter.connections
+                else:
+                    missing |= splitter.connections - self.connections
+                self.connections.add(pos)
+            self.connections.discard(self.pos)
+            self.fully_connected = True
+
+        def energize(self):
+            missing = self.connections.copy()
+            while missing:
+                pos = missing.pop()
                 splitter = splitters[pos]
                 self.energized |= splitter.energized
-                self.connections |= splitter.connections
-                self.connected |= splitter.connected
-            if connections:
-                self.connect(splitters)
+                if splitter.fully_energized:
+                    missing -= splitter.connections
+            self.fully_energized = True
 
     splitters = {
         pos: Splitter(
@@ -131,6 +145,8 @@ def solve_two(grid):
     }
     for splitter in splitters.values():
         splitter.connect(splitters)
+    for splitter in splitters.values():
+        splitter.energize()
     return max(test())
 
 
