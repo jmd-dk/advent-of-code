@@ -57,7 +57,7 @@ def solve_two(grid):
     def shine(*beam, trace_splitters=False):
         beams = {tuple(map(complex, beam))}
         energized = set()
-        connected_splitters = set()
+        connected = set()
         while beams:
             beams_next = set()
             for pos, vel in beams:
@@ -69,25 +69,29 @@ def solve_two(grid):
                 energized.add((pos, vel))
                 match (tile := grid[pos]), vel:
                     case ('.', _) | ('|', -1j | 1j) | ('-', -1 | 1):
-                        vels = [vel]
+                        beams_next.add((pos, vel))
                     case '/', _:
-                        vels = [-complex(vel.imag, vel.real)]
+                        beams_next.add((pos, -complex(vel.imag, vel.real)))
                     case '\\', _:
-                        vels = [+complex(vel.imag, vel.real)]
+                        beams_next.add((pos, +complex(vel.imag, vel.real)))
                     case '|' | '-', _:
                         if not trace_splitters:
                             energized |= splitters[pos].energized
                             continue
-                        elif len(energized) > 1:
-                            connected_splitters.add(pos)
+                        if len(energized) > 1:
+                            connected.add(pos)
                             continue
-                        energized.add((pos, -vel))
-                        vel = {'-': 1, '|': 1j}[tile]
-                        vels = [vel, -vel]
-                for vel in vels:
-                    beams_next.add((pos, vel))
+                        vel = get_splitter_vel(tile)
+                        beams_next.add((pos, -vel))
+                        beams_next.add((pos, +vel))
             beams = beams_next
-        return energized, connected_splitters
+        return energized, connected
+
+    def get_splitter_vel(tile, perp=False):
+        vels = {'|': 1j, '-': 1}
+        if perp:
+            vels['|'], vels['-'] = vels['-'], vels['|']
+        return vels[tile]
 
     def test():
         for i in range(size):
@@ -96,7 +100,7 @@ def solve_two(grid):
             yield measure(*shine(complex(i, -1), +1j))
             yield measure(*shine(complex(i, size), -1j))
 
-    def measure(energized, connected_splitters):
+    def measure(energized, connected):
         return len({pos for pos, vel in energized})
 
     class Splitter:
@@ -107,8 +111,7 @@ def solve_two(grid):
             self.connected = {self.pos}
 
         def connect(self, splitters):
-            connections = self.connections - self.connected
-            for pos in connections:
+            for pos in (connections := self.connections - self.connected):
                 if pos in self.connected:
                     continue
                 splitter = splitters[pos]
@@ -121,7 +124,11 @@ def solve_two(grid):
     splitters = {
         pos: Splitter(
             pos,
-            *shine(pos - (vel := {'|': 1, '-': 1j}[tile]), vel, trace_splitters=True),
+            *shine(
+                pos - (vel := get_splitter_vel(tile, perp=True)),
+                vel,
+                trace_splitters=True,
+            ),
         )
         for pos, tile in grid.items()
         if tile in '|-'
