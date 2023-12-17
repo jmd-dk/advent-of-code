@@ -18,7 +18,7 @@ puzzles, written in **Python 3.12*** 🐍
 [🌟](solution/14/solve.py)
 [🌟](solution/15/solve.py)
 [🌟](solution/16/solve.py)
-[⚫](https://adventofcode.com/2023/day/17)
+[🌟](solution/17/solve.py)
 [⚫](https://adventofcode.com/2023/day/18)
 [⚫](https://adventofcode.com/2023/day/19)
 [⚫](https://adventofcode.com/2023/day/20)
