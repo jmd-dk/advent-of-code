@@ -16,6 +16,7 @@ def read():
         }
     return grid
 
+
 # Solution to part one
 @analyze
 def solve_one(grid):
@@ -87,6 +88,7 @@ def solve_two(grid):
                     visited.add(key)
                     state_new = new_state(loss, pos, vel)
                     heapq.heappush(heap, state_new)
+
 
 # Solve
 print(solve_one(read()))
