@@ -21,7 +21,7 @@ def read():
 @analyze
 def solve_one(plan):
     def get_step(instruction):
-        mapping = {'U': -1j, 'D': +1j, 'L': -1, 'R': +1}
+        mapping = {'R': +1, 'D': +1j, 'L': -1, 'U': -1j}
         return mapping[instruction.direction] * instruction.n
 
     area_shoelace = 0
