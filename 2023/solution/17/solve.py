@@ -16,11 +16,11 @@ def read():
         }
     return grid
 
-
 # Solution to part one
 @analyze
 def solve_one(grid):
-    size = int(len(grid) ** 0.5)
+    end = complex(*max((pos.real, pos.imag) for pos in grid.keys()))
+    max_consec = 3
     State = collections.namedtuple('State', ('loss', 'id', 'pos', 'vel'))
     new_state = lambda loss, pos, vel, *, id_gen=itertools.count(): State(
         loss,
@@ -28,42 +28,35 @@ def solve_one(grid):
         pos,
         vel,
     )
-    get_direction = lambda vel: vel / abs(vel) if vel != 0 else 0
-    get_key = lambda pos, vel: (pos, abs(vel.real), abs(vel.imag))
-    start, dest = 0, (size - 1) * (1 + 1j)
-    queue = [new_state(0, start, 0)]
+    start, dest = 0, end
+    heap = [new_state(0, start, 1), new_state(0, start, 1j)]
     visited = set()
     while True:
-        state = heapq.heappop(queue)
-        key = get_key(state.pos, state.vel)
-        if key in visited:
-            continue
-        visited.add(key)
+        state = heapq.heappop(heap)
         if state.pos == dest:
-            break
-        for pos in [state.pos - 1, state.pos + 1, state.pos - 1j, state.pos + 1j]:
-            if (loss := grid.get(pos)) is None:
-                continue
-            direc_state = get_direction(state.vel)
-            vel = pos - state.pos
-            direc = get_direction(vel)
-            if direc == -direc_state:
-                continue
-            elif direc == direc_state:
-                if abs(state.vel) == 3:
-                    continue
-                vel += state.vel
-            if get_key(pos, vel) in visited:
-                continue
-            state_new = new_state(state.loss + loss, pos, vel)
-            heapq.heappush(queue, state_new)
-    return state.loss
+            return state.loss
+        vel_perp = complex(state.vel.imag, state.vel.real)
+        for vel in [vel_perp, -vel_perp]:
+            pos = state.pos
+            loss = state.loss
+            for step in range(max_consec):
+                pos += vel
+                if (l := grid.get(pos)) is None:
+                    break
+                loss += l
+                key = (pos, abs(vel.real), abs(vel.imag), step)
+                if key in visited:
+                    break
+                visited.add(key)
+                state_new = new_state(loss, pos, vel)
+                heapq.heappush(heap, state_new)
 
 
 # Solution to part two
 @analyze
 def solve_two(grid):
-    size = int(len(grid) ** 0.5)
+    end = complex(*max((pos.real, pos.imag) for pos in grid.keys()))
+    min_consec, max_consec = 4, 10
     State = collections.namedtuple('State', ('loss', 'id', 'pos', 'vel'))
     new_state = lambda loss, pos, vel, *, id_gen=itertools.count(): State(
         loss,
@@ -71,39 +64,29 @@ def solve_two(grid):
         pos,
         vel,
     )
-    get_direction = lambda vel: vel / abs(vel) if vel != 0 else 0
-    get_key = lambda pos, vel: (pos, abs(vel.real), abs(vel.imag))
-    start, dest = 0, (size - 1) * (1 + 1j)
-    queue = [new_state(0, start, 0)]
+    start, dest = 0, end
+    heap = [new_state(0, start, 1), new_state(0, start, 1j)]
     visited = set()
     while True:
-        state = heapq.heappop(queue)
-        key = get_key(state.pos, state.vel)
-        if key in visited:
-            continue
-        visited.add(key)
+        state = heapq.heappop(heap)
         if state.pos == dest:
-            break
-        for pos in [state.pos - 1, state.pos + 1, state.pos - 1j, state.pos + 1j]:
-            if (loss := grid.get(pos)) is None:
-                continue
-            direc_state = get_direction(state.vel)
-            vel = pos - state.pos
-            direc = get_direction(vel)
-            if direc == -direc_state:
-                continue
-            elif direc == direc_state:
-                if abs(state.vel) == 10:
-                    continue
-                vel += state.vel
-            elif 0 < abs(state.vel) < 4:
-                continue
-            if get_key(pos, vel) in visited:
-                continue
-            state_new = new_state(state.loss + loss, pos, vel)
-            heapq.heappush(queue, state_new)
-    return state.loss
-
+            return state.loss
+        vel_perp = complex(state.vel.imag, state.vel.real)
+        for vel in [vel_perp, -vel_perp]:
+            pos = state.pos
+            loss = state.loss
+            for step in range(1, max_consec + 1):
+                pos += vel
+                if (l := grid.get(pos)) is None:
+                    break
+                loss += l
+                if step >= min_consec:
+                    key = (pos, abs(vel.real), abs(vel.imag), step)
+                    if key in visited:
+                        break
+                    visited.add(key)
+                    state_new = new_state(loss, pos, vel)
+                    heapq.heappush(heap, state_new)
 
 # Solve
 print(solve_one(read()))
