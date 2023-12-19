@@ -57,9 +57,9 @@ with a single Python script `solve.py`, defining the following functions:
 Common, *[magic](#-magic) functionality* is imported at the beginning of
 `solve.py`.
 
-Demonstration inputs --- taken directly from the
-[Advent of Code](https://adventofcode.com/) puzzle input --- are stored in the
-`demo-input` files, with a heading `# Demo <i>` above each one.
+Demonstration inputs — taken directly from the
+[Advent of Code](https://adventofcode.com/) puzzle description — are stored
+in the `demo-input` files, with a heading `# Demo <i>` above each one.
 
 Answers to the demo input(s) as well as (my personalized) full input are
 stored in the `answer` files.
