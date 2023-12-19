@@ -2,7 +2,10 @@ python ?= python3.12
 
 MAKEFLAGS += --no-print-directory
 
+year = $(notdir $(patsubst %/,%,$(dir $(abspath $(firstword $(MAKEFILE_LIST))))))
+
 puzzles = $(shell for d in $$(seq -w 1 25); do [ -d solution/$$d ] && echo $$d; done)
+
 
 all: puzzles
 
@@ -48,7 +51,7 @@ $(input):
 	    import aocd, pathlib; \
 	    path = pathlib.Path('solution/$(subst input-,,$@)/input'); \
 	    text_prev = path.read_text() if path.is_file() else None; \
-	    text = aocd.get_data(year=2023, day=int('$(subst input-,,$@)')); \
+	    text = aocd.get_data(year=$(year), day=int('$(subst input-,,$@)')); \
 	    new = text != text_prev; \
 	    path.write_text(text) if new else None; \
 	    print('Retrieved input for day $(subst input-,,$@)') if new else None; \

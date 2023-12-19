@@ -23,6 +23,17 @@ def open_input():
     filename, demo = _get_input_info()
     if demo:
         return open_text(_get_demo(directory))
+    path = directory / filename
+    if not pathlib.Path(path).is_file():
+        day = int(directory.name)
+        year_dir = directory.parents[1]
+        year = year_dir.name
+        raise FileNotFoundError(
+            f'File {path} not found. You can either\n'
+            f'- Download it manually from https://adventofcode.com/{year}/day/{day}\n'
+            f'- Download it automatically using `(cd \'{year_dir}\' && make input-{day:02})`\n'
+            f'- Download all input files using `(cd \'{year_dir}\' && make input)`'
+        )
     return open_file(directory / filename)
 
 
@@ -139,7 +150,7 @@ def analyze(func):
 # Function returning the input data file as well as the demo number
 # in accordance with to the DEMO environment variable.
 def _get_input_info(*, info=[]):
-    import os, warnings
+    import os, pathlib, warnings
 
     if info:
         return info
@@ -152,7 +163,10 @@ def _get_input_info(*, info=[]):
     filename = 'input'
     if demo:
         filename = f'demo-{filename}'
-    if not os.path.isfile(filename) and os.path.isfile(f'{filename}.txt'):
+    if (
+        not pathlib.Path(filename).is_file()
+        and pathlib.Path(f'{filename}.txt').is_file()
+    ):
         filename = f'{filename}.txt'
     info += filename, demo
     return _get_input_info()
