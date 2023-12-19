@@ -66,7 +66,8 @@ stored in the `answer` files.
 
 The full (personalized) inputs are not included in this repository. You should
 place your own as files named `input` within the different subdirectories (and
-modify the `answer` files accordingly).
+modify the `answer` files accordingly). The `input` files can also be
+*[retrieved automatically](#🤖-makefile) using `make input`.
 
 
 </br>
@@ -98,6 +99,10 @@ used by the solutions:
 With the [`Makefile`](Makefile) you can do the following:
 * `make`: Run all solutions.
   * `make <n>`: Run solution for day `n`.
+* `make input`: Download all `input` files from
+  [adventofcode.com](https://adventofcode.com/2023/). For this to work, you
+  need to have logged into Advent of Code using Chrome or Firefox.
+  * `make input-<n>`: Download `input` for day `n`.
 * `make format`: Format all solution files as well as [`magic.py`](magic.py)
   using the [Black](https://github.com/psf/black) formatter.
   * `make format-<n>`: Format solution file for day `n`.
