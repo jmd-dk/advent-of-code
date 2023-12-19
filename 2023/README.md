@@ -54,8 +54,8 @@ with a single Python script `solve.py`, defining the following functions:
 * `solve_one()`: Solution algorithm for **part one**.
 * `solve_two()`: Solution algorithm for **part two**.
 
-Common, *[magic](#-magic) functionality* is imported at the beginning of
-`solve.py`.
+Common, [magic functionality](#-magic) is imported at the beginning of
+all `solve.py` files.
 
 Demonstration inputs — taken directly from the
 [Advent of Code](https://adventofcode.com/) puzzle description — are stored
@@ -67,7 +67,7 @@ stored in the `answer` files.
 The full (personalized) inputs are not included in this repository. You should
 place your own as files named `input` within the different subdirectories (and
 modify the `answer` files accordingly). The `input` files can also be
-*[retrieved automatically](#-makefile) using `make input`.
+[retrieved automatically](#-makefile) using `make input`.
 
 
 </br>
