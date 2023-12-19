@@ -52,7 +52,7 @@ def analyze(func):
         time: float
 
         def __str__(self):
-            width = 42
+            width = 44
             s = f'day {self.day}, part {self.part}: '
             v = str(self.value if self.value is not None else 'error')
             t = '({})'.format(pretty_time(self.time))
