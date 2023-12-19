@@ -116,7 +116,9 @@ With the [`Makefile`](Makefile) you can do the following:
 </br>
 
 ## 🐋 Docker
-The solutions may be run through [Docker](https://www.docker.com/).
+The solutions may be run through [Docker](https://www.docker.com/). Before
+doing so, make sure to [download](#-makefile) the `input` files.
+
 To e.g. run day 1, do
 ```bash
 cd advent-of-code/2023/
