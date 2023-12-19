@@ -82,7 +82,7 @@ def solve_two(workflows, parts):
             range_exclude = range(max(range0.start, range1.stop), range0.stop)
         return range_overlap, range_exclude
 
-    def check(ranges, name, lvl=0):
+    def check(ranges, name):
         if name == 'A':
             yield ranges
             return
@@ -93,7 +93,7 @@ def solve_two(workflows, parts):
             if range_overlap:
                 ranges_new = ranges.copy()
                 ranges_new[rule.xmas] = range_overlap
-                yield from check(ranges_new, rule.dest, lvl + 1)
+                yield from check(ranges_new, rule.dest)
             if range_exclude:
                 ranges[rule.xmas] = range_exclude
 
