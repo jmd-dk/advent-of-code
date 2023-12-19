@@ -22,15 +22,10 @@ def read():
     return games
 
 
-# Initial conditions
-@memoize
-def get_initial(part=None):
-    return (bag := {'red': 12, 'green': 13, 'blue': 14})
-
-
 # Solution to part one
 @analyze
-def solve_one(games, bag):
+def solve_one(games):
+    bag = {'red': 12, 'green': 13, 'blue': 14}
     return sum(
         game_id
         for game_id, game in games.items()
@@ -40,7 +35,8 @@ def solve_one(games, bag):
 
 # Solution to part two
 @analyze
-def solve_two(games, bag):
+def solve_two(games):
+    bag = {'red': 12, 'green': 13, 'blue': 14}
     sum_power = 0
     for game_id, game in games.items():
         minimum = collections.Counter()
@@ -52,5 +48,5 @@ def solve_two(games, bag):
 
 
 # Solve
-print(solve_one(read(), get_initial()))
-print(solve_two(read(), get_initial()))
+print(solve_one(read()))
+print(solve_two(read()))
