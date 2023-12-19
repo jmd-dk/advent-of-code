@@ -67,7 +67,7 @@ stored in the `answer` files.
 The full (personalized) inputs are not included in this repository. You should
 place your own as files named `input` within the different subdirectories (and
 modify the `answer` files accordingly). The `input` files can also be
-[retrieved automatically](#-makefile) using `make input`.
+[retrieved automatically](#-makefile).
 
 
 </br>
