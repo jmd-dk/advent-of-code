@@ -31,25 +31,42 @@ puzzles, written in **Python 3.12*** 🐍
 
 </br>
 
-## 📜 Guidelines adopted
+## 📜 Guidelines
+The following self-imposed guidelines are adopted:
 * Python **standard library** only (no external packages).
 * Parts one and two are to be solved **separately**.
 * **Clean code**, with complex optimizations only as far as needed
   to reach **execution times < 1 second**.
 
-Within the [solution](solution) directory, each day gets its own subdirectory
+> [!NOTE]
+> Having parts one and two being solved separate with no code shared naturally
+> leads to code repetition. However, previous year's experience has shown that
+> the simplicity of part one is often tainted by allowing code share.
+
+
+</br>
+
+## 📁 Structure
+Each day gets its own subdirectory within the [solution](solution) directory,
 with a single Python script `solve.py`, defining the following functions:
 * `read()`: For **reading input** into some appropriate data structure.
   Further data processing should be avoided.
 * `solve_one()`: Solution algorithm for **part one**.
 * `solve_two()`: Solution algorithm for **part two**.
-* `get_initial()` (optional): For setting **initial conditions**.
 
-> [!NOTE]
-> Having `solve_one()` and `solve_two()` be separate with no code shared
-> naturally leads to code repetition. However, previous year's experience
-> has shown that the simplicity of part one is often tainted by allowing
-> code share.
+Common, *[magic](#✨-magic) functionality* is imported at the beginning of
+`solve.py`.
+
+Demonstration inputs --- taken directly from the
+[Advent of Code](https://adventofcode.com/) puzzle input --- are stored in the
+`demo-input` files, with a heading `# Demo <i>` above each one.
+
+Answers to the demo input(s) as well as (my personalized) full input are
+stored in the `answer` files.
+
+The full (personalized) inputs are not included in this repository. You should
+place your own as files named `input` within the different subdirectories (and
+modify the `answer` files accordingly).
 
 
 </br>
@@ -93,7 +110,7 @@ With the [`Makefile`](Makefile) you can do the following:
 
 </br>
 
-## 🐋 Running with Docker
+## 🐋 Docker
 The solutions may be run through [Docker](https://www.docker.com/).
 To e.g. run day 1, do
 ```bash

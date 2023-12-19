@@ -152,6 +152,8 @@ def _get_input_info(*, info=[]):
     filename = 'input'
     if demo:
         filename = f'demo-{filename}'
+    if not os.path.isfile(filename) and os.path.isfile(f'{filename}.txt'):
+        filename = f'{filename}.txt'
     info += filename, demo
     return _get_input_info()
 
