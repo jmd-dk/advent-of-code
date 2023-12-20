@@ -1,4 +1,4 @@
-import collections, heapq, itertools
+import collections, heapq
 
 # Summon magic
 __import__('sys').path.append(str(__import__('pathlib').Path(__file__).parents[2]))
@@ -9,85 +9,81 @@ from magic import *
 @memoize
 def read():
     with open_input() as file:
-        grid = {
-            complex(j, i): int(ch)
-            for i, line in enumerate(file)
-            for j, ch in enumerate(line.rstrip())
-        }
+        grid = [list(map(int, line.rstrip())) for line in file]
     return grid
 
 
 # Solution to part one
 @analyze
 def solve_one(grid):
-    end = complex(*max((pos.real, pos.imag) for pos in grid.keys()))
+    shape = (len(grid), len(grid[0]))
+    State = collections.namedtuple('State', ('loss', 'x', 'y', 'vx', 'vy'))
+    x_start, y_start = 0, 0
+    x_end, y_end = shape[0] - 1, shape[1] - 1
     max_consec = 3
-    State = collections.namedtuple('State', ('loss', 'id', 'pos', 'vel'))
-    new_state = lambda loss, pos, vel, *, id_gen=itertools.count(): State(
-        loss,
-        next(id_gen),
-        pos,
-        vel,
-    )
-    start, dest = 0, end
-    heap = [new_state(0, start, 1), new_state(0, start, 1j)]
+    heap = [State(0, x_start, y_start, 1, 0), State(0, x_start, y_start, 0, 1)]
+    heapq.heapify(heap)
     visited = set()
     while True:
         state = heapq.heappop(heap)
-        if state.pos == dest:
+        if (state.x, state.y) == (x_end, y_end):
             return state.loss
-        vel_perp = complex(state.vel.imag, state.vel.real)
-        for vel in [vel_perp, -vel_perp]:
-            pos = state.pos
+        vx = state.vy
+        vy = state.vx
+        for direc in range(2):
+            vx *= -1
+            vy *= -1
+            x = state.x
+            y = state.y
             loss = state.loss
-            for step in range(max_consec):
-                pos += vel
-                if (l := grid.get(pos)) is None:
+            for step in range(1, max_consec + 1):
+                x += vx
+                y += vy
+                if not (0 <= x < shape[0]) or not (0 <= y < shape[1]):
                     break
-                loss += l
-                key = (pos, abs(vel.real), abs(vel.imag), step)
+                loss += grid[x][y]
+                key = (x, y, vx**2, vy**2, step)
                 if key in visited:
                     break
                 visited.add(key)
-                state_new = new_state(loss, pos, vel)
-                heapq.heappush(heap, state_new)
+                heapq.heappush(heap, State(loss, x, y, vx, vy))
 
 
 # Solution to part two
 @analyze
 def solve_two(grid):
-    end = complex(*max((pos.real, pos.imag) for pos in grid.keys()))
+    shape = (len(grid), len(grid[0]))
+    State = collections.namedtuple('State', ('loss', 'x', 'y', 'vx', 'vy'))
+    x_start, y_start = 0, 0
+    x_end, y_end = shape[0] - 1, shape[1] - 1
     min_consec, max_consec = 4, 10
-    State = collections.namedtuple('State', ('loss', 'id', 'pos', 'vel'))
-    new_state = lambda loss, pos, vel, *, id_gen=itertools.count(): State(
-        loss,
-        next(id_gen),
-        pos,
-        vel,
-    )
-    start, dest = 0, end
-    heap = [new_state(0, start, 1), new_state(0, start, 1j)]
+    heap = [State(0, x_start, y_start, 1, 0), State(0, x_start, y_start, 0, 1)]
+    heapq.heapify(heap)
     visited = set()
     while True:
         state = heapq.heappop(heap)
-        if state.pos == dest:
+        if (state.x, state.y) == (x_end, y_end):
             return state.loss
-        vel_perp = complex(state.vel.imag, state.vel.real)
-        for vel in [vel_perp, -vel_perp]:
-            pos = state.pos
+        vx = state.vy
+        vy = state.vx
+        for direc in range(2):
+            vx *= -1
+            vy *= -1
+            x = state.x
+            y = state.y
             loss = state.loss
             for step in range(1, max_consec + 1):
-                pos += vel
-                if (l := grid.get(pos)) is None:
+                x += vx
+                y += vy
+                if not (0 <= x < shape[0]) or not (0 <= y < shape[1]):
                     break
-                loss += l
+                loss += grid[x][y]
                 if step >= min_consec:
-                    key = (pos, abs(vel.real), abs(vel.imag), step)
+                    key = (x, y, vx**2, vy**2, step)
                     if key in visited:
                         break
                     visited.add(key)
-                    state_new = new_state(loss, pos, vel)
-                    heapq.heappush(heap, state_new)
+                    heapq.heappush(heap, State(loss, x, y, vx, vy))
 
 
 # Solve
