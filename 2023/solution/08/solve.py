@@ -33,17 +33,18 @@ def solve_one(turns, nodes):
 # Solution to part two
 @analyze
 def solve_two(turns, nodes):
-    def assumption_violated(assumption, violated):
-        if not violated:
+    def assume(assumption, valid):
+        if valid:
             return
-        if assumption == 0:
-            message = 'a given ghost only ever reaches the same stop'
-        elif assumption == 1:
-            message = (
-                'the stop is reached for the second time '
-                'after exactly twice the number of steps '
-                'it took the first time'
-            )
+        match assumption:
+            case 0:
+                message = 'a given ghost only ever reaches the same stop'
+            case 1:
+                message = (
+                    'the stop is reached for the second time '
+                    'after exactly twice the number of steps '
+                    'it took the first time'
+                )
         raise RuntimeError(f'The assumption that {message} is violated')
 
     def find_cycle_times(node):
@@ -55,9 +56,9 @@ def solve_two(turns, nodes):
             stops[node].append(step)
             if len(stops[node]) < 2:
                 continue
-            assumption_violated(0, len(stops) != 1)
+            assume(0, len(stops) == 1)
             cycle = next(iter(stops.values()))
-            assumption_violated(1, cycle[1] != 2 * cycle[0])
+            assume(1, cycle[1] == 2 * cycle[0])
             return cycle[0]
 
     generate_check = lambda c: lambda node: node.endswith(c)
