@@ -39,9 +39,10 @@ The following self-imposed guidelines are adopted:
   to reach **execution times < 1 second**.
 
 > [!NOTE]
-> Having parts one and two being solved separate with no code shared naturally
-> leads to code repetition. However, previous year's experience has shown that
-> the simplicity of part one is often tainted by allowing code share.
+> Having parts one and two being solved separately with no code shared
+> naturally leads to code repetition. However, previous year's experience has
+> shown that the simplicity of part one is often tainted by allowing
+> code share.
 
 
 </br>
