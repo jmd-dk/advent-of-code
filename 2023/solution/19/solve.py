@@ -82,7 +82,7 @@ def solve_two(workflows, parts):
             range_exclude = range(max(range0.start, range1.stop), range0.stop)
         return range_overlap, range_exclude
 
-    def check(ranges, name):
+    def check(ranges, name='in'):
         if name == 'A':
             yield ranges
             return
@@ -96,10 +96,7 @@ def solve_two(workflows, parts):
                 ranges[rule.xmas] = range_exclude
 
     ranges = {ch: range(val_min, val_max + 1) for ch in 'xmas'}
-    name = 'in'
-    return sum(
-        math.prod(len(r) for r in ranges.values()) for ranges in check(ranges, name)
-    )
+    return sum(math.prod(len(r) for r in ranges.values()) for ranges in check(ranges))
 
 
 # Solve
