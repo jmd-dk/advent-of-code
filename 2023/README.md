@@ -59,16 +59,18 @@ Common, [magic functionality](#-magic) is imported at the beginning of
 all `solve.py` files.
 
 Demonstration inputs — taken directly from the
-[Advent of Code](https://adventofcode.com/) puzzle description — are stored
-in the `demo-input` files, with a heading `# Demo <i>` above each one.
+[Advent of Code](https://adventofcode.com/) puzzle descriptions — are stored
+in the `demo-input` files, with a heading `# Demo <i>` above individual
+demonstration inputs.
 
-Answers to the demo input(s) as well as (my personalized) full input are
-stored in the `answer` files.
+Answers to the demo input(s) as well as to (my personalized) full input are
+stored in the `answer` files, for both part one and two.
 
-The full (personalized) inputs are not included in this repository. You should
-place your own as files named `input` within the different subdirectories (and
-modify the `answer` files accordingly). The `input` files can also be
-[retrieved automatically](#-makefile).
+The full (personalized) inputs are
+[not included](https://adventofcode.com/about#legal) in this repository.
+You should place your own as files named `input` within the different
+subdirectories (and modify the `answer` files accordingly). The `input` files
+can also be [retrieved automatically](#-makefile).
 
 
 </br>
