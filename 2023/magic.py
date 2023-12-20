@@ -66,8 +66,7 @@ def analyze(func):
             width = 44
             s = f'day {self.day}, part {self.part}: '
             v = str(self.value if self.value is not None else 'error')
-            t = '({})'.format(pretty_time(self.time))
-            spacing = ' ' * (width - len(s) - len(v) - max(len(t), 9))
+            spacing = ' ' * (width - len(s) - len(v) - 9)
             spacing += ' ' * (not spacing)
             v = escape(
                 (
@@ -82,8 +81,9 @@ def analyze(func):
                 False: escape('red', '✘'),
                 True: escape('green', '✔'),
             }[self.correct]
-            t = escape('gray', t)
-            return f'{s}{v}{spacing}{c} {t}'
+            t = escape('gray', '({})'.format(pretty_time(self.time)))
+            slow = ' 🐌' * (self.time >= 1)
+            return f'{s}{v}{spacing}{c} {t}{slow}'
 
     class DontPrint:
         def __str__(self):
