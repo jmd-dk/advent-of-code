@@ -91,9 +91,7 @@ def solve_two(workflows, parts):
         for rule in workflows[name]:
             range_overlap, range_exclude = merge_ranges(ranges[rule.xmas], rule.range)
             if range_overlap:
-                ranges_new = ranges.copy()
-                ranges_new[rule.xmas] = range_overlap
-                yield from check(ranges_new, rule.dest)
+                yield from check(ranges | {rule.xmas: range_overlap}, rule.dest)
             if range_exclude:
                 ranges[rule.xmas] = range_exclude
 
