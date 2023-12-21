@@ -82,15 +82,17 @@ def solve_two(grid, n_steps):
         special &= (n_steps - shape[0] // 2) % shape[0] == 0
         if special:
             reachable = walk_general(shape[0] // 2, start)
+
             def check_diamond():
-                i, j = 0, shape[0]//2
+                i, j = 0, shape[0] // 2
                 for di, dj in [(+1, +1), (+1, -1), (-1, -1), (-1, +1)]:
-                    for dstep in range(shape[0]//2):
+                    for dstep in range(shape[0] // 2):
                         i += di
                         j += dj
                         if (i, j) not in reachable:
                             return
                 return True
+
             if check_diamond():
                 return walk_special(n_steps, start)
         return len(walk_general(n_steps, start))
