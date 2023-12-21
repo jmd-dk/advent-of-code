@@ -77,19 +77,11 @@ def solve_two(grid, n_steps):
 
     def walk(n_steps):
         start = find_start()
-        special = shape[0] == shape[1] and shape[0] & 1
-        if special:
-            i = start[0]
-            for j in range(shape[1]):
-                if grid[i][j] != '.':
-                    special = False
-                    break
-        if special:
-            j = start[1]
-            for i in range(shape[0]):
-                if grid[i][j] != '.':
-                    special = False
-                    break
+        special = shape[0] == shape[1]
+        special &= shape[0] & 1
+        special &= (n_steps - shape[0] // 2) % shape[0] == 0
+        special &= all(grid[i][start[1]] == '.' for i in range(shape[0]))
+        special &= all(grid[start[0]][j] == '.' for j in range(shape[1]))
         if special:
             return walk_special(n_steps, start)
         return walk_general(n_steps, start)
