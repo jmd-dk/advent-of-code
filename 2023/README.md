@@ -22,7 +22,7 @@ puzzles, written in **Python 3.12*** 🐍
 [🌟](solution/18/solve.py)
 [🌟](solution/19/solve.py)
 [🌟](solution/20/solve.py)
-[⚫](https://adventofcode.com/2023/day/21)
+[🌟](solution/21/solve.py)
 [⚫](https://adventofcode.com/2023/day/22)
 [⚫](https://adventofcode.com/2023/day/23)
 [⚫](https://adventofcode.com/2023/day/24)
