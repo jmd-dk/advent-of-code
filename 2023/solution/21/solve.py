@@ -121,7 +121,7 @@ def solve_two(grid, n_steps):
         x = [i * shape[0] // 2 for i in range(1, 2 * (order + 1), 2)]
         y = [walk_general(xi, start) for xi in x]
 
-        def quadratic_lagrange(p):
+        def poly_lagrange(p):
             a = (
                 fractions.Fraction(
                     math.prod(p - xj for xj in x if xj != xi),
@@ -131,7 +131,7 @@ def solve_two(grid, n_steps):
             )
             return sum(ai * yi for ai, yi in zip(a, y))
 
-        return quadratic_lagrange(n_steps)
+        return poly_lagrange(n_steps)
 
     return walk(n_steps)
 
