@@ -76,25 +76,26 @@ def solve_two(grid, n_steps):
                 return i, j
 
     def walk(n_steps):
+        def check_diamond():
+            reachable = walk_general(shape[0] // 2, start)
+            i, j = 0, shape[0] // 2
+            for di, dj in [(+1, +1), (+1, -1), (-1, -1), (-1, +1)]:
+                for dstep in range(shape[0] // 2):
+                    i += di
+                    j += dj
+                    if (i, j) not in reachable:
+                        return
+            return True
+
         start = find_start()
         special = shape[0] == shape[1]
         special &= shape[0] & 1
         special &= (n_steps - shape[0] // 2) % shape[0] == 0
+        special = special and all(grid[i][start[1]] == '.' for i in range(shape[0]))
+        special = special and all(grid[start[0]][j] == '.' for j in range(shape[1]))
+        special = special and check_diamond()
         if special:
-            reachable = walk_general(shape[0] // 2, start)
-
-            def check_diamond():
-                i, j = 0, shape[0] // 2
-                for di, dj in [(+1, +1), (+1, -1), (-1, -1), (-1, +1)]:
-                    for dstep in range(shape[0] // 2):
-                        i += di
-                        j += dj
-                        if (i, j) not in reachable:
-                            return
-                return True
-
-            if check_diamond():
-                return walk_special(n_steps, start)
+            return walk_special(n_steps, start)
         return len(walk_general(n_steps, start))
 
     def walk_general(n_steps, start):
@@ -120,10 +121,6 @@ def solve_two(grid, n_steps):
         return reachable
 
     def walk_special(n_steps, start):
-        order = 2
-        x = [i * shape[0] // 2 for i in range(1, 2 * (order + 1), 2)]
-        y = [len(walk_general(xi, start)) for xi in x]
-
         def poly_lagrange(p):
             a = (
                 fractions.Fraction(
@@ -134,6 +131,9 @@ def solve_two(grid, n_steps):
             )
             return sum(ai * yi for ai, yi in zip(a, y))
 
+        order = 2
+        x = [i * shape[0] // 2 for i in range(1, 2 * (order + 1), 2)]
+        y = [len(walk_general(xi, start)) for xi in x]
         return poly_lagrange(n_steps)
 
     return walk(n_steps)
