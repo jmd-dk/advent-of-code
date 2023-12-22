@@ -12,7 +12,7 @@ def read():
     with open_input() as file:
         for line in file:
             x_bgn, y_bgn, z_bgn, x_end, y_end, z_end = map(
-                int, re.findall(r'\d+', line)
+                int, re.findall(r'\d+', line),
             )
             bricks.append(
                 (
@@ -40,8 +40,7 @@ def solve_one(bricks):
         for i, brick in enumerate(bricks):
             if (z := fall_single(brick)) == brick[2].start:
                 continue
-            for xyz in itertools.product(*brick):
-                tower.pop(xyz)
+            disintegrate(brick)
             brick = bricks[i] = (*brick[:2], range(z, z + len(brick[2])))
             for xyz in itertools.product(*brick):
                 tower[xyz] = i
@@ -52,6 +51,10 @@ def solve_one(bricks):
                 if (x, y, z) in tower:
                     return z + 1
         return z + 1
+
+    def disintegrate(brick):
+        for xyz in itertools.product(*brick):
+            tower.pop(xyz)
 
     def get_supports(brick, z):
         return {
@@ -116,8 +119,7 @@ def solve_two(bricks):
             if not fall_single_check(brick, tower):
                 continue
             n += 1
-            for xyz in itertools.product(*brick):
-                tower.pop(xyz)
+            disintegrate(brick, tower)
         return n
 
     tower = construct_tower()
