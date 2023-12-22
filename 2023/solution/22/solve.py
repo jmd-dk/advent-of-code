@@ -8,19 +8,12 @@ from magic import *
 # Reading in data
 @memoize
 def read():
+    range_inclusive = lambda start, stop: range(start, stop + 1)
     bricks = []
     with open_input() as file:
         for line in file:
-            x_bgn, y_bgn, z_bgn, x_end, y_end, z_end = map(
-                int, re.findall(r'\d+', line),
-            )
-            bricks.append(
-                (
-                    range(x_bgn, x_end + 1),
-                    range(y_bgn, y_end + 1),
-                    range(z_bgn, z_end + 1),
-                )
-            )
+            coords = tuple(map(int, re.findall(r'\d+', line)))
+            bricks.append(tuple(range_inclusive(*coords[dim::3]) for dim in range(3)))
     return bricks
 
 
