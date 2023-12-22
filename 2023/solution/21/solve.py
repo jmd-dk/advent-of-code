@@ -91,8 +91,6 @@ def solve_two(grid, n_steps):
         special = shape[0] == shape[1]
         special &= shape[0] & 1
         special &= (n_steps - shape[0] // 2) % shape[0] == 0
-        special = special and all(grid[i][start[1]] == '.' for i in range(shape[0]))
-        special = special and all(grid[start[0]][j] == '.' for j in range(shape[1]))
         special = special and check_diamond()
         if special:
             return walk_special(n_steps, start)
