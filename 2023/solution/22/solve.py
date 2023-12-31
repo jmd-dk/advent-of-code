@@ -1,4 +1,4 @@
-import collections, itertools, re
+import itertools, re
 
 # Summon magic
 __import__('sys').path.append(str(__import__('pathlib').Path(__file__).parents[2]))
