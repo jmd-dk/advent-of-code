@@ -50,7 +50,7 @@ def solve_one(grid):
                         possibilities = {(i, j - 1)}
                     case '>':
                         possibilities = {(i, j + 1)}
-                graph[(i, j)] = possibilities
+                graph[i, j] = possibilities
         return graph
 
     def reduce_graph(graph, pos_ori, graph_reduced=None):
@@ -128,13 +128,13 @@ def solve_two(grid):
 
     def build_array_reduced(graph_reduced):
         enumeration = {pos: i for i, pos in enumerate(graph_reduced)}
-        array_reduced = [None for _ in graph_reduced]
-        for pos0 in graph_reduced:
-            i = enumeration[pos0]
-            array_reduced[i] = [
+        array_reduced = [
+            [
                 (enumeration[pos1], graph_reduced[pos0][pos1])
                 for pos1 in graph_reduced[pos0]
             ]
+            for pos0 in graph_reduced
+        ]
         return array_reduced
 
     def hike(i):
