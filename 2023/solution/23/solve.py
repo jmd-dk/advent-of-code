@@ -110,7 +110,7 @@ def solve_two(grid):
                 pos_prev = pos
                 pos = next(iter(possibilities))
 
-        forks = [start, stop] + [
+        forks = [stop, start] + [
             pos for pos, possibilities in graph.items() if len(possibilities) > 2
         ]
         graph_reduced = collections.defaultdict(dict)
@@ -121,7 +121,21 @@ def solve_two(grid):
                     continue
                 graph_reduced[pos_ori][pos] = n
                 graph_reduced[pos][pos_ori] = n
-        graph_reduced[stop] = graph_reduced.pop(stop)
+        graph_reduced[start] = graph_reduced.pop(start)
+
+        def remove_backtrack_boundary(pos_prev, pos):
+            graph_reduced[pos].pop(pos_prev)
+            if stop in graph_reduced[pos]:
+                return
+            pos_prev = pos
+            for pos in graph_reduced[pos_prev]:
+                if len(graph_reduced[pos]) == 3:
+                    return remove_backtrack_boundary(pos_prev, pos)
+
+        pos_prev = next(iter(graph_reduced[start]))
+        graph_reduced[pos_prev].pop(start)
+        for pos in set(graph_reduced[pos_prev]) - {start}:
+            remove_backtrack_boundary(pos_prev, pos)
         return graph_reduced
 
     def build_array_reduced(graph_reduced):
@@ -136,22 +150,22 @@ def solve_two(grid):
         return array_reduced
 
     def hike(i):
-        if i == i_stop:
-            return 0
-        result = result_default
+        result = -1
         visited[i] = True
         for j, n in array_reduced[i]:
             if visited[j]:
                 continue
-            result = max(result, n + hike(j))
+            elif j == 0:
+                result = n
+            elif (tmp := n + hike(j)) > result:
+                result = tmp
         visited[i] = False
         return result
 
     array_reduced = build_array_reduced(reduce_graph(build_graph()))
-    i_stop = len(array_reduced) - 1
-    result_default = -float('inf')
     visited = [False for _ in array_reduced]
-    return hike(0)
+    i_start = len(array_reduced) - 1
+    return hike(i_start)
 
 
 # Solve
