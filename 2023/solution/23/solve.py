@@ -24,33 +24,32 @@ def solve_one(grid):
 
     def build_graph():
         graph = {}
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                match grid[i][j]:
-                    case '#':
-                        continue
-                    case '.':
-                        possibilities = {
-                            (i, j)
-                            for i, j, slope in [
-                                (i - 1, j, '^'),
-                                (i + 1, j, 'v'),
-                                (i, j - 1, '<'),
-                                (i, j + 1, '>'),
-                            ]
-                            if 0 <= i < shape[0]
-                            and 0 <= j < shape[1]
-                            and grid[i][j] in ['.', slope]
-                        }
-                    case '^':
-                        possibilities = {(i - 1, j)}
-                    case 'v':
-                        possibilities = {(i + 1, j)}
-                    case '<':
-                        possibilities = {(i, j - 1)}
-                    case '>':
-                        possibilities = {(i, j + 1)}
-                graph[i, j] = possibilities
+        for i, j in itertools.product(*map(range, shape)):
+            match grid[i][j]:
+                case '#':
+                    continue
+                case '.':
+                    possibilities = {
+                        (i, j)
+                        for i, j, slope in [
+                            (i - 1, j, '^'),
+                            (i + 1, j, 'v'),
+                            (i, j - 1, '<'),
+                            (i, j + 1, '>'),
+                        ]
+                        if 0 <= i < shape[0]
+                        and 0 <= j < shape[1]
+                        and grid[i][j] in ['.', slope]
+                    }
+                case '^':
+                    possibilities = {(i - 1, j)}
+                case 'v':
+                    possibilities = {(i + 1, j)}
+                case '<':
+                    possibilities = {(i, j - 1)}
+                case '>':
+                    possibilities = {(i, j + 1)}
+            graph[i, j] = possibilities
         return graph
 
     def reduce_graph(graph, pos_ori, graph_reduced=None):
@@ -91,16 +90,15 @@ def solve_two(grid):
 
     def build_graph():
         graph = {}
-        for i in range(shape[0]):
-            for j in range(shape[1]):
-                if grid[i][j] == '#':
-                    continue
-                possibilities = {
-                    (i, j)
-                    for i, j in [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
-                    if 0 <= i < shape[0] and 0 <= j < shape[1] and grid[i][j] != '#'
-                }
-                graph[(i, j)] = possibilities
+        for i, j in itertools.product(*map(range, shape)):
+            if grid[i][j] == '#':
+                continue
+            possibilities = {
+                (i, j)
+                for i, j in [(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)]
+                if 0 <= i < shape[0] and 0 <= j < shape[1] and grid[i][j] != '#'
+            }
+            graph[i, j] = possibilities
         return graph
 
     def reduce_graph(graph):
