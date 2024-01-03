@@ -161,7 +161,7 @@ def solve_two(hailstones, limits):
     select = lambda: (random.randrange(len(hailstones)) for _ in range(n_hail))
     while (solution := solve(*select())) is None:
         pass
-    return sum(solution[:3])
+    return sum(solution.p)
 
 
 # Solve
