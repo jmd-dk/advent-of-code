@@ -75,7 +75,7 @@ def solve_two(hailstones, limits):
     From symmetry we get corresponding equations for ([1], [2]) and ([2], [0]).
     These are 3 linear equations in 6 unknowns. Adding a third hailstone, k,
     we can extend the system of equations with three similar equations from
-    e.g. (j, k). The system of 6 linear equations in 6 unknown can then be
+    e.g. (j, k). The system of 6 linear equations in 6 unknowns can then be
     solved using Gaussian elimination.
     """
 
