@@ -39,8 +39,8 @@ The following self-imposed guidelines are adopted:
   to reach **execution times < 1 second**.
 
 > [!NOTE]
-> All solutions now complete within 1 second (using Python 3.12 running on
-> AMD Ryzen 7 4800HS), with none of them employing multiprocessing.
+> **All solutions complete within 1 second** (using Python 3.12 running on
+> AMD Ryzen 7 4800HS), **without employing multiprocessing**.
 > Day 23 part two is the only one that struggles, with an execution time
 > around 975 ms.
 
