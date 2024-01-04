@@ -1,6 +1,6 @@
-# 🎄 Advent of Code 2023 🧩
+# ❄️ Advent of Code 2023 🧩
 *My solutions to the [2023 Advent of Code](https://adventofcode.com/2023/)
-puzzles, written in **Python 3.12*** 🐍
+puzzles, written in **Python** (≥ 3.10)* 🐍
 
 [🌟](solution/01/solve.py)
 [🌟](solution/02/solve.py)
