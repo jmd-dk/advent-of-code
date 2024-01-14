@@ -110,16 +110,21 @@ With the [`Makefile`](Makefile) you can do the following:
   * `make <n>`: Run solution for day `n`.
 * `make input`: Download all `input` files from
   [adventofcode.com](https://adventofcode.com/2023/). For this to work, you
-  need to have logged into Advent of Code using Chrome or Firefox.
-  * `make input-<n>`: Download `input` for day `n`.
+  need to have logged into [Advent of Code](https://adventofcode.com)
+  using Chrome or Firefox.
+  * `make input-<n>`: Same as above for day `n`.
 * `make format`: Format all solution files as well as [`magic.py`](magic.py)
   using the [Black](https://github.com/psf/black) formatter.
-  * `make format-<n>`: Format solution file for day `n`.
-* `make check`: Run all solutions and compare the results to known answers.
-  * `make check-<n>`: Run solution for day `n` and compare the result to
-    known answer.
+  * `make format-<n>`: Same as above for day `n`.
+* `make check`: Run all solutions on both demo and the full input.
+  Abort if any result differs from the known answer.
+  * `make check-<n>`: Same as above for day `n`.
 * `make clean`: Cleanup common unwanted, auto-generated files.
 * `make dist`: Run `make clean`, `make format`, `make check` and `git status`.
+
+> [!NOTE]
+> In the above commands, valid values of `<n>` always use two digits
+> (so `01` instead of just `1`).
 
 
 </br>
