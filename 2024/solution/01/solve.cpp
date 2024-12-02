@@ -12,6 +12,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "../../magic.h"
+
 using Int = std::int32_t;
 
 // Structure holding the data
@@ -53,7 +55,7 @@ Data read() {
 }
 
 // Solution to part one
-Int solve_one(Data data) {
+Int solve_one(Data& data) {
     for (auto& list : data) {
         std::ranges::sort(list);
     }
@@ -65,7 +67,7 @@ Int solve_one(Data data) {
 }
 
 // Solution to part two
-Int solve_two(Data data) {
+Int solve_two(const Data& data) {
     auto count = [](std::span<const Int> list) {
         std::unordered_map<Int, Int> counter;
         for (const Int n : list) {
@@ -87,9 +89,7 @@ Int solve_two(Data data) {
 
 // Solve
 int main() {
-    const int day = 1;
-    Data data = read();
-    std::print("day {}, part {}: {}\n", day, 1, solve_one(data));
-    std::print("day {}, part {}: {}\n", day, 2, solve_two(data));
+    analyze(read, solve_one);
+    analyze(read, solve_two);
     return 0;
 }

@@ -11,6 +11,8 @@
 #include <string>
 #include <vector>
 
+#include "../../magic.h"
+
 using Int = std::int32_t;
 using Reports = std::vector<std::vector<Int>>;
 
@@ -36,7 +38,7 @@ Reports read() {
 }
 
 // Solution to part one
-Int solve_one(Reports reports) {
+Int solve_one(const Reports& reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
     auto check = [&](const std::span<const Int> levels) {
         static const Int min = 1;
@@ -59,7 +61,7 @@ Int solve_one(Reports reports) {
 }
 
 // Solution to part two
-Int solve_two(Reports reports) {
+Int solve_two(const Reports& reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
     auto check = [&](const std::span<const Int> levels, std::size_t skip) {
         static const Int min = 1;
@@ -97,9 +99,7 @@ Int solve_two(Reports reports) {
 
 // Solve
 int main() {
-    const int day = 2;
-    Reports reports = read();
-    std::print("day {}, part {}: {}\n", day, 1, solve_one(reports));
-    std::print("day {}, part {}: {}\n", day, 2, solve_two(reports));
+    analyze(read, solve_one);
+    analyze(read, solve_two);
     return 0;
 }
