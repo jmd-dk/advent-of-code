@@ -8,7 +8,7 @@ ifeq ($(origin CXX),default)
     endif
 endif
 
-CXXFLAGS += -std=c++23 -Wall -Wextra
+CXXFLAGS += -std=c++23 -O2 -Wall -Wextra -pedantic
 
 python ?= python3
 
