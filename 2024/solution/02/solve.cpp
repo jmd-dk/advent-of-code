@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cstddef>
 #include <cstdint>
 #include <fstream>
 #include <functional>
@@ -38,12 +39,12 @@ Reports read() {
 Int solve_one(Reports reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
     auto check = [&](const std::span<const Int> levels) {
-        const Int min = 1;
-        const Int max = 3;
+        static const Int min = 1;
+        static const Int max = 3;
         const int sign = sgn(levels[0] - levels[1]);
-        for (const auto& [left, right] :
+        for (const auto& [left, rght] :
              std::views::zip(levels, std::views::drop(levels, 1))) {
-            const Int diff = left - right;
+            const Int diff = left - rght;
             if (sgn(diff) != sign || std::abs(diff) < min || max < std::abs(diff)) {
                 return false;
             }
@@ -60,35 +61,36 @@ Int solve_one(Reports reports) {
 // Solution to part two
 Int solve_two(Reports reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
-    std::function<bool(const std::span<Int>, bool)> check;
-    check = [&](const std::span<Int> levels, bool recurse) {
-        const Int min = 1;
-        const Int max = 3;
-        const int sign = sgn(levels[0] - levels[1]);
-        for (auto it_left = levels.begin(), it_rght = levels.begin() + 1;
-             it_rght != levels.end(); it_left++, it_rght++) {
-            const Int diff = *it_left - *it_rght;
-            if (sgn(diff) == sign && min <= std::abs(diff) && std::abs(diff) <= max) {
+    auto check = [&](const std::span<const Int> levels, std::size_t skip) {
+        static const Int min = 1;
+        static const Int max = 3;
+        static const int sign_unset = -2;
+        int sign = sign_unset;
+        for (std::size_t index = 0; index < levels.size() - 1 - (levels.size() - 1 == skip);
+             index++) {
+            if (index == skip) {
                 continue;
             }
-            if (!recurse) {
+            const Int left = levels[index];
+            const Int rght = levels[index + 1 + (index + 1 == skip)];
+            const Int diff = left - rght;
+            if (sign == sign_unset) {
+                sign = sgn(diff);
+            }
+            if (sgn(diff) != sign || std::abs(diff) < min || max < std::abs(diff)) {
                 return false;
             }
-            // Try leaving out left
-            const Int left = *it_left;
-            *it_left = *(it_left - 1);
-            if (check(std::span<Int>(it_left, levels.end()), false)) {
-                return true;
-            }
-            // Try leaving out rght
-            *it_rght = left;
-            return check(std::span<Int>(it_rght, levels.end()), false);
         }
         return true;
     };
     Int num_safe = 0;
     for (auto levels : reports) {
-        num_safe += check(levels, true);
+        for (std::size_t skip = 0; skip < levels.size(); skip++) {
+            if (check(levels, skip)) {
+                num_safe += 1;
+                break;
+            }
+        }
     }
     return num_safe;
 }
