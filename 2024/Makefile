@@ -27,6 +27,12 @@ solution/%/solve: solution/%/solve.cpp $(MAKEFILE_LIST)
 $(puzzles):
 	@$(MAKE) puzzle-$@
 
+format_cmd := clang-format -i -style="{IndentWidth: 4, UseTab: Never, PointerAlignment: Left, AllowShortFunctionsOnASingleLine: false,  ColumnLimit: 92}"
+format = $(addprefix format-,$(puzzles))
+format: $(format)
+$(format):
+	$(format_cmd) solution/$(subst format-,,$@)/solve.cpp
+
 input = $(addprefix input-,$(puzzles))
 input: $(input)
 $(input):
