@@ -65,6 +65,9 @@ With the [`Makefile`](Makefile) you can do the following:
   need to have logged into [Advent of Code](https://adventofcode.com)
   using Chrome or Firefox.
   * `make input-<n>`: Same as above for day `n`.
+* `make format`: Format all solution files
+  using [clang-format](https://clang.llvm.org/docs/ClangFormat.html).
+  * `make format-<n>`: Same as above for day `n`.
 * `make clean`: Cleanup common unwanted, auto-generated files.
 
 > [!NOTE]
