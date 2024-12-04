@@ -13,6 +13,7 @@
 #include <utility>
 #include <vector>
 
+// For taking care of running the solve functions
 template <typename ReadFunc, typename SolveFunc>
 auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
     // Day
@@ -59,15 +60,18 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
         time_stream << "0";
     }
     // Print out results
-    const int width = 34;
+    const int width = 26;
     std::vector<std::string> output = {
         std::format("day {}, part {}: {}", day, part, result),
         std::format("({})", time_stream.str())};
-    std::print(
-        "{}{}{}\n", output[0],
-        std::string(std::max<int>(1, width - output[0].size() - output[1].size()), ' '),
-        output[1]);
+    std::print("{}{}{}\n", output[0],
+               std::string(std::max<int>(1, width - output[0].size()), ' '), output[1]);
     return result;
+}
+
+// Easy, general printing
+void print(auto obj) {
+    std::print("{}\n", obj);
 }
 
 #endif // MAGIC_H

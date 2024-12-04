@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdint>
 #include <fstream>
-#include <print>
 #include <ranges>
 #include <span>
 #include <sstream>
@@ -60,7 +59,7 @@ Int solve_one(Data& data) {
         std::ranges::sort(list);
     }
     Int distance = 0;
-    for (const auto [left, rght] : std::views::zip(data.left, data.rght)) {
+    for (const auto& [left, rght] : std::views::zip(data.left, data.rght)) {
         distance += std::abs(left - rght);
     }
     return distance;

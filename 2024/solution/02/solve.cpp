@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <fstream>
 #include <functional>
-#include <print>
 #include <ranges>
 #include <span>
 #include <sstream>
@@ -41,13 +40,13 @@ Reports read() {
 Int solve_one(const Reports& reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
     auto check = [&](const std::span<const Int> levels) {
-        static const Int min = 1;
-        static const Int max = 3;
+        static constexpr Int min = 1;
+        static constexpr Int max = 3;
         const int sign = sgn(levels[0] - levels[1]);
         for (const auto& [left, rght] :
              std::views::zip(levels, std::views::drop(levels, 1))) {
             const Int diff = left - rght;
-            if (sgn(diff) != sign || std::abs(diff) < min || max < std::abs(diff)) {
+            if (sgn(diff) != sign or std::abs(diff) < min or max < std::abs(diff)) {
                 return false;
             }
         }
@@ -64,9 +63,9 @@ Int solve_one(const Reports& reports) {
 Int solve_two(const Reports& reports) {
     auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
     auto check = [&](const std::span<const Int> levels, std::size_t skip) {
-        static const Int min = 1;
-        static const Int max = 3;
-        static const int sign_unset = -2;
+        static constexpr Int min = 1;
+        static constexpr Int max = 3;
+        static constexpr int sign_unset = -2;
         int sign = sign_unset;
         for (std::size_t index = 0; index < levels.size() - 1 - (levels.size() - 1 == skip);
              index++) {
@@ -79,7 +78,7 @@ Int solve_two(const Reports& reports) {
             if (sign == sign_unset) {
                 sign = sgn(diff);
             }
-            if (sgn(diff) != sign || std::abs(diff) < min || max < std::abs(diff)) {
+            if (sgn(diff) != sign or std::abs(diff) < min or max < std::abs(diff)) {
                 return false;
             }
         }
