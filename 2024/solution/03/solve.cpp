@@ -42,7 +42,7 @@ Int solve_two(const std::string& memory) {
     for (auto it = std::sregex_iterator(memory.begin(), memory.end(), pattern);
          it != std::sregex_iterator(); it++) {
         std::smatch match = *it;
-        if (enable and match[1].matched) {
+        if (enable and match.size() > 1 and match[1].matched) {
             sum += std::stoi(match.str(1)) * std::stoi(match.str(2));
         } else {
             enable = (match.str() == "do()");
