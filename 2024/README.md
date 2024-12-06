@@ -7,7 +7,7 @@ puzzles, written in **C++** (≥ 23)*
 [🌟](solution/03/solve.cpp)
 [🌟](solution/04/solve.cpp)
 [🌟](solution/05/solve.cpp)
-[⚫](solution/06/solve.cpp)
+[🌟](solution/06/solve.cpp)
 [⚫](solution/07/solve.cpp)
 [⚫](solution/08/solve.cpp)
 [⚫](solution/09/solve.cpp)
