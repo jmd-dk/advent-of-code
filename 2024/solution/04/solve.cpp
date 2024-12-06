@@ -1,7 +1,5 @@
 #include <cstddef>
 #include <cstdint>
-#include <fstream>
-#include <stdexcept>
 #include <string>
 
 #include "../../magic.h"
@@ -11,14 +9,8 @@ using Data = std::vector<std::vector<char>>;
 
 // Reading in data
 Data read() {
-    const std::string filename = "input";
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
     Data data;
-    std::string line;
-    while (std::getline(file, line)) {
+    for (const std::string& line : LineReader("input")) {
         data.emplace_back(line.begin(), line.end());
     }
     return data;

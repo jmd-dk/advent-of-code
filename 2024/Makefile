@@ -27,7 +27,7 @@ solution/%/solve: solution/%/solve.cpp magic.h $(MAKEFILE_LIST)
 $(puzzles):
 	@$(MAKE) puzzle-$@
 
-format_cmd := clang-format -i -style="{IndentWidth: 4, UseTab: Never, PointerAlignment: Left, AllowShortFunctionsOnASingleLine: false,  ColumnLimit: 92}"
+format_cmd := clang-format -i -style="{BasedOnStyle: Google, IndentWidth: 4, AccessModifierOffset: -2}"
 format = $(addprefix format-,$(puzzles))
 format: $(format)
 	$(format_cmd) magic.h

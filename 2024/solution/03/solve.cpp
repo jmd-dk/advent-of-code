@@ -1,8 +1,5 @@
 #include <cstdint>
-#include <fstream>
 #include <regex>
-#include <sstream>
-#include <stdexcept>
 #include <string>
 
 #include "../../magic.h"
@@ -11,14 +8,10 @@ using Int = std::int32_t;
 
 // Reading in data
 std::string read() {
-    const std::string filename = "input";
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Failed to open file: " + filename);
+    std::string memory;
+    for (const std::string& line : LineReader("input")) {
+        memory += line;
     }
-    std::ostringstream oss;
-    oss << file.rdbuf();
-    std::string memory = oss.str();
     return memory;
 }
 

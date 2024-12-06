@@ -1,12 +1,10 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
-#include <fstream>
 #include <functional>
 #include <ranges>
 #include <span>
 #include <sstream>
-#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -17,14 +15,8 @@ using Reports = std::vector<std::vector<Int>>;
 
 // Reading in data
 Reports read() {
-    const std::string filename = "input";
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
     Reports reports;
-    std::string line;
-    while (std::getline(file, line)) {
+    for (const std::string& line : LineReader("input")) {
         std::istringstream stream(line);
         std::vector<Int> levels;
         Int level;
@@ -46,7 +38,8 @@ Int solve_one(const Reports& reports) {
         for (const auto& [left, rght] :
              std::views::zip(levels, std::views::drop(levels, 1))) {
             const Int diff = left - rght;
-            if (sgn(diff) != sign or std::abs(diff) < min or max < std::abs(diff)) {
+            if (sgn(diff) != sign or std::abs(diff) < min or
+                max < std::abs(diff)) {
                 return false;
             }
         }
@@ -67,8 +60,8 @@ Int solve_two(const Reports& reports) {
         static constexpr Int max = 3;
         static constexpr int sign_unset = -2;
         int sign = sign_unset;
-        for (std::size_t index = 0; index < levels.size() - 1 - (levels.size() - 1 == skip);
-             index++) {
+        for (std::size_t index = 0;
+             index < levels.size() - 1 - (levels.size() - 1 == skip); index++) {
             if (index == skip) {
                 continue;
             }
@@ -78,7 +71,8 @@ Int solve_two(const Reports& reports) {
             if (sign == sign_unset) {
                 sign = sgn(diff);
             }
-            if (sgn(diff) != sign or std::abs(diff) < min or max < std::abs(diff)) {
+            if (sgn(diff) != sign or std::abs(diff) < min or
+                max < std::abs(diff)) {
                 return false;
             }
         }

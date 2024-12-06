@@ -1,65 +1,41 @@
-#include <algorithm>
 #include <array>
 #include <cmath>
 #include <cstdint>
-#include <fstream>
 #include <ranges>
 #include <span>
 #include <sstream>
-#include <stdexcept>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <vector>
 
 #include "../../magic.h"
 
 using Int = std::int32_t;
-
-// Structure holding the data
-struct Data {
-    std::array<std::vector<Int>, 2> both;
-    std::vector<Int>& left = both[0];
-    std::vector<Int>& rght = both[1];
-    Data() = default;
-    Data(const Data& other) {
-        both[0] = other.both[0];
-        both[1] = other.both[1];
-    }
-    auto begin() {
-        return both.begin();
-    }
-    auto end() {
-        return both.end();
-    }
-};
+using Data = std::tuple<std::vector<Int>, std::vector<Int>>;
 
 // Reading in data
 Data read() {
-    const std::string filename = "input";
-    std::ifstream file(filename);
-    if (!file) {
-        throw std::runtime_error("Failed to open file: " + filename);
-    }
-    Data data;
-    std::string line;
-    while (std::getline(file, line)) {
+    std::vector<Int> list_left;
+    std::vector<Int> list_rght;
+    for (const std::string& line : LineReader("input")) {
         std::istringstream stream(line);
-        for (auto& list : data) {
-            Int n;
-            stream >> n;
-            list.push_back(n);
-        }
+        Int num;
+        stream >> num;
+        list_left.push_back(num);
+        stream >> num;
+        list_rght.push_back(num);
     }
-    return data;
+    return {list_left, list_rght};
 }
 
 // Solution to part one
 Int solve_one(Data& data) {
-    for (auto& list : data) {
-        std::ranges::sort(list);
-    }
+    auto& [list_left, list_rght] = data;
+    std::ranges::sort(list_left);
+    std::ranges::sort(list_rght);
     Int distance = 0;
-    for (const auto& [left, rght] : std::views::zip(data.left, data.rght)) {
+    for (const auto& [left, rght] : std::views::zip(list_left, list_rght)) {
         distance += std::abs(left - rght);
     }
     return distance;
@@ -67,15 +43,16 @@ Int solve_one(Data& data) {
 
 // Solution to part two
 Int solve_two(const Data& data) {
+    auto& [list_left, list_rght] = data;
     auto count = [](std::span<const Int> list) {
         std::unordered_map<Int, Int> counter;
-        for (const Int n : list) {
+        for (const Int& n : list) {
             counter[n] += 1;
         }
         return counter;
     };
-    const auto counter_left = count(data.left);
-    const auto counter_rght = count(data.rght);
+    const auto counter_left = count(list_left);
+    const auto counter_rght = count(list_rght);
     Int score = 0;
     for (const auto& [key, val_left] : counter_left) {
         if (auto it = counter_rght.find(key); it != counter_rght.end()) {
