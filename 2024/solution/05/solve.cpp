@@ -4,6 +4,7 @@
 #include <functional>
 #include <ranges>
 #include <regex>
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -32,8 +33,10 @@ Data read() {
         switch (section) {
             case 0:
                 if (std::regex_match(line, match, pattern_rule)) {
-                    rules.push_back(
-                        {std::stoi(match.str(1)), std::stoi(match.str(2))});
+                    Int left, rght;
+                    std::istringstream(match.str(1)) >> left;
+                    std::istringstream(match.str(2)) >> rght;
+                    rules.push_back({left, rght});
                 }
                 break;
             case 1:
@@ -42,7 +45,9 @@ Data read() {
                                                     pattern_update);
                      it != std::sregex_iterator(); it++) {
                     match = *it;
-                    update.push_back(std::stoi(match.str()));
+                    Int num;
+                    std::istringstream(match.str()) >> num;
+                    update.push_back(num);
                 }
                 updates.push_back(update);
                 break;

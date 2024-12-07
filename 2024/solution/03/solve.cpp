@@ -1,5 +1,6 @@
 #include <cstdint>
 #include <regex>
+#include <sstream>
 #include <string>
 
 #include "../../magic.h"
@@ -22,7 +23,10 @@ Int solve_one(const std::string& memory) {
     for (auto it = std::sregex_iterator(memory.begin(), memory.end(), pattern);
          it != std::sregex_iterator(); it++) {
         std::smatch match = *it;
-        sum += std::stoi(match.str(1)) * std::stoi(match.str(2));
+        Int left, rght;
+        std::istringstream(match.str(1)) >> left;
+        std::istringstream(match.str(2)) >> rght;
+        sum += left * rght;
     }
     return sum;
 }
@@ -36,7 +40,10 @@ Int solve_two(const std::string& memory) {
          it != std::sregex_iterator(); it++) {
         std::smatch match = *it;
         if (enable and match.size() > 1 and match[1].matched) {
-            sum += std::stoi(match.str(1)) * std::stoi(match.str(2));
+            Int left, rght;
+            std::istringstream(match.str(1)) >> left;
+            std::istringstream(match.str(2)) >> rght;
+            sum += left * rght;
         } else {
             enable = (match.str() == "do()");
         }
