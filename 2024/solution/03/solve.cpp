@@ -20,7 +20,7 @@ Int solve_one(const std::string& memory) {
     static const std::regex pattern(R"(mul\((\d+),(\d+)\))");
     Int sum = 0;
     for (auto it = std::sregex_iterator(memory.begin(), memory.end(), pattern);
-         it != std::sregex_iterator(); ++it) {
+         it != std::sregex_iterator(); it++) {
         std::smatch match = *it;
         sum += std::stoi(match.str(1)) * std::stoi(match.str(2));
     }

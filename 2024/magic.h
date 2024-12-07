@@ -120,7 +120,7 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
         }
     }
     // Print out results
-    const int width = 26;
+    const int width = 32;
     std::array<std::string, 2> output = {
         std::format("day {}, part {}: {}", day, part, result),
         std::format("({} {})", time_value, time_unit)};
@@ -160,8 +160,5 @@ struct ArrayHash {
         return hash;
     }
 };
-
-// Easy, general printing
-void print(auto obj) { std::print("{}\n", obj); }
 
 #endif  // MAGIC_H
