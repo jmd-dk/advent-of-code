@@ -23,7 +23,7 @@ using Data = std::tuple<Position, Guard, Positions>;
 Data read() {
     Guard guard;
     Positions obstacles;
-    Position shape;
+    Position shape{};
     Int i = -1;
     for (const std::string& line : LineReader("input")) {
         i++;
