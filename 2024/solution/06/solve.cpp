@@ -68,8 +68,8 @@ Int solve_one(Data& data) {
         {{+1, 0}, {0, -1}},
     };
     Positions visited;
-    while (0 <= guard.pos[0] and guard.pos[0] < shape[0] and
-           0 <= guard.pos[1] and guard.pos[1] < shape[1]) {
+    while (0 <= guard.pos[0] and guard.pos[0] < shape[0] and 0 <= guard.pos[1] and
+           guard.pos[1] < shape[1]) {
         visited.insert(guard.pos);
         auto pos_next = guard.pos;
         for (const Int i : {0, 1}) {
@@ -93,30 +93,29 @@ Int solve_two(Data& data) {
         {{0, +1}, {+1, 0}},
         {{+1, 0}, {0, -1}},
     };
-    auto patrol =
-        [&](Guard guard,
-            std::unordered_map<Position, Positions, ArrayHash<Int>>& visited) {
-            while (0 <= guard.pos[0] and guard.pos[0] < shape[0] and
-                   0 <= guard.pos[1] and guard.pos[1] < shape[1]) {
-                if (auto it = visited.find(guard.pos); it != visited.end()) {
-                    auto& [_, dirs] = *it;
-                    if (dirs.contains(guard.dir)) {
-                        return true;
-                    }
-                }
-                visited[guard.pos].insert(guard.dir);
-                auto pos_next = guard.pos;
-                for (const Int i : {0, 1}) {
-                    pos_next[i] += guard.dir[i];
-                }
-                if (obstacles.contains(pos_next)) {
-                    guard.dir = turn.at(guard.dir);
-                } else {
-                    guard.pos = pos_next;
+    auto patrol = [&](Guard guard,
+                      std::unordered_map<Position, Positions, ArrayHash<Int>>& visited) {
+        while (0 <= guard.pos[0] and guard.pos[0] < shape[0] and 0 <= guard.pos[1] and
+               guard.pos[1] < shape[1]) {
+            if (auto it = visited.find(guard.pos); it != visited.end()) {
+                auto& [_, dirs] = *it;
+                if (dirs.contains(guard.dir)) {
+                    return true;
                 }
             }
-            return false;
-        };
+            visited[guard.pos].insert(guard.dir);
+            auto pos_next = guard.pos;
+            for (const Int i : {0, 1}) {
+                pos_next[i] += guard.dir[i];
+            }
+            if (obstacles.contains(pos_next)) {
+                guard.dir = turn.at(guard.dir);
+            } else {
+                guard.pos = pos_next;
+            }
+        }
+        return false;
+    };
     std::unordered_map<Position, Positions, ArrayHash<Int>> visited;
     patrol(guard, visited);
     std::unordered_map<Position, Positions, ArrayHash<Int>> visited_obstructed;

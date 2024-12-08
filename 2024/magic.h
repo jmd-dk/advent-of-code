@@ -28,13 +28,11 @@ class LineReader {
   private:
     class Iterator {
       public:
-        explicit Iterator(const std::string& filename, bool is_end)
-            : is_end(is_end) {
+        explicit Iterator(const std::string& filename, bool is_end) : is_end(is_end) {
             if (!is_end) {
                 file.open(filename);
                 if (!file) {
-                    throw std::runtime_error("Failed to open file: " +
-                                             filename);
+                    throw std::runtime_error("Failed to open file: " + filename);
                 }
             }
         }
@@ -43,9 +41,7 @@ class LineReader {
             is_end = !std::getline(file, line);
             return *this;
         }
-        bool operator!=(const Iterator& other) const {
-            return is_end != other.is_end;
-        }
+        bool operator!=(const Iterator& other) const { return is_end != other.is_end; }
 
       private:
         bool is_end;
@@ -87,28 +83,21 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
     if (duration >= std::chrono::seconds(1)) {
         time_value = std::format(
             "{:.3g}",
-            std::chrono::duration_cast<std::chrono::milliseconds>(duration)
-                    .count() /
-                1e+3);
+            std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() / 1e+3);
         time_unit = "s";
     } else if (duration >= std::chrono::milliseconds(1)) {
         time_value = std::format(
             "{:.3g}",
-            std::chrono::duration_cast<std::chrono::microseconds>(duration)
-                    .count() /
-                1e+3);
+            std::chrono::duration_cast<std::chrono::microseconds>(duration).count() / 1e+3);
         time_unit = "ms";
     } else if (duration >= std::chrono::microseconds(1)) {
         time_value = std::format(
             "{:.3g}",
-            std::chrono::duration_cast<std::chrono::nanoseconds>(duration)
-                    .count() /
-                1e+3);
+            std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count() / 1e+3);
         time_unit = "µs";
     } else if (duration >= std::chrono::nanoseconds(1)) {
         time_value = std::format(
-            "{}", std::chrono::duration_cast<std::chrono::nanoseconds>(duration)
-                      .count());
+            "{}", std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count());
         time_unit = "ns";
     } else {
         time_value = "no time at all";
@@ -129,8 +118,7 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
         std::format("day {}, part {}: {}", day, part, result),
         std::format("({} {})", time_value, time_unit)};
     std::print("{}{}{}\n", output[0],
-               std::string(std::max<int>(1, width - output[0].size()), ' '),
-               output[1]);
+               std::string(std::max<int>(1, width - output[0].size()), ' '), output[1]);
     return result;
 }
 

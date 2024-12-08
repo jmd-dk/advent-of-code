@@ -8,8 +8,7 @@
 
 using Int = std::uint32_t;
 using Position = std::array<Int, 2>;
-using Data =
-    std::tuple<Position, std::unordered_map<char, std::vector<Position>>>;
+using Data = std::tuple<Position, std::unordered_map<char, std::vector<Position>>>;
 
 // Reading in data
 Data read() {

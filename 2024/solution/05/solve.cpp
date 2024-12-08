@@ -41,8 +41,8 @@ Data read() {
                 break;
             case 1:
                 Update update;
-                for (auto it = std::sregex_iterator(line.begin(), line.end(),
-                                                    pattern_update);
+                for (auto it =
+                         std::sregex_iterator(line.begin(), line.end(), pattern_update);
                      it != std::sregex_iterator(); it++) {
                     match = *it;
                     Int num;
@@ -61,15 +61,13 @@ Int solve_one(const Data& data) {
     const auto& [rules, updates] = data;
     std::unordered_map<std::array<Int, 2>, Rule, ArrayHash<Int>> rules_map;
     auto get_key = [](const Rule& rule) {
-        return std::array<Int, 2>{std::ranges::min(rule),
-                                  std::ranges::max(rule)};
+        return std::array<Int, 2>{std::ranges::min(rule), std::ranges::max(rule)};
     };
     for (const Rule& rule : rules) {
         rules_map[get_key(rule)] = rule;
     }
     auto check_order = [&](Int left, Int rght) {
-        if (auto it = rules_map.find(get_key({left, rght}));
-            it != rules_map.end()) {
+        if (auto it = rules_map.find(get_key({left, rght})); it != rules_map.end()) {
             const auto& [_, rule] = *it;
             if (left != rule[0]) {
                 return false;
@@ -78,11 +76,10 @@ Int solve_one(const Data& data) {
         return true;
     };
     auto check_update = [&](const Update& update) {
-        for (std::size_t index_left = 0; index_left < update.size() - 1;
-             index_left++) {
+        for (std::size_t index_left = 0; index_left < update.size() - 1; index_left++) {
             const Int& left = update[index_left];
-            for (std::size_t index_rght = index_left + 1;
-                 index_rght < update.size(); index_rght++) {
+            for (std::size_t index_rght = index_left + 1; index_rght < update.size();
+                 index_rght++) {
                 const Int& rght = update[index_rght];
                 if (not check_order(left, rght)) {
                     return false;
@@ -105,15 +102,13 @@ Int solve_two(const Data& data) {
     const auto& [rules, updates] = data;
     std::unordered_map<std::array<Int, 2>, Rule, ArrayHash<Int>> rules_map;
     auto get_key = [](const Rule& rule) {
-        return std::array<Int, 2>{std::ranges::min(rule),
-                                  std::ranges::max(rule)};
+        return std::array<Int, 2>{std::ranges::min(rule), std::ranges::max(rule)};
     };
     for (const Rule& rule : rules) {
         rules_map[get_key(rule)] = rule;
     }
     auto check_order = [&](Int left, Int rght) {
-        if (auto it = rules_map.find(get_key({left, rght}));
-            it != rules_map.end()) {
+        if (auto it = rules_map.find(get_key({left, rght})); it != rules_map.end()) {
             const auto& [_, rule] = *it;
             if (left != rule[0]) {
                 return false;
@@ -123,11 +118,10 @@ Int solve_two(const Data& data) {
     };
     auto correct_update = [&](Update& update) {
         bool already_correct = true;
-        for (std::size_t index_left = 0; index_left < update.size() - 1;
-             index_left++) {
+        for (std::size_t index_left = 0; index_left < update.size() - 1; index_left++) {
             const Int left = update[index_left];
-            for (std::size_t index_rght = index_left + 1;
-                 index_rght < update.size(); index_rght++) {
+            for (std::size_t index_rght = index_left + 1; index_rght < update.size();
+                 index_rght++) {
                 const Int rght = update[index_rght];
                 if (not check_order(left, rght)) {
                     update[index_left] = rght;
