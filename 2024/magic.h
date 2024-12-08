@@ -14,23 +14,31 @@
 #include <stdexcept>
 #include <string>
 
-// For rading in a text file line by line
+// For reading in a text file line by line
 class LineReader {
   public:
-    explicit LineReader(const std::string& filename) : file(filename) {
-        if (!file) {
-            throw std::runtime_error("Failed to open file: " + filename);
-        }
+    explicit LineReader(const std::string& filename) : filename(filename) {}
+    auto begin() const {
+        auto it = Iterator(filename, false);
+        ++it;  // read in first line
+        return it;
     }
+    auto end() const { return Iterator(filename, true); }
+
+  private:
     class Iterator {
       public:
-        explicit Iterator(std::ifstream& file, bool is_end)
-            : file(file), is_end(is_end) {
+        explicit Iterator(const std::string& filename, bool is_end)
+            : is_end(is_end) {
             if (!is_end) {
-                ++(*this);
+                file.open(filename);
+                if (!file) {
+                    throw std::runtime_error("Failed to open file: " +
+                                             filename);
+                }
             }
         }
-        std::string operator*() const { return line; }
+        const std::string& operator*() const { return line; }
         Iterator& operator++() {
             is_end = !std::getline(file, line);
             return *this;
@@ -40,15 +48,11 @@ class LineReader {
         }
 
       private:
-        std::ifstream& file;
-        std::string line;
         bool is_end;
+        std::ifstream file;
+        std::string line;
     };
-    Iterator begin() { return Iterator(file, false); }
-    Iterator end() { return Iterator(file, true); }
-
-  private:
-    std::ifstream file;
+    const std::string filename;
 };
 
 // For taking care of running the solve functions
