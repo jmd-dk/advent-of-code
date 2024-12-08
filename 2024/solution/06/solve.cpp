@@ -28,7 +28,7 @@ Data read() {
     for (const std::string& line : LineReader("input")) {
         i++;
         for (const auto& [_j, c] : std::views::enumerate(line)) {
-            Int j = static_cast<Int>(_j);
+            const Int j = static_cast<Int>(_j);
             shape[1] = std::max(shape[1], j);
             switch (c) {
                 case '#':

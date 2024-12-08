@@ -18,7 +18,7 @@ Data read() {
     for (const auto& line : LineReader("input")) {
         i++;
         for (const auto& [_j, freq] : std::views::enumerate(line)) {
-            Int j = static_cast<Int>(_j);
+            const Int j = static_cast<Int>(_j);
             shape[1] = std::max(shape[1], j);
             if (freq != '.') {
                 antennas[freq].push_back({i, j});
@@ -31,8 +31,8 @@ Data read() {
 }
 
 // Solution to part one
-Int solve_one(Data data) {
-    auto [shape, antennas] = data;
+Int solve_one(const Data& data) {
+    const auto& [shape, antennas] = data;
     std::unordered_set<Position, ArrayHash<Int>> antinodes;
     auto add_antinode = [&](const Position& antinode) {
         if (antinode[0] < shape[0] && antinode[1] < shape[1]) {
@@ -52,8 +52,8 @@ Int solve_one(Data data) {
 }
 
 // Solution to part two
-Int solve_two(Data data) {
-    auto [shape, antennas] = data;
+Int solve_two(const Data& data) {
+    const auto& [shape, antennas] = data;
     std::unordered_set<Position, ArrayHash<Int>> antinodes;
     auto add_antinodes = [&](Position pos, const Position& diff) {
         while (pos[0] < shape[0] && pos[1] < shape[1]) {
