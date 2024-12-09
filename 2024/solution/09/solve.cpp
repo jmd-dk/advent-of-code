@@ -90,34 +90,13 @@ Int solve_two(std::list<Block>& diskmap) {
             if (space.size < file.size) {
                 continue;
             }
-            // Pop space
             it_space = diskmap.erase(it_space);
-            // Insert file
             it_space = diskmap.insert(it_space, file);
-            // Insert leftover space
             Int size = space.size - file.size;
             if (size > 0) {
                 it_space = --diskmap.insert(++it_space, {size});
             }
-            // Turn original file into space and merge neighbor spaces
             it_file->free();
-            if (not(--it_file)->is_file()) {
-                size = it_file->size;
-                it_file = diskmap.erase(it_file);
-                it_file->size += size;
-            } else {
-                ++it_file;
-            }
-            if (it_file != --diskmap.end()) {
-                if (not(++it_file)->is_file()) {
-                    size = it_file->size;
-                    it_file = diskmap.erase(it_file);
-                    --it_file;
-                    it_file->size += size;
-                } else {
-                    --it_file;
-                }
-            }
             break;
         }
     }
