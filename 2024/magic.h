@@ -113,7 +113,7 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
         }
     }
     // Print out results
-    const int width = 32;
+    const int width = 33;
     std::array<std::string, 2> output = {
         std::format("day {}, part {}: {}", day, part, result),
         std::format("({} {})", time_value, time_unit)};
