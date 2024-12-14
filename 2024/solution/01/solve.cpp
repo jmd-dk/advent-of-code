@@ -35,7 +35,7 @@ Int solve_one(Data& data) {
     std::ranges::sort(list_left);
     std::ranges::sort(list_rght);
     Int distance = 0;
-    for (const auto& [left, rght] : std::views::zip(list_left, list_rght)) {
+    for (auto [left, rght] : std::views::zip(list_left, list_rght)) {
         distance += std::abs(left - rght);
     }
     return distance;
@@ -46,7 +46,7 @@ Int solve_two(const Data& data) {
     auto& [list_left, list_rght] = data;
     auto count = [](std::span<const Int> list) {
         std::unordered_map<Int, Int> counter;
-        for (const Int& n : list) {
+        for (Int n : list) {
             counter[n] += 1;
         }
         return counter;
@@ -54,9 +54,9 @@ Int solve_two(const Data& data) {
     const auto counter_left = count(list_left);
     const auto counter_rght = count(list_rght);
     Int score = 0;
-    for (const auto& [key, val_left] : counter_left) {
+    for (auto [key, val_left] : counter_left) {
         if (auto it = counter_rght.find(key); it != counter_rght.end()) {
-            const auto& [_, val_rght] = *it;
+            auto [_, val_rght] = *it;
             score += key * val_left * val_rght;
         }
     }

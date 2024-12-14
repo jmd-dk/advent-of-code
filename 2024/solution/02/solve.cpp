@@ -30,14 +30,13 @@ Reports read() {
 
 // Solution to part one
 Int solve_one(const Reports& reports) {
-    auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
-    auto check = [&](const std::span<const Int> levels) {
+    auto sgn = [](Int num) { return (num > 0) - (num < 0); };
+    auto check = [&](std::span<const Int> levels) {
         static constexpr Int min = 1;
         static constexpr Int max = 3;
-        const int sign = sgn(levels[0] - levels[1]);
-        for (const auto& [left, rght] :
-             std::views::zip(levels, std::views::drop(levels, 1))) {
-            const Int diff = left - rght;
+        int sign = sgn(levels[0] - levels[1]);
+        for (auto [left, rght] : std::views::zip(levels, std::views::drop(levels, 1))) {
+            Int diff = left - rght;
             if (sgn(diff) != sign or std::abs(diff) < min or max < std::abs(diff)) {
                 return false;
             }
@@ -53,8 +52,8 @@ Int solve_one(const Reports& reports) {
 
 // Solution to part two
 Int solve_two(const Reports& reports) {
-    auto sgn = [](const Int num) { return (num > 0) - (num < 0); };
-    auto check = [&](const std::span<const Int> levels, std::size_t skip) {
+    auto sgn = [](Int num) { return (num > 0) - (num < 0); };
+    auto check = [&](std::span<const Int> levels, std::size_t skip) {
         static constexpr Int min = 1;
         static constexpr Int max = 3;
         static constexpr int sign_unset = -2;
@@ -64,9 +63,9 @@ Int solve_two(const Reports& reports) {
             if (index == skip) {
                 continue;
             }
-            const Int left = levels[index];
-            const Int rght = levels[index + 1 + (index + 1 == skip)];
-            const Int diff = left - rght;
+            Int left = levels[index];
+            Int rght = levels[index + 1 + (index + 1 == skip)];
+            Int diff = left - rght;
             if (sign == sign_unset) {
                 sign = sgn(diff);
             }

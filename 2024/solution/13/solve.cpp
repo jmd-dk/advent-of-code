@@ -53,7 +53,7 @@ Int solve_one(const std::vector<Machine>& machines) {
     auto compute_cost = [](Int m, Int n) { return m * Costs::A + n * Costs::B; };
     Int cost_tot = 0;
     for (const auto& [a, b, p] : machines) {
-        const Int denom = b[0] * a[1] - a[0] * b[1];
+        Int denom = b[0] * a[1] - a[0] * b[1];
         if (denom == 0) {
             // Degenerate case
             // This case is not present within the input data, so we can ignore it
@@ -61,12 +61,12 @@ Int solve_one(const std::vector<Machine>& machines) {
             continue;
         }
         // Unique solution case
-        const auto [quot_a, rem_a] = std::div(b[0] * p[1] - p[0] * b[1], denom);
+        auto [quot_a, rem_a] = std::div(b[0] * p[1] - p[0] * b[1], denom);
         if (rem_a != 0) {
             // Fractional A-button presses required
             continue;
         }
-        const auto [quot_b, rem_b] = std::div(p[0] - quot_a * a[0], b[0]);
+        auto [quot_b, rem_b] = std::div(p[0] - quot_a * a[0], b[0]);
         if (rem_b != 0) {
             // Fractional B-button presses required
             continue;
@@ -87,7 +87,7 @@ Int solve_two(std::vector<Machine>& machines) {
     auto compute_cost = [](Int m, Int n) { return m * Costs::A + n * Costs::B; };
     Int cost_tot = 0;
     for (const auto& [a, b, p] : machines) {
-        const Int denom = b[0] * a[1] - a[0] * b[1];
+        Int denom = b[0] * a[1] - a[0] * b[1];
         if (denom == 0) {
             // Degenerate case
             // This case is not present within the input data, so we can ignore it
@@ -95,12 +95,12 @@ Int solve_two(std::vector<Machine>& machines) {
             continue;
         }
         // Unique solution case
-        const auto [quot_a, rem_a] = std::div(b[0] * p[1] - p[0] * b[1], denom);
+        auto [quot_a, rem_a] = std::div(b[0] * p[1] - p[0] * b[1], denom);
         if (rem_a != 0) {
             // Fractional A-button presses required
             continue;
         }
-        const auto [quot_b, rem_b] = std::div(p[0] - quot_a * a[0], b[0]);
+        auto [quot_b, rem_b] = std::div(p[0] - quot_a * a[0], b[0]);
         if (rem_b != 0) {
             // Fractional B-button presses required
             continue;

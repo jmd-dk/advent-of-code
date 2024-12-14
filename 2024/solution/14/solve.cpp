@@ -39,7 +39,7 @@ constexpr std::array<Int, 2> space{101, 103};
 Int solve_one(std::vector<Robot>& robots) {
     constexpr Int time = 100;
     for (Robot& robot : robots) {
-        for (const auto dim : {0, 1}) {
+        for (auto dim : {0, 1}) {
             robot.pos[dim] = (robot.pos[dim] + time * robot.vel[dim]) % space[dim];
             if (robot.pos[dim] < 0) {
                 robot.pos[dim] += space[dim];
@@ -54,8 +54,8 @@ Int solve_one(std::vector<Robot>& robots) {
         quadrants[robot.pos[0] > space[0] / 2][robot.pos[1] > space[1] / 2] += 1;
     }
     Int safety_factor = 1;
-    for (const auto i : {0, 1}) {
-        for (const auto j : {0, 1}) {
+    for (auto i : {0, 1}) {
+        for (auto j : {0, 1}) {
             safety_factor *= quadrants[i][j];
         }
     }
@@ -75,7 +75,7 @@ Int solve_two(std::vector<Robot>& robots) {
         for (const Robot& robot : robots) {
             grid[robot.pos[1]][robot.pos[0]] += 1;
         }
-        const Int num_chunks = (space[0] / chunk_size) * (space[1] / chunk_size);
+        Int num_chunks = (space[0] / chunk_size) * (space[1] / chunk_size);
         double entropy = 0;
         for (Int j_bgn = 0; j_bgn < space[1]; j_bgn += chunk_size) {
             Int j_end = std::min(j_bgn + chunk_size, space[1]);
@@ -90,7 +90,7 @@ Int solve_two(std::vector<Robot>& robots) {
                 if (count == 0) {
                     continue;
                 }
-                const double p = static_cast<double>(count) / num_chunks;
+                double p = static_cast<double>(count) / num_chunks;
                 entropy -= p * std::log2(p);
             }
         }
@@ -99,7 +99,7 @@ Int solve_two(std::vector<Robot>& robots) {
     auto print_grid = [](const Grid& grid) {
         for (const auto& row : grid) {
             std::ostringstream stream;
-            for (const Int n : row) {
+            for (Int n : row) {
                 if (n == 0) {
                     stream << " ";
                 } else if (n >= 10) {
@@ -113,7 +113,7 @@ Int solve_two(std::vector<Robot>& robots) {
     };
     auto evolve = [](std::vector<Robot>& robots) {
         for (Robot& robot : robots) {
-            for (const auto dim : {0, 1}) {
+            for (auto dim : {0, 1}) {
                 robot.pos[dim] = (robot.pos[dim] + robot.vel[dim]) % space[dim];
                 if (robot.pos[dim] < 0) {
                     robot.pos[dim] += space[dim];

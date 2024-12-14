@@ -20,7 +20,7 @@ std::vector<Equation> read() {
         std::size_t index = 0;
         for (auto it = std::sregex_iterator(line.begin(), line.end(), pattern);
              it != std::sregex_iterator(); index++, it++) {
-            const std::smatch match = *it;
+            std::smatch match = *it;
             Int num;
             std::istringstream(match.str()) >> num;
             if (index == 0) {
@@ -37,14 +37,14 @@ std::vector<Equation> read() {
 // Solution to part one
 Int solve_one(const std::vector<Equation>& equations) {
     std::function<Int(const Int, const Equation&, std::size_t)> evaluate;
-    evaluate = [&](const Int left, const Equation& equation, std::size_t index) -> Int {
+    evaluate = [&](Int left, const Equation& equation, std::size_t index) -> Int {
         if (equation.first < left) {
             return 0;
         }
         if (index == equation.second.size()) {
             return equation.first == left;
         }
-        const Int rght = equation.second[index++];
+        Int rght = equation.second[index++];
         return evaluate(left + rght, equation, index) +
                evaluate(left * rght, equation, index);
     };
@@ -59,20 +59,20 @@ Int solve_one(const std::vector<Equation>& equations) {
 
 // Solution to part two
 Int solve_two(const std::vector<Equation>& equations) {
-    auto concat = [](const Int left, const Int rght) {
+    auto concat = [](Int left, Int rght) {
         Int num;
         std::istringstream(std::format("{}{}", left, rght)) >> num;
         return num;
     };
-    std::function<Int(const Int, const Equation&, std::size_t)> evaluate;
-    evaluate = [&](const Int left, const Equation& equation, std::size_t index) -> Int {
+    std::function<Int(Int, const Equation&, std::size_t)> evaluate;
+    evaluate = [&](Int left, const Equation& equation, std::size_t index) -> Int {
         if (equation.first < left) {
             return 0;
         }
         if (index == equation.second.size()) {
             return equation.first == left;
         }
-        const Int rght = equation.second[index++];
+        Int rght = equation.second[index++];
         return evaluate(left + rght, equation, index) +
                evaluate(left * rght, equation, index) +
                evaluate(concat(left, rght), equation, index);

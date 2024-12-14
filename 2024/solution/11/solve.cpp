@@ -28,12 +28,12 @@ std::size_t solve_one(std::deque<Int>& stones) {
     constexpr int num_blinks = 25;
     constexpr Int factor = 2024;
     for (auto _ [[maybe_unused]] : std::ranges::iota_view(0, num_blinks)) {
-        const std::size_t count = stones.size();
+        std::size_t count = stones.size();
         for (std::size_t i = 0; i < count; i++) {
             Int stone = stones[0];
             if (stone == 0) {
                 stones.push_back(1);
-            } else if (const std::string str = std::to_string(stone); not(str.size() & 1)) {
+            } else if (std::string str = std::to_string(stone); not(str.size() & 1)) {
                 std::size_t mid = str.size() / 2;
                 std::istringstream(str.substr(0, mid)) >> stone;
                 stones.push_back(stone);
@@ -52,12 +52,12 @@ std::size_t solve_one(std::deque<Int>& stones) {
 std::size_t solve_two(std::deque<Int>& stones) {
     constexpr int num_blinks = 75;
     constexpr Int factor = 2024;
-    auto blink_at_stone = [&](const Int& stone) -> std::vector<Int> {
+    auto blink_at_stone = [&](Int stone) -> std::vector<Int> {
         if (stone == 0) {
             return {1};
-        } else if (const std::string str = std::to_string(stone); not(str.size() & 1)) {
+        } else if (std::string str = std::to_string(stone); not(str.size() & 1)) {
             Int stone0, stone1;
-            const std::size_t mid = str.size() / 2;
+            std::size_t mid = str.size() / 2;
             std::istringstream(str.substr(0, mid)) >> stone0;
             std::istringstream(str.substr(mid)) >> stone1;
             return {stone0, stone1};
@@ -66,13 +66,13 @@ std::size_t solve_two(std::deque<Int>& stones) {
         }
     };
     std::unordered_map<Int, std::size_t> counter;
-    for (const Int& stone : stones) {
+    for (Int stone : stones) {
         counter[stone] += 1;
     }
     std::unordered_map<Int, std::size_t> counter_next;
-    for (const auto& _ [[maybe_unused]] : std::ranges::iota_view(0, num_blinks)) {
-        for (const auto& [value, count] : counter) {
-            for (const Int& value_next : blink_at_stone(value)) {
+    for (auto _ [[maybe_unused]] : std::ranges::iota_view(0, num_blinks)) {
+        for (auto [value, count] : counter) {
+            for (Int value_next : blink_at_stone(value)) {
                 counter_next[value_next] += count;
             }
         }
@@ -80,7 +80,7 @@ std::size_t solve_two(std::deque<Int>& stones) {
         std::swap(counter, counter_next);
     }
     std::size_t count_tot = 0;
-    for (const auto& [value, count] : counter) {
+    for (auto [_, count] : counter) {
         count_tot += count;
     }
     return count_tot;

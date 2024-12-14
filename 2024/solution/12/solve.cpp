@@ -27,12 +27,12 @@ Int solve_one(const Grid& grid) {
         Region region;
         Region visit{pos};
         while (not visit.empty()) {
-            const auto& it = visit.begin();
+            auto it = visit.begin();
             pos = *it;
             visit.erase(it);
             region.insert(pos);
             for (const auto& step : steps) {
-                const Position pos_neighbor{pos[0] + step[0], pos[1] + step[1]};
+                Position pos_neighbor{pos[0] + step[0], pos[1] + step[1]};
                 if (not(0 <= pos_neighbor[0] && pos_neighbor[0] < shape[0] &&
                         0 <= pos_neighbor[1] && pos_neighbor[1] < shape[1])) {
                     continue;
@@ -52,7 +52,7 @@ Int solve_one(const Grid& grid) {
         Region edges;
         for (const auto& pos : region) {
             for (const auto& step : steps) {
-                const Position edge{2 * pos[0] + step[0], 2 * pos[1] + step[1]};
+                Position edge{2 * pos[0] + step[0], 2 * pos[1] + step[1]};
                 if (edges.contains(edge)) {
                     edges.erase(edge);
                 } else {
@@ -65,12 +65,12 @@ Int solve_one(const Grid& grid) {
     Int price_tot = 0;
     Region plots_handled;
     for (const auto& [i, row] : std::views::enumerate(grid)) {
-        for (const auto& [j, type] : std::views::enumerate(row)) {
-            const Position pos{static_cast<Int>(i), static_cast<Int>(j)};
+        for (auto [j, type] : std::views::enumerate(row)) {
+            Position pos{static_cast<Int>(i), static_cast<Int>(j)};
             if (plots_handled.contains(pos)) {
                 continue;
             }
-            const auto region = connect(pos);
+            auto region = connect(pos);
             plots_handled.insert(region.begin(), region.end());
             price_tot += region.size() * get_perimeter(region);
         }
@@ -87,12 +87,12 @@ Int solve_two(const Grid& grid) {
         Region region;
         Region visit{pos};
         while (not visit.empty()) {
-            const auto& it = visit.begin();
+            auto it = visit.begin();
             pos = *it;
             visit.erase(it);
             region.insert(pos);
             for (const auto& step : steps) {
-                const Position pos_neighbor{pos[0] + step[0], pos[1] + step[1]};
+                Position pos_neighbor{pos[0] + step[0], pos[1] + step[1]};
                 if (not(0 <= pos_neighbor[0] && pos_neighbor[0] < shape[0] &&
                         0 <= pos_neighbor[1] && pos_neighbor[1] < shape[1])) {
                     continue;
@@ -112,7 +112,7 @@ Int solve_two(const Grid& grid) {
         Region edges;
         for (const auto& pos : region) {
             for (const auto& step : steps) {
-                const Position edge{2 * pos[0] + step[0], 2 * pos[1] + step[1]};
+                Position edge{2 * pos[0] + step[0], 2 * pos[1] + step[1]};
                 if (edges.contains(edge)) {
                     edges.erase(edge);
                 } else {
@@ -126,11 +126,11 @@ Int solve_two(const Grid& grid) {
         };
         Int num_sides = 0;
         while (not edges.empty()) {
-            const Position edge = *edges.begin();
+            Position edge = *edges.begin();
             num_sides += 1;
             int dim = edge[0] & 1;
             int belongs = does_belong(edge, dim);
-            for (const Int step : {-2, +2}) {
+            for (Int step : {-2, +2}) {
                 Position edge_neighbor = edge;
                 do {
                     edges.erase(edge_neighbor);
@@ -144,12 +144,12 @@ Int solve_two(const Grid& grid) {
     Int price_tot = 0;
     Region plots_handled;
     for (const auto& [i, row] : std::views::enumerate(grid)) {
-        for (const auto& [j, type] : std::views::enumerate(row)) {
-            const Position pos{static_cast<Int>(i), static_cast<Int>(j)};
+        for (auto [j, type] : std::views::enumerate(row)) {
+            Position pos{static_cast<Int>(i), static_cast<Int>(j)};
             if (plots_handled.contains(pos)) {
                 continue;
             }
-            const Region region = connect(pos);
+            Region region = connect(pos);
             plots_handled.insert(region.begin(), region.end());
             price_tot += region.size() * get_num_sides(region);
         }

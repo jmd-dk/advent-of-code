@@ -16,7 +16,7 @@ struct Block {
 std::list<Block> read() {
     std::list<Block> diskmap;
     for (const auto& line : LineReader("input")) {
-        for (const auto& [twice_id, c] : std::views::enumerate(line)) {
+        for (auto [twice_id, c] : std::views::enumerate(line)) {
             Int size = c - '0';
             if (size == 0) {
                 continue;

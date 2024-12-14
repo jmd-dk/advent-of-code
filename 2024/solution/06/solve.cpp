@@ -27,8 +27,8 @@ Data read() {
     Int i = -1;
     for (const std::string& line : LineReader("input")) {
         i++;
-        for (const auto& [_j, c] : std::views::enumerate(line)) {
-            const Int j = static_cast<Int>(_j);
+        for (auto [_j, c] : std::views::enumerate(line)) {
+            Int j = static_cast<Int>(_j);
             shape[1] = std::max(shape[1], j);
             switch (c) {
                 case '#':
@@ -72,7 +72,7 @@ Int solve_one(Data& data) {
            guard.pos[1] < shape[1]) {
         visited.insert(guard.pos);
         auto pos_next = guard.pos;
-        for (const Int i : {0, 1}) {
+        for (auto i : {0, 1}) {
             pos_next[i] += guard.dir[i];
         }
         if (obstacles.contains(pos_next)) {
@@ -105,7 +105,7 @@ Int solve_two(Data& data) {
             }
             visited[guard.pos].insert(guard.dir);
             auto pos_next = guard.pos;
-            for (const Int i : {0, 1}) {
+            for (auto i : {0, 1}) {
                 pos_next[i] += guard.dir[i];
             }
             if (obstacles.contains(pos_next)) {

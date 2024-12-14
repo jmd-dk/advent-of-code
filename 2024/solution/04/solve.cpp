@@ -18,10 +18,10 @@ Data read() {
 
 // Solution to part one
 Int solve_one(const Data& data) {
-    static constexpr std::string target = "XMAS";
+    static constexpr std::string target{"XMAS"};
     const std::array<std::size_t, 2> shape{data.size(), data[0].size()};
     auto check = [&](std::size_t i, std::size_t j, int di, int dj) {
-        for (const char& c : target) {
+        for (char c : target) {
             if (i >= shape[0] or j >= shape[1] or data[i][j] != c) {
                 return false;
             }
@@ -45,13 +45,13 @@ Int solve_one(const Data& data) {
 
 // Solution to part two
 Int solve_two(const Data& data) {
-    static constexpr std::string target = "MAS";
+    static constexpr std::string target{"MAS"};
     static_assert(target.size() & 1);
     const std::array<std::size_t, 2> shape{data.size(), data[0].size()};
     auto check = [&](std::size_t i, std::size_t j, int di, int dj) {
         i -= di * (target.size() / 2);
         j -= dj * (target.size() / 2);
-        for (const char& c : target) {
+        for (char c : target) {
             if (i >= shape[0] or j >= shape[1] or data[i][j] != c) {
                 return false;
             }

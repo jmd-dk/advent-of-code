@@ -17,8 +17,8 @@ Data read() {
     Position shape{};
     for (const auto& line : LineReader("input")) {
         i++;
-        for (const auto& [_j, freq] : std::views::enumerate(line)) {
-            const Int j = static_cast<Int>(_j);
+        for (auto [_j, freq] : std::views::enumerate(line)) {
+            Int j = static_cast<Int>(_j);
             shape[1] = std::max(shape[1], j);
             if (freq != '.') {
                 antennas[freq].push_back({i, j});

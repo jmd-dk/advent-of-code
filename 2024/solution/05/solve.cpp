@@ -77,11 +77,9 @@ Int solve_one(const Data& data) {
     };
     auto check_update = [&](const Update& update) {
         for (std::size_t index_left = 0; index_left < update.size() - 1; index_left++) {
-            const Int& left = update[index_left];
             for (std::size_t index_rght = index_left + 1; index_rght < update.size();
                  index_rght++) {
-                const Int& rght = update[index_rght];
-                if (not check_order(left, rght)) {
+                if (not check_order(update[index_left], update[index_rght])) {
                     return false;
                 }
             }
@@ -119,10 +117,10 @@ Int solve_two(const Data& data) {
     auto correct_update = [&](Update& update) {
         bool already_correct = true;
         for (std::size_t index_left = 0; index_left < update.size() - 1; index_left++) {
-            const Int left = update[index_left];
+            Int left = update[index_left];
             for (std::size_t index_rght = index_left + 1; index_rght < update.size();
                  index_rght++) {
-                const Int rght = update[index_rght];
+                Int rght = update[index_rght];
                 if (not check_order(left, rght)) {
                     update[index_left] = rght;
                     update[index_rght] = left;
