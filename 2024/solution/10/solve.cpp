@@ -23,10 +23,10 @@ Grid read() {
 }
 
 // Solution to part one
-struct Values {
-    static constexpr Int Sentinel = -1;
-    static constexpr Int Begin = 0;
-    static constexpr Int End = 9;
+namespace Values {
+    inline constexpr Int Sentinel = -1;
+    inline constexpr Int Begin = 0;
+    inline constexpr Int End = 9;
 };
 Int solve_one(const Grid& grid) {
     const std::array<Int, 2> shape{static_cast<Int>(grid.size()),
