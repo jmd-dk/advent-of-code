@@ -1,6 +1,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <format>
+#include <functional>
 #include <regex>
 #include <sstream>
 #include <utility>
