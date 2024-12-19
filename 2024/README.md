@@ -20,7 +20,7 @@ puzzles, written in **C++** (≥ 23)*
 [🌟](solution/16/solve.cpp)
 [🌟](solution/17/solve.cpp)
 [🌟](solution/18/solve.cpp)
-[⚫](solution/19/solve.cpp)
+[🌟](solution/19/solve.cpp)
 [⚫](solution/20/solve.cpp)
 [⚫](solution/21/solve.cpp)
 [⚫](solution/22/solve.cpp)
