@@ -37,7 +37,7 @@ std::vector<Equation> read() {
 
 // Solution to part one
 Int solve_one(const std::vector<Equation>& equations) {
-    std::function<Int(const Int, const Equation&, std::size_t)> evaluate;
+    std::function<Int(Int, const Equation&, std::size_t)> evaluate;
     evaluate = [&](Int left, const Equation& equation, std::size_t index) -> Int {
         if (equation.first < left) {
             return 0;
