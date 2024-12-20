@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 

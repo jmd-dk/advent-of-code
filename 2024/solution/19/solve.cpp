@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int64_t;
 using Data = std::tuple<std::vector<std::string>, std::vector<std::string>>;

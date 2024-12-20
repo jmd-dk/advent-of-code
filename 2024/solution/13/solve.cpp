@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int64_t;
 struct Machine {

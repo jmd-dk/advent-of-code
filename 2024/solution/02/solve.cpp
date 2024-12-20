@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 using Reports = std::vector<std::vector<Int>>;

@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <list>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int64_t;
 struct Block {

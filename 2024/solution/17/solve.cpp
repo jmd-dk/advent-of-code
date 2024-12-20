@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int64_t;
 using Data = std::tuple<std::unordered_map<char, Int>, std::vector<Int>>;

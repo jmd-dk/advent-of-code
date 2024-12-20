@@ -5,7 +5,7 @@
 #include <unordered_set>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 using Grid = std::vector<std::vector<std::uint8_t>>;

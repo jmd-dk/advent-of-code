@@ -22,7 +22,7 @@ puzzles: $(addprefix puzzle-,$(puzzles))
 puzzle-%: solution/%/solve
 	@cd $(dir $<) && ./$(notdir $<)
 .PRECIOUS: solution/%/solve
-solution/%/solve: solution/%/solve.cpp magic.h $(MAKEFILE_LIST)
+solution/%/solve: solution/%/solve.cpp magic.hpp $(MAKEFILE_LIST)
 	$(CXX) $(CXXFLAGS) $< -o $@
 $(puzzles):
 	@$(MAKE) puzzle-$@
@@ -30,7 +30,7 @@ $(puzzles):
 format_cmd := clang-format -i -style="{BasedOnStyle: Google, IndentWidth: 4, AccessModifierOffset: -2, ColumnLimit: 92}"
 format = $(addprefix format-,$(puzzles))
 format: $(format)
-	$(format_cmd) magic.h
+	$(format_cmd) magic.hpp
 $(format):
 	$(format_cmd) solution/$(subst format-,,$@)/solve.cpp
 

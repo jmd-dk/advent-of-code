@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <utility>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::uint64_t;
 

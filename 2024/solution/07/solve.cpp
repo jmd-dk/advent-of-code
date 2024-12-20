@@ -7,7 +7,7 @@
 #include <utility>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::uint64_t;
 using Equation = std::pair<Int, std::vector<Int>>;

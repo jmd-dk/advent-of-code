@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 using Data = std::tuple<std::vector<Int>, std::vector<Int>>;

@@ -2,7 +2,7 @@
 #include <ranges>
 #include <unordered_set>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 using Grid = std::vector<std::vector<char>>;

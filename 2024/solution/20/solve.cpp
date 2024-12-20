@@ -3,7 +3,7 @@
 #include <cstdlib>
 #include <unordered_map>
 
-#include "../../magic.h"
+#include "../../magic.hpp"
 
 using Int = std::int32_t;
 using Position = std::array<Int, 2>;
