@@ -58,14 +58,9 @@ Int solve_two(const Data& rotations) {
     Int dial{dial_init};
     for (Int rotation : rotations) {
         auto [q, r] = divmod(dial + rotation, dial_size);
-        if (q < 0) {
-            zeros += -q - (dial == 0);
-            zeros += (r == 0);
-        } else if (q > 0) {
-            zeros += q;
-        } else {
-            zeros += (r == 0);
-        }
+        zeros += std::abs(q);
+        zeros -= (q < 0 && dial == 0);  // remove double-count when starting at 0 and moving left
+        zeros += (q <= 0 && r == 0);    // count landing on 0 unless moving right
         dial = r;
     }
     return zeros;
