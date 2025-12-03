@@ -2,7 +2,6 @@
 #include <cmath>
 #include <cstdint>
 #include <fstream>
-#include <ranges>
 #include <string>
 #include <utility>
 #include <vector>
@@ -15,8 +14,9 @@ using Data = std::vector<Int>;
 // Reading in data
 Data read() {
     Data rotations{};
+    std::string line;
     std::ifstream file{"input"};
-    for (std::string& line : std::ranges::istream_view<std::string>{file}) {
+    while (std::getline(file, line)) {
         Int rotation{};
         std::from_chars(line.data() + 1, line.data() + line.size(), rotation);
         rotation *= (line[0] == 'L' ? -1 : +1);

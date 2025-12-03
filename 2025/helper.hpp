@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <concepts>
 #include <cstddef>
 #include <filesystem>
 #include <format>
@@ -78,6 +79,47 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
         std::string(static_cast<std::size_t>(std::max(1, width - static_cast<int>(output[0].size()))), ' '),
         output[1]
     );
+    return result;
+}
+
+// Hash function for std::array
+struct ArrayHash {
+    /* Simplified version of Python's tuple hashing,
+    itself a simplified version of xxHash. See
+    https://github.com/python/cpython/blob/main/Objects/tupleobject.c
+    */
+    static constexpr bool _64 = (sizeof(std::size_t) > 4);
+    static constexpr std::size_t prime1 = (_64 ? 11400714785074694791uz : 2654435761uz);
+    static constexpr std::size_t prime2 = (_64 ? 14029467366897019727uz : 2246822519uz);
+    static constexpr std::size_t prime5 = (_64 ? 2870177450012600261uz : 374761393uz);
+    template <typename T, std::size_t N>
+    std::size_t operator()(const std::array<T, N>& arr) const {
+        std::hash<T> hasher{};
+        std::size_t hash = prime5;
+        for (const T& elem : arr) {
+            hash += hasher(elem) * prime2;
+            if constexpr (_64) {
+                hash = (hash << 31) | (hash >> 33);
+            } else {
+                hash = (hash << 13) | (hash >> 19);
+            }
+            hash *= prime1;
+        }
+        return hash;
+    }
+};
+
+// Integer power function
+template <std::integral Base, std::unsigned_integral Exp>
+[[nodiscard]] constexpr Base ipow(Base base, Exp exp) noexcept {
+    Base result{1};
+    while (exp != 0) {
+        if (exp & 1) {
+            result *= base;
+        }
+        base *= base;
+        exp >>= 1;
+    }
     return result;
 }
 
