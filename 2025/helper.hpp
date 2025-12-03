@@ -10,6 +10,8 @@
 #include <stdexcept>
 #include <string>
 
+namespace helper {
+
 // For taking care of running the solve functions
 template <typename ReadFunc, typename SolveFunc>
 auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
@@ -78,3 +80,5 @@ auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
     );
     return result;
 }
+
+}  // namespace helper

@@ -68,6 +68,6 @@ Int solve_two(const Data& rotations) {
 
 // Solve
 int main() {
-    analyze(read, solve_one);
-    analyze(read, solve_two);
+    helper::analyze(read, solve_one);
+    helper::analyze(read, solve_two);
 }
