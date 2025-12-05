@@ -37,7 +37,7 @@ Data read() {
 Int solve_one(const Data& ranges) {
     Int sum{};
     for (const Range& range : ranges) {
-        for (Int id = range.first; id <= range.second; id++) {
+        for (Int id{range.first}; id <= range.second; id++) {
             std::string str = std::to_string(id);
             if (str.substr(0, str.size() / 2) == str.substr(str.size() / 2)) {
                 sum += id;
@@ -51,7 +51,7 @@ Int solve_one(const Data& ranges) {
 Int solve_two(const Data& ranges) {
     Int sum{};
     for (const Range& range : ranges) {
-        for (Int id = range.first; id <= range.second; id++) {
+        for (Int id{range.first}; id <= range.second; id++) {
             std::string str = std::to_string(id);
             for (std::size_t i = 1; i <= str.size() / 2; i++) {
                 if (str.size() % i) {

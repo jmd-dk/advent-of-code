@@ -88,14 +88,14 @@ struct ArrayHash {
     itself a simplified version of xxHash. See
     https://github.com/python/cpython/blob/main/Objects/tupleobject.c
     */
-    static constexpr bool _64 = (sizeof(std::size_t) > 4);
-    static constexpr std::size_t prime1 = (_64 ? 11400714785074694791uz : 2654435761uz);
-    static constexpr std::size_t prime2 = (_64 ? 14029467366897019727uz : 2246822519uz);
-    static constexpr std::size_t prime5 = (_64 ? 2870177450012600261uz : 374761393uz);
+    static constexpr bool _64{sizeof(std::size_t) > 4};
+    static constexpr std::size_t prime1{_64 ? 11400714785074694791uz : 2654435761uz};
+    static constexpr std::size_t prime2{_64 ? 14029467366897019727uz : 2246822519uz};
+    static constexpr std::size_t prime5{_64 ? 2870177450012600261uz : 374761393uz};
     template <typename T, std::size_t N>
     std::size_t operator()(const std::array<T, N>& arr) const {
         std::hash<T> hasher{};
-        std::size_t hash = prime5;
+        std::size_t hash{prime5};
         for (const T& elem : arr) {
             hash += hasher(elem) * prime2;
             if constexpr (_64) {
