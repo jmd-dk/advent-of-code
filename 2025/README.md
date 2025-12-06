@@ -7,7 +7,7 @@ puzzles, written in **C++** (≥ 26)*
 [🌟](solution/03/solve.cpp)
 [🌟](solution/04/solve.cpp)
 [🌟](solution/05/solve.cpp)
-[⚫](solution/06/solve.cpp)
+[🌟](solution/06/solve.cpp)
 [⚫](solution/07/solve.cpp)
 [⚫](solution/08/solve.cpp)
 [⚫](solution/09/solve.cpp)
@@ -21,7 +21,8 @@ puzzles, written in **C++** (≥ 26)*
 ## 📜 Guidelines
 The following self-imposed guidelines are adopted:
 * C++ **standard library** only (no external libraries).
-* Parts one and two are to be solved **separately**.
+* The solution to part 1 should **not be needlessly overcomplicated**
+  in order to accommodate part 2.
 
 
 </br>
@@ -33,6 +34,8 @@ with a single file `solve.cpp`, defining the following functions:
   Further data processing should be avoided.
 * `solve_one()`: Solution algorithm for **part one**.
 * `solve_two()`: Solution algorithm for **part two**.
+
+The `helper.hpp` header file implements common helper functionality.
 
 The full (personalized) inputs are
 [not included](https://adventofcode.com/about#legal) in this repository.
