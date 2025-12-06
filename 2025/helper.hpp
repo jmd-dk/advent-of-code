@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <format>
 #include <print>
+#include <source_location>
 #include <stdexcept>
 #include <string>
 
@@ -15,10 +16,12 @@ namespace helper {
 
 // For taking care of running the solve functions
 template <typename ReadFunc, typename SolveFunc>
-auto analyze(ReadFunc&& read_func, SolveFunc&& solve_func) {
+auto analyze(
+    ReadFunc&& read_func, SolveFunc&& solve_func, std::source_location source = std::source_location::current()
+) {
     // Day
     int day{};
-    std::filesystem::path path{__FILE__};
+    std::filesystem::path path{source.file_name()};
     while (path != path.root_path()) {
         path = path.parent_path();
         std::string dirname{path.filename().string()};
