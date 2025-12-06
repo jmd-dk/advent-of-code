@@ -15,6 +15,7 @@
 namespace helper {
 
 // For taking care of running the solve functions
+static unsigned int part{};
 template <typename ReadFunc, typename SolveFunc>
 auto analyze(
     ReadFunc&& read_func, SolveFunc&& solve_func, std::source_location source = std::source_location::current()
@@ -33,7 +34,6 @@ auto analyze(
         break;
     }
     // Part
-    static int part{};
     part++;
     // Read in data
     auto data = read_func();
