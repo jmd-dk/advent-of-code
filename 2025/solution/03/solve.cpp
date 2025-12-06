@@ -20,7 +20,7 @@ Data read() {
     Data banks{};
     auto char2int = [](char c) { return static_cast<Int>(c - '0'); };
     std::ifstream file{"input"};
-    std::string line;
+    std::string line{};
     while (std::getline(file, line)) {
         banks.push_back(line | std::views::transform(char2int) | std::ranges::to<std::vector>());
     }

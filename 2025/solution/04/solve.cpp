@@ -15,7 +15,7 @@ using Data = std::unordered_set<Coord, helper::ArrayHash>;
 Data read() {
     Data map{};
     std::ifstream file{"input"};
-    std::string line;
+    std::string line{};
     for (Int i{}; std::getline(file, line); i++) {
         for (auto [j, c] : std::views::enumerate(line)) {
             if (c == '@') {

@@ -19,7 +19,7 @@ using Data = std::vector<Range>;
 Data read() {
     Data ranges{};
     std::ifstream file{"input"};
-    std::string line;
+    std::string line{};
     std::getline(file, line);
     for (auto&& comma_split : std::views::split(line, ',')) {
         std::string token{comma_split.begin(), comma_split.end()};

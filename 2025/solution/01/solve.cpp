@@ -14,7 +14,7 @@ using Data = std::vector<Int>;
 // Reading in data
 Data read() {
     Data rotations{};
-    std::string line;
+    std::string line{};
     std::ifstream file{"input"};
     while (std::getline(file, line)) {
         Int rotation{};
