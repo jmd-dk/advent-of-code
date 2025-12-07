@@ -8,7 +8,7 @@ puzzles, written in **C++** (≥ 26)*
 [🌟](solution/04/solve.cpp)
 [🌟](solution/05/solve.cpp)
 [🌟](solution/06/solve.cpp)
-[⚫](solution/07/solve.cpp)
+[🌟](solution/07/solve.cpp)
 [⚫](solution/08/solve.cpp)
 [⚫](solution/09/solve.cpp)
 [⚫](solution/10/solve.cpp)

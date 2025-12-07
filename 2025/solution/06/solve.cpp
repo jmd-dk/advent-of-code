@@ -85,7 +85,7 @@ Int solve_one(const Data& data) {
         auto nums = problem.digit_blocks | std::views::transform(interpret_digits);
         return std::ranges::fold_left(std::views::drop(nums, 1), *std::ranges::begin(nums), problem.operation);
     };
-    return std::ranges::fold_left(data | std::views::transform(solve_problem), Int{}, std::plus<>{});
+    return helper::sum(data | std::views::transform(solve_problem));
 }
 
 // Solution to part two

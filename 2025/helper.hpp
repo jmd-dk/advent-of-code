@@ -7,10 +7,13 @@
 #include <cstddef>
 #include <filesystem>
 #include <format>
+#include <functional>
 #include <print>
+#include <ranges>
 #include <source_location>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 namespace helper {
 
@@ -111,6 +114,18 @@ struct ArrayHash {
         return hash;
     }
 };
+
+// General sum and producct functions
+auto sum(std::ranges::input_range auto&& r) {
+    using R = decltype(r);
+    using T = std::ranges::range_value_t<R>;
+    return std::ranges::fold_left(std::forward<R>(r), T{}, std::plus{});
+}
+auto prod(std::ranges::input_range auto&& r) {
+    using R = decltype(r);
+    using T = std::ranges::range_value_t<R>;
+    return std::ranges::fold_left(std::forward<R>(r), T{}, std::multiplies{});
+}
 
 // Integer power function
 template <std::integral Base, std::unsigned_integral Exp>
