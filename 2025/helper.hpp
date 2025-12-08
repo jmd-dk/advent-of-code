@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <chrono>
 #include <concepts>
 #include <cstddef>
@@ -9,6 +10,7 @@
 #include <format>
 #include <functional>
 #include <iostream>
+#include <limits>
 #include <ostream>
 #include <print>
 #include <ranges>
@@ -119,6 +121,188 @@ struct ArrayHash {
     }
 };
 
+// Max-heap
+template <typename T>
+class Heap {
+  public:
+    using value_type = T;
+
+    explicit Heap(std::size_t max_size = std::numeric_limits<std::size_t>::max()) : max_size_(max_size) {}
+
+    Heap(std::vector<T> data_in, std::size_t max_size = std::numeric_limits<std::size_t>::max()) : max_size_(max_size) {
+        push_many(std::move(data_in));
+    }
+
+    [[nodiscard]] bool empty() const noexcept { return data_.empty(); }
+    [[nodiscard]] std::size_t size() const noexcept { return data_.size(); }
+    [[nodiscard]] std::size_t max_size() const noexcept { return max_size_; }
+
+    [[nodiscard]] T const& top() const {
+        if (data_.empty()) {
+            throw std::out_of_range("Heap::top: empty heap");
+        }
+        return data_.front();
+    }
+
+    void push(T value) {
+        if (data_.size() < max_size_) {
+            data_.push_back(std::move(value));
+            std::push_heap(data_.begin(), data_.end());
+        } else if (value < data_.front()) {
+            std::pop_heap(data_.begin(), data_.end());
+            data_.back() = std::move(value);
+            std::push_heap(data_.begin(), data_.end());
+        }
+    }
+
+    template <typename... Args>
+    void emplace(Args&&... args) {
+        T value(std::forward<Args>(args)...);
+        push(std::move(value));
+    }
+
+    T pop() {
+        std::pop_heap(data_.begin(), data_.end());
+        T value = std::move(data_.back());
+        data_.pop_back();
+        return value;
+    }
+
+    void push_many(std::vector<T> data_in) {
+        if (data_in.empty()) {
+            return;
+        }
+        if (data_.empty()) {
+            // Fast path
+            if (data_in.size() > max_size_) {
+                std::nth_element(data_in.begin(), data_in.begin() + max_size_, data_in.end());
+                data_in.resize(max_size_);
+            }
+            data_ = std::move(data_in);
+            std::make_heap(data_.begin(), data_.end());
+        } else {
+            for (T& el : data_in) {
+                push(std::move(el));
+            }
+        }
+    }
+
+    [[nodiscard]] std::vector<T> to_vector() {
+        std::vector<T> vec;
+        vec.reserve(size());
+        while (!empty()) {
+            vec.push_back(pop());
+        }
+        std::ranges::reverse(vec);
+        return vec;
+    }
+    [[nodiscard]] std::vector<T> const& data() const noexcept { return data_; }
+
+  private:
+    std::vector<T> data_{};
+    const std::size_t max_size_{};
+};
+
+// Disjoint Set Union
+class DSU {
+  public:
+    explicit DSU(std::size_t element_count)
+        : element_count_(element_count), component_count_(element_count), sizes_(element_count, 1) {
+        parents_.reserve(element_count_);
+        for (std::size_t i = 0; i < element_count_; ++i) {
+            parents_.push_back(i);
+        }
+    }
+
+    std::size_t find(std::size_t i) noexcept {
+        if (parents_[i] != i) {
+            // Path compression
+            parents_[i] = find(parents_[i]);
+        }
+        return parents_[i];
+    }
+
+    bool unite(std::size_t i, std::size_t j) noexcept {
+        i = find(i);
+        j = find(j);
+        if (i == j) {
+            return false;
+        }
+        if (sizes_[i] < sizes_[j]) {
+            std::swap(i, j);
+        }
+        parents_[j] = i;
+        sizes_[i] += sizes_[j];
+        component_count_--;
+        return true;
+    }
+
+    [[nodiscard]] std::size_t element_count() const noexcept { return element_count_; }
+
+    [[nodiscard]] std::size_t component_count() const noexcept { return component_count_; }
+
+    [[nodiscard]] std::size_t component_size(std::size_t i) noexcept { return sizes_[find(i)]; }
+
+    [[nodiscard]] bool same_component(std::size_t i, std::size_t j) noexcept { return find(i) == find(j); }
+
+    // Get all root indices
+    [[nodiscard]] std::vector<std::size_t> roots() {
+        std::vector<std::size_t> root_indices;
+        root_indices.reserve(component_count_);
+        // Ensure every element points directly to a root
+        for (std::size_t i = 0; i < element_count_; i++) {
+            find(i);
+        }
+        // Collect all roots
+        for (std::size_t i = 0; i < element_count_; i++) {
+            if (parents_[i] == i) {
+                root_indices.push_back(i);
+            }
+        }
+        return root_indices;
+    }
+
+    // Get `num` root indices with smallest/largest component sizes
+    [[nodiscard]] std::vector<std::size_t> roots(std::size_t num, bool largest = false) {
+        if (num == 0) {
+            return {};
+        }
+        // Get all root indices
+        std::vector<std::size_t> root_indices{roots()};
+        if (num >= root_indices.size()) {
+            return root_indices;
+        }
+        // Get component information
+        struct Component {
+            std::size_t size{};
+            std::size_t root{};
+            constexpr auto operator<=>(Component const&) const = default;
+        };
+        std::vector<Component> components;
+        components.reserve(root_indices.size());
+        for (std::size_t root_index : root_indices) {
+            components.emplace_back(component_size(root_index), root_index);
+        }
+        // Filter out the `num` smallest/largest components
+        auto nth = components.begin() + static_cast<decltype(components)::difference_type>(num);
+        if (largest) {
+            std::ranges::nth_element(components, nth, std::ranges::greater{});
+        } else {
+            std::ranges::nth_element(components, nth, std::ranges::less{});
+        }
+        components.resize(num);
+        // Return roots only
+        return components | std::views::transform([](Component const& component) { return component.root; }) |
+               std::ranges::to<std::vector>();
+    }
+
+  private:
+    const std::size_t element_count_{};
+    std::size_t component_count_{};
+    std::vector<std::size_t> sizes_{};
+    std::vector<std::size_t> parents_{};
+};
+
 // General sum and producct functions
 auto sum(std::ranges::input_range auto&& r) {
     using R = decltype(r);
@@ -128,14 +312,15 @@ auto sum(std::ranges::input_range auto&& r) {
 auto prod(std::ranges::input_range auto&& r) {
     using R = decltype(r);
     using T = std::ranges::range_value_t<R>;
-    return std::ranges::fold_left(std::forward<R>(r), T{}, std::multiplies{});
+    return std::ranges::fold_left(std::forward<R>(r), T{1}, std::multiplies{});
 }
 
 // Integer power function
-template <std::integral Base, std::unsigned_integral Exp>
+template <std::integral Base, std::integral Exp>
 [[nodiscard]] constexpr Base ipow(Base base, Exp exp) noexcept {
+    assert(exp >= 0);
     Base result{1};
-    while (exp != 0) {
+    while (exp > 0) {
         if (exp & 1) {
             result *= base;
         }
