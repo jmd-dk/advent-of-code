@@ -8,6 +8,8 @@
 #include <filesystem>
 #include <format>
 #include <functional>
+#include <iostream>
+#include <ostream>
 #include <print>
 #include <ranges>
 #include <ratio>
@@ -86,6 +88,7 @@ auto analyze(
         std::string(static_cast<std::size_t>(std::max(1, width - static_cast<int>(output[0].size()))), ' '),
         output[1]
     );
+    std::cout << std::flush;
     return result;
 }
 
