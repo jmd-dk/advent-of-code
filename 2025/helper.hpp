@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include <vector>
 
 namespace helper {
 
@@ -140,13 +141,6 @@ class Heap {
     [[nodiscard]] bool empty() const noexcept { return data_.empty(); }
     [[nodiscard]] std::size_t size() const noexcept { return data_.size(); }
     [[nodiscard]] std::size_t max_size() const noexcept { return max_size_; }
-
-    [[nodiscard]] T const& top() const {
-        if (data_.empty()) {
-            throw std::out_of_range("Heap::top: empty heap");
-        }
-        return data_.front();
-    }
 
     void push(T value) {
         if (data_.size() < max_size_) {

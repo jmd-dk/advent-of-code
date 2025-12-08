@@ -8,7 +8,7 @@ ifeq ($(origin CXX),default)
     endif
 endif
 
-CXXFLAGS += -std=c++2c
+CXXFLAGS += -std=c++26
 CXXFLAGS += -DNDEBUG -O3 -funroll-loops -ffast-math -march=native
 CXXFLAGS += -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion -Wshadow -Werror
 
