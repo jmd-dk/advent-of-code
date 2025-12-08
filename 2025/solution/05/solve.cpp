@@ -2,7 +2,7 @@
 #include <charconv>
 #include <cstdint>
 #include <fstream>
-#include <ranges>
+#include <string>
 #include <utility>
 #include <vector>
 

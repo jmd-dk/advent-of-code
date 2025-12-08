@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <fstream>
 #include <ranges>
+#include <string>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>

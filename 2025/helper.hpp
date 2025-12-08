@@ -10,6 +10,7 @@
 #include <functional>
 #include <print>
 #include <ranges>
+#include <ratio>
 #include <source_location>
 #include <stdexcept>
 #include <string>
