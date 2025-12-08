@@ -121,15 +121,19 @@ struct ArrayHash {
     }
 };
 
-// Max-heap
-template <typename T>
+// Heap
+template <typename T, typename Compare>
 class Heap {
   public:
     using value_type = T;
 
-    explicit Heap(std::size_t max_size = std::numeric_limits<std::size_t>::max()) : max_size_(max_size) {}
+    explicit Heap(std::size_t max_size = std::numeric_limits<std::size_t>::max(), Compare comp = Compare{})
+        : max_size_(max_size), comp_(std::move(comp)) {}
 
-    Heap(std::vector<T> data_in, std::size_t max_size = std::numeric_limits<std::size_t>::max()) : max_size_(max_size) {
+    explicit Heap(
+        std::vector<T> data_in, std::size_t max_size = std::numeric_limits<std::size_t>::max(), Compare comp = Compare{}
+    )
+        : max_size_(max_size), comp_(std::move(comp)) {
         push_many(std::move(data_in));
     }
 
@@ -147,11 +151,11 @@ class Heap {
     void push(T value) {
         if (data_.size() < max_size_) {
             data_.push_back(std::move(value));
-            std::push_heap(data_.begin(), data_.end());
-        } else if (value < data_.front()) {
-            std::pop_heap(data_.begin(), data_.end());
+            std::ranges::push_heap(data_, comp_);
+        } else if (comp_(value, data_.front())) {
+            std::ranges::pop_heap(data_, comp_);
             data_.back() = std::move(value);
-            std::push_heap(data_.begin(), data_.end());
+            std::ranges::push_heap(data_, comp_);
         }
     }
 
@@ -162,7 +166,7 @@ class Heap {
     }
 
     T pop() {
-        std::pop_heap(data_.begin(), data_.end());
+        std::ranges::pop_heap(data_, comp_);
         T value = std::move(data_.back());
         data_.pop_back();
         return value;
@@ -175,11 +179,12 @@ class Heap {
         if (data_.empty()) {
             // Fast path
             if (data_in.size() > max_size_) {
-                std::nth_element(data_in.begin(), data_in.begin() + max_size_, data_in.end());
+                auto last = data_in.begin() + static_cast<decltype(data_in)::difference_type>(max_size_);
+                std::ranges::nth_element(data_in, last, comp_);
                 data_in.resize(max_size_);
             }
             data_ = std::move(data_in);
-            std::make_heap(data_.begin(), data_.end());
+            std::ranges::make_heap(data_, comp_);
         } else {
             for (T& el : data_in) {
                 push(std::move(el));
@@ -196,12 +201,20 @@ class Heap {
         std::ranges::reverse(vec);
         return vec;
     }
+
     [[nodiscard]] std::vector<T> const& data() const noexcept { return data_; }
 
   private:
     std::vector<T> data_{};
     const std::size_t max_size_{};
+    Compare comp_{};
 };
+
+// Named Heap specializations
+template <typename T>
+using MinHeap = Heap<T, std::less<T>>;
+template <typename T>
+using MaxHeap = Heap<T, std::greater<T>>;
 
 // Disjoint Set Union
 class DSU {
