@@ -337,4 +337,14 @@ template <std::integral Base, std::integral Exp>
     return result;
 }
 
+// Combined concept for integral and floating-point
+template <typename T>
+concept arithmetic = std::integral<T> || std::floating_point<T>;
+
+// Mathematical sign function, with possible return values {-1, 0, +1}
+template <arithmetic T>
+constexpr T sign(T x) {
+    return (x > T{0}) - (x < T{0});
+}
+
 }  // namespace helper
