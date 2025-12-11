@@ -367,14 +367,226 @@ template <std::integral Base, std::integral Exp>
     return result;
 }
 
-// Combined concept for integral and floating-point
+// Rational (integer fraction) number type
+template <std::integral T>
+class Rational {
+  public:
+    using number_tag = void;  // for number concept
+
+    Rational() = default;
+
+    constexpr Rational(T n) : num_(n), den_(T{1}) {}
+
+    constexpr Rational(T n, T d) : num_(n), den_(d) {
+        if (den_ == T{}) {
+            throw std::invalid_argument("Rational: denominator cannot be zero");
+        }
+        normalize();
+    }
+
+    [[nodiscard]] constexpr T num() const noexcept { return num_; }
+    [[nodiscard]] constexpr T den() const noexcept { return den_; }
+
+    [[nodiscard]] constexpr Rational reciprocal() const { return Rational(den_, num_); }
+
+    [[nodiscard]] std::string to_string() const {
+        if (den_ == T{1}) {
+            return std::format("{}", num_);
+        }
+        return std::format("{}/{}", num_, den_);
+    }
+
+    // --------------------------------
+    // (Rational, Rational) arithmetics
+    // --------------------------------
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator+(Rational<U> other) const {
+        return Rational(num_ * other.den() + other.num() * den_, den_ * other.den());
+    }
+
+    [[nodiscard]] constexpr Rational operator+() const noexcept { return Rational(num_, den_); }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator-(Rational<U> other) const {
+        return Rational(num_ * other.den() - other.num() * den_, den_ * other.den());
+    }
+
+    [[nodiscard]] constexpr Rational operator-() const noexcept { return Rational(-num_, den_); }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator*(Rational<U> other) const {
+        return Rational(num_ * other.num(), den_ * other.den());
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator/(Rational<U> other) const {
+        if (other.num() == U{}) {
+            throw std::invalid_argument("Rational: division by zero");
+        }
+        return Rational(num_ * other.den(), den_ * other.num());
+    }
+
+    // -------------------
+    // Compound assignment
+    // -------------------
+
+    constexpr Rational& operator+=(Rational other) {
+        *this = *this + other;
+        return *this;
+    }
+
+    constexpr Rational& operator-=(Rational other) {
+        *this = *this - other;
+        return *this;
+    }
+
+    constexpr Rational& operator*=(Rational other) {
+        *this = *this * other;
+        return *this;
+    }
+
+    constexpr Rational& operator/=(Rational other) {
+        *this = *this / other;
+        return *this;
+    }
+
+    // -------------------------------------
+    // (Rational, std::integral) arithmetics
+    // -------------------------------------
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator+(U value) const {
+        return *this + Rational<U>(value);
+    }
+
+    template <std::integral U>
+    [[nodiscard]] friend constexpr auto operator+(U lhs, Rational rhs) {
+        return Rational<U>(lhs) + rhs;
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator-(U value) const {
+        return *this - Rational<U>(value);
+    }
+
+    template <std::integral U>
+    [[nodiscard]] friend constexpr auto operator-(U lhs, Rational rhs) {
+        // (lhs) - (rhs)
+        return Rational<U>(lhs) - rhs;
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator*(U value) const {
+        return *this * Rational<U>(value);
+    }
+
+    template <std::integral U>
+    [[nodiscard]] friend constexpr auto operator*(U lhs, Rational rhs) {
+        return rhs * Rational<U>(lhs);
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr auto operator/(U value) const {
+        if (value == U{}) {
+            throw std::invalid_argument("Rational: division by zero");
+        }
+        return *this / Rational<U>(value);
+    }
+
+    template <std::integral U>
+    [[nodiscard]] friend constexpr auto operator/(U lhs, Rational rhs) {
+        return Rational<U>(lhs) / rhs;
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr Rational pow(U exponent) const {
+        if (exponent == U{}) {
+            if (*this == T{}) {
+                throw std::invalid_argument("Rational::pow: 0^0 is undefined");
+            }
+            return Rational(T{1});
+        }
+        if (exponent < U{}) {
+            return reciprocal().pow(-exponent);
+        }
+        return Rational(ipow(num_, exponent), ipow(den_, exponent));
+    }
+
+    // -----------
+    // Comparisons
+    // -----------
+
+    template <std::integral U>
+    [[nodiscard]] constexpr bool operator==(Rational<U> other) const noexcept {
+        return num_ == other.num() && den_ == other.den();
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr bool operator==(U value) const noexcept {
+        return *this == Rational<U>(value);
+    }
+
+    template <std::integral U>
+    constexpr std::strong_ordering operator<=>(Rational<U> other) const noexcept {
+        return num_ * other.den() <=> other.num() * den_;
+    }
+
+    template <std::integral U>
+    constexpr std::strong_ordering operator<=>(U value) const noexcept {
+        return *this <=> Rational<U>(value);
+    }
+
+    [[nodiscard]] explicit constexpr operator bool() const noexcept { return num_ != T{}; }
+
+  private:
+    constexpr void normalize() noexcept {
+        if (num_ == T{}) {
+            den_ = T{1};
+            return;
+        }
+        if (den_ < T{}) {
+            num_ = -num_;
+            den_ = -den_;
+        }
+        const T gcd = std::gcd(num_, den_);
+        num_ /= gcd;
+        den_ /= gcd;
+    }
+
+    T num_{};
+    T den_{1};
+};
+
+// Combined concept for number-like types
 template <typename T>
-concept arithmetic = std::integral<T> || std::floating_point<T>;
+concept number = std::integral<T> || std::floating_point<T> || requires { typename T::number_tag; };
 
 // Mathematical sign function, with possible return values {-1, 0, +1}
-template <arithmetic T>
+template <number T>
 constexpr T sign(T x) {
-    return (x > T{0}) - (x < T{0});
+    return (x > T{}) - (x < T{});
 }
 
 }  // namespace helper
+
+// Specializations of std templates
+namespace std {
+
+// Hashing of Rational objects
+template <std::integral T>
+struct hash<helper::Rational<T>> {
+    [[nodiscard]] constexpr std::size_t operator()(helper::Rational<T> const& rational) const noexcept {
+        return helper::ArrayHash{}({rational.num(), rational.den()});
+    }
+};
+
+// Formatting of Rational objects
+template <class T>
+struct formatter<helper::Rational<T>> : std::formatter<std::string> {
+    auto format(helper::Rational<T> const& rational, auto& ctx) const {
+        return std::formatter<std::string>::format(rational.to_string(), ctx);
+    }
+};
+
+}  // namespace std
