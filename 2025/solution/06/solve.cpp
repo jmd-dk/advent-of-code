@@ -33,19 +33,23 @@ Data read() {
         for (auto [_i, c] : std::views::enumerate(line)) {
             std::size_t i = static_cast<std::size_t>(_i);
             switch (c) {
-            case ' ':
-                row.push_back(std::nullopt);
-                break;
-            case '+':
-                operations.push_back(std::plus<>{});
-                col_indices.push_back(i);
-                break;
-            case '*':
-                operations.push_back(std::multiplies<>{});
-                col_indices.push_back(i);
-                break;
-            default:
-                row.push_back(static_cast<Int>(c - '0'));
+                case ' ': {
+                    row.push_back(std::nullopt);
+                    break;
+                }
+                case '+': {
+                    operations.push_back(std::plus<>{});
+                    col_indices.push_back(i);
+                    break;
+                }
+                case '*': {
+                    operations.push_back(std::multiplies<>{});
+                    col_indices.push_back(i);
+                    break;
+                }
+                default: {
+                    row.push_back(static_cast<Int>(c - '0'));
+                }
             }
         }
         rows.push_back(std::move(row));

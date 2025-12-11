@@ -20,7 +20,7 @@ using Data = std::vector<Coord>;
 
 // Reading in data
 Data read() {
-    Data data;
+    Data data{};
     std::ifstream file{"input"};
     std::string line{};
     while (std::getline(file, line)) {

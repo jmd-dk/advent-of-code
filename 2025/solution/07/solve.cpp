@@ -29,14 +29,14 @@ Data read() {
         for (auto [_j, c] : std::views::enumerate(line)) {
             Int j = static_cast<Int>(_j);
             switch (c) {
-            case '^':
-                map.splitters.insert({i, j});
-                map.shape[0] = std::max(map.shape[0], i + 1);
-                map.shape[1] = std::max(map.shape[1], j + 1);
-                break;
-            case 'S':
-                start = {i, j};
-                break;
+                case '^':
+                    map.splitters.insert({i, j});
+                    map.shape[0] = std::max(map.shape[0], i + 1);
+                    map.shape[1] = std::max(map.shape[1], j + 1);
+                    break;
+                case 'S':
+                    start = {i, j};
+                    break;
             }
         }
     }

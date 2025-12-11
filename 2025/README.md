@@ -11,7 +11,7 @@ puzzles, written in **C++** (≥ 26)*
 [🌟](solution/07/solve.cpp)
 [🌟](solution/08/solve.cpp)
 [🌟](solution/09/solve.cpp)
-[⚫](solution/10/solve.cpp)
+[⭐](solution/10/solve.cpp)
 [⚫](solution/11/solve.cpp)
 [⚫](solution/12/solve.cpp)
 

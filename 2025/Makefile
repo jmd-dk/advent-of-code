@@ -29,7 +29,7 @@ solution/%/solve: solution/%/solve.cpp helper.hpp $(MAKEFILE_LIST)
 $(puzzles):
 	@$(MAKE) puzzle-$@
 
-format_cmd := clang-format -i -style='{BasedOnStyle: LLVM, IndentWidth: 4, ContinuationIndentWidth: 4, AccessModifierOffset: -2, ColumnLimit: 120, PointerAlignment: Left, AlwaysBreakTemplateDeclarations: true, AlignAfterOpenBracket: BlockIndent, BinPackArguments: false, BinPackParameters: false, Cpp11BracedListStyle: true, InsertTrailingCommas: Wrapped, SpacesBeforeTrailingComments: 2, PenaltyBreakAssignment: 250, PenaltyBreakBeforeFirstCallParameter: 400, PenaltyBreakString: 300}'
+format_cmd := clang-format -i -style='{BasedOnStyle: LLVM, IndentWidth: 4, ContinuationIndentWidth: 4, AccessModifierOffset: -2, ColumnLimit: 120, PointerAlignment: Left, AlwaysBreakTemplateDeclarations: true, AlignAfterOpenBracket: BlockIndent, BinPackArguments: false, BinPackParameters: false, Cpp11BracedListStyle: true, IndentCaseLabels: true, InsertTrailingCommas: Wrapped, SpacesBeforeTrailingComments: 2, PenaltyBreakAssignment: 250, PenaltyBreakBeforeFirstCallParameter: 400, PenaltyBreakString: 300}'
 format = $(addprefix format-,$(puzzles))
 format: $(format)
 	$(format_cmd) helper.hpp

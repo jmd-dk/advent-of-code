@@ -58,7 +58,7 @@ std::size_t solve_one(const Data& data) {
     constexpr std::size_t num_connections = 1'000;
     constexpr std::size_t num_largest = 3;
     // Heapify all coordinate pairs over their (squared) distances
-    helper::MinHeap<CoordPair> heap(num_connections);
+    helper::MaxHeap<CoordPair> heap(num_connections);
     for (std::size_t i = 0; i < data.size(); i++) {
         for (std::size_t j = i + 1; j < data.size(); j++) {
             heap.emplace(i, j, data);

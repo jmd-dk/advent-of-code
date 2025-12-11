@@ -9,8 +9,10 @@
 #include <filesystem>
 #include <format>
 #include <functional>
+#include <generator>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <ostream>
 #include <print>
 #include <ranges>
@@ -153,19 +155,6 @@ class Heap {
         }
     }
 
-    template <typename... Args>
-    void emplace(Args&&... args) {
-        T value(std::forward<Args>(args)...);
-        push(std::move(value));
-    }
-
-    T pop() {
-        std::ranges::pop_heap(data_, comp_);
-        T value = std::move(data_.back());
-        data_.pop_back();
-        return value;
-    }
-
     void push_many(std::vector<T> data_in) {
         if (data_in.empty()) {
             return;
@@ -185,6 +174,21 @@ class Heap {
             }
         }
     }
+
+    template <typename... Args>
+    void emplace(Args&&... args) {
+        T value(std::forward<Args>(args)...);
+        push(std::move(value));
+    }
+
+    T pop() {
+        std::ranges::pop_heap(data_, comp_);
+        T value = std::move(data_.back());
+        data_.pop_back();
+        return value;
+    }
+
+    [[nodiscard]] const T& top() const { return data_.front(); }
 
     [[nodiscard]] std::vector<T> to_vector() {
         std::vector<T> vec;
@@ -206,9 +210,9 @@ class Heap {
 
 // Named Heap specializations
 template <typename T>
-using MinHeap = Heap<T, std::less<T>>;
+using MinHeap = Heap<T, std::greater<T>>;
 template <typename T>
-using MaxHeap = Heap<T, std::greater<T>>;
+using MaxHeap = Heap<T, std::less<T>>;
 
 // Disjoint Set Union
 class DSU {
@@ -309,6 +313,32 @@ class DSU {
     std::vector<std::size_t> sizes_{};
     std::vector<std::size_t> parents_{};
 };
+
+// Coroutine for generating all subsets of indices from a size
+// in lexicographic order.
+inline std::generator<std::span<const std::size_t>> powerset(std::size_t n) {
+    std::vector<std::size_t> indices;
+    indices.reserve(n);
+    for (std::size_t k = 0; k <= n; ++k) {
+        indices.resize(k);
+        std::iota(indices.begin(), indices.end(), std::size_t{});
+        auto next_combination = [&]() {
+            for (std::size_t i = k; i-- > 0;) {
+                if (indices[i] != i + n - k) {
+                    indices[i]++;
+                    for (std::size_t j = i + 1; j < k; j++) {
+                        indices[j] = indices[j - 1] + 1;
+                    }
+                    return true;
+                }
+            }
+            return false;  // exhausted all subsets
+        };
+        do {
+            co_yield indices;
+        } while (next_combination());
+    }
+}
 
 // General sum and producct functions
 auto sum(std::ranges::input_range auto&& r) {
