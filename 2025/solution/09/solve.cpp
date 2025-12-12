@@ -187,7 +187,7 @@ Int solve_two(const Data& data) {
                 if (!invalid) {
                     Int width = (x_max - x_min) + 1;
                     Int hight = (y_max - y_min) + 1;
-                    co_yield width* hight;
+                    co_yield width * hight;
                 }
             }
         }
