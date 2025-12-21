@@ -48,6 +48,22 @@ auto analyze(
     }
     // Part
     part++;
+    // Read in answer file if present
+    auto read_answers = []() -> std::vector<std::string> {
+        std::filesystem::path path_answer{"answer"};
+        if (!std::filesystem::is_regular_file(path_answer)) {
+            return {};
+        }
+        std::string line_answer{};
+        std::ifstream file{path_answer};
+        std::getline(file, line_answer);
+        auto tokens = line_answer | std::views::split(' ') |
+                      std::views::filter([](auto&& token_part) { return !std::ranges::empty(token_part); }) |
+                      std::views::transform([](auto&& token_part) { return std::ranges::to<std::string>(token_part); });
+        return std::ranges::to<std::vector<std::string>>(tokens);
+    };
+    std::vector<std::string> answers = read_answers();
+    assert(answers.size() <= 2);
     // Read in data
     auto data = read_func();
     // Solve and measure execution time
@@ -84,10 +100,18 @@ auto analyze(
         }
     }
     // Print out results
-    constexpr int width{32};
+    constexpr int width{34};
+    std::string checkmark{" "};
+    if (0 < part && part - 1 < answers.size()) {
+        if (std::format("{}", result) == answers[part - 1]) {
+            checkmark = "\x1b[32m✓\x1b[0m";
+        } else {
+            checkmark = "\x1b[31m✗\x1b[0m";
+        }
+    }
     std::array output{
-        std::format("day {}, part {}: {}", day, part, result),
-        std::format("({}{}{})", time_value, time_unit.empty() ? "" : " ", time_unit),
+        std::format("day {:>2}, part {}: {}", day, part, result),
+        std::format("{} \x1b[2m{}{}{}\x1b[0m", checkmark, time_value, time_unit.empty() ? "" : " ", time_unit),
     };
     std::println(
         "{}{}{}",
