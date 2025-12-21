@@ -12,7 +12,7 @@
 
 using Int = std::int64_t;
 using Coord = std::array<Int, 2>;
-using CoordSet = std::unordered_set<Coord, helper::ArrayHash>;
+using CoordSet = std::unordered_set<Coord, aoc::ArrayHash>;
 struct Map {
     CoordSet splitters{};
     Coord shape{};
@@ -86,11 +86,11 @@ Int solve_two(const Data& data) {
         }
         std::swap(beams, beams_next);
     }
-    return helper::sum(std::views::values(beams));
+    return aoc::sum(std::views::values(beams));
 }
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

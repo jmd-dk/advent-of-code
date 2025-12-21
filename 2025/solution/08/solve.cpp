@@ -46,7 +46,7 @@ struct CoordPair {
     CoordPair() = default;
     CoordPair(std::size_t i_, std::size_t j_, std::span<const Coord> data) : i(i_), j(j_) {
         for (auto [value_i, value_j] : std::views::zip(data[i], data[j])) {
-            dist2 += helper::ipow(value_j - value_i, 2);
+            dist2 += aoc::ipow(value_j - value_i, 2);
         }
     }
 
@@ -58,20 +58,20 @@ std::size_t solve_one(const Data& data) {
     constexpr std::size_t num_connections = 1'000;
     constexpr std::size_t num_largest = 3;
     // Heapify all coordinate pairs over their (squared) distances
-    helper::MaxHeap<CoordPair> heap(num_connections);
+    aoc::MaxHeap<CoordPair> heap(num_connections);
     for (std::size_t i = 0; i < data.size(); i++) {
         for (std::size_t j = i + 1; j < data.size(); j++) {
             heap.emplace(i, j, data);
         }
     }
     // Count disjoint components using DSU
-    helper::DSU dsu(data.size());
+    aoc::DSU dsu(data.size());
     for (const CoordPair& coord_pair : heap.data()) {
         dsu.unite(coord_pair.i, coord_pair.j);
     }
     bool largest = true;
-    return helper::prod(
-        dsu.roots(num_largest, largest) | std::views::transform(std::bind_front(&helper::DSU::component_size, &dsu))
+    return aoc::prod(
+        dsu.roots(num_largest, largest) | std::views::transform(std::bind_front(&aoc::DSU::component_size, &dsu))
     );
 }
 
@@ -88,7 +88,7 @@ Int solve_two(const Data& data) {
     }
     std::ranges::sort(coord_pairs);
     // Build up DSU until network is complete
-    helper::DSU dsu(data.size());
+    aoc::DSU dsu(data.size());
     CoordPair final_coord_pair{};
     for (const CoordPair& coord_pair : coord_pairs) {
         dsu.unite(coord_pair.i, coord_pair.j);
@@ -102,6 +102,6 @@ Int solve_two(const Data& data) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

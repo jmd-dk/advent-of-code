@@ -18,12 +18,14 @@
 #include <ranges>
 #include <ratio>
 #include <source_location>
+#include <span>
 #include <stdexcept>
 #include <string>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
-namespace helper {
+namespace aoc {
 
 // For taking care of running the solve functions
 static unsigned int part{};
@@ -373,28 +375,45 @@ class Rational {
   public:
     using number_tag = void;  // for number concept
 
+    // Default ctor: constructs 0/1
     Rational() = default;
 
-    constexpr Rational(T n) : num_(n), den_(T{1}) {}
+    // 1-param ctor: constructs n/1
+    constexpr Rational(T num) : num_(num) {}
 
-    constexpr Rational(T n, T d) : num_(n), den_(d) {
+    // 2-param ctor: constructs num/den (normalizes, throws if den == 0)
+    constexpr Rational(T num, T den) : num_(num), den_(den) {
         if (den_ == T{}) {
             throw std::invalid_argument("Rational: denominator cannot be zero");
         }
         normalize();
     }
 
+    // 2-param ctor for other types
+    template <std::integral NUM, std::integral DEN>
+    constexpr Rational(NUM num, DEN den) : Rational(T{num}, T{den}) {}
+
+    // Cross-type ctor
+    template <std::integral U>
+    explicit constexpr Rational(Rational<U> other) : Rational(T{other.num()}, T{other.den()}) {}
+
+    // Explicit conversion from Rational to integral or floating-point
+    template <typename U>
+        requires(std::integral<U> || std::floating_point<U>)
+    [[nodiscard]] explicit constexpr operator U() const noexcept {
+        return static_cast<U>(num_) / static_cast<U>(den_);
+    }
+
+    // Assignment operator from Rational<U> to Rational<T>
+    template <std::integral U>
+        requires(!std::same_as<U, T>)
+    constexpr Rational& operator=(Rational<U> other) {
+        *this = Rational<T>(other);
+        return *this;
+    }
+
     [[nodiscard]] constexpr T num() const noexcept { return num_; }
     [[nodiscard]] constexpr T den() const noexcept { return den_; }
-
-    [[nodiscard]] constexpr Rational reciprocal() const { return Rational(den_, num_); }
-
-    [[nodiscard]] std::string to_string() const {
-        if (den_ == T{1}) {
-            return std::format("{}", num_);
-        }
-        return std::format("{}/{}", num_, den_);
-    }
 
     // --------------------------------
     // (Rational, Rational) arithmetics
@@ -425,30 +444,6 @@ class Rational {
             throw std::invalid_argument("Rational: division by zero");
         }
         return Rational(num_ * other.den(), den_ * other.num());
-    }
-
-    // -------------------
-    // Compound assignment
-    // -------------------
-
-    constexpr Rational& operator+=(Rational other) {
-        *this = *this + other;
-        return *this;
-    }
-
-    constexpr Rational& operator-=(Rational other) {
-        *this = *this - other;
-        return *this;
-    }
-
-    constexpr Rational& operator*=(Rational other) {
-        *this = *this * other;
-        return *this;
-    }
-
-    constexpr Rational& operator/=(Rational other) {
-        *this = *this / other;
-        return *this;
     }
 
     // -------------------------------------
@@ -499,18 +494,32 @@ class Rational {
         return Rational<U>(lhs) / rhs;
     }
 
+    // -------------------
+    // Compound assignment
+    // -------------------
+
     template <std::integral U>
-    [[nodiscard]] constexpr Rational pow(U exponent) const {
-        if (exponent == U{}) {
-            if (*this == T{}) {
-                throw std::invalid_argument("Rational::pow: 0^0 is undefined");
-            }
-            return Rational(T{1});
-        }
-        if (exponent < U{}) {
-            return reciprocal().pow(-exponent);
-        }
-        return Rational(ipow(num_, exponent), ipow(den_, exponent));
+    constexpr Rational& operator+=(Rational<U> other) {
+        *this = *this + other;
+        return *this;
+    }
+
+    template <std::integral U>
+    constexpr Rational& operator-=(Rational<U> other) {
+        *this = *this - other;
+        return *this;
+    }
+
+    template <std::integral U>
+    constexpr Rational& operator*=(Rational<U> other) {
+        *this = *this * other;
+        return *this;
+    }
+
+    template <std::integral U>
+    constexpr Rational& operator/=(Rational<U> other) {
+        *this = *this / other;
+        return *this;
     }
 
     // -----------
@@ -529,6 +538,7 @@ class Rational {
 
     template <std::integral U>
     constexpr std::strong_ordering operator<=>(Rational<U> other) const noexcept {
+        // Beware of overflow here!
         return num_ * other.den() <=> other.num() * den_;
     }
 
@@ -538,6 +548,36 @@ class Rational {
     }
 
     [[nodiscard]] explicit constexpr operator bool() const noexcept { return num_ != T{}; }
+
+    // --------------------------
+    // Additional math operations
+    // --------------------------
+
+    [[nodiscard]] constexpr bool is_integral() const noexcept { return den_ == T{1}; }
+
+    [[nodiscard]] constexpr Rational reciprocal() const { return Rational(den_, num_); }
+
+    [[nodiscard]] constexpr Rational abs() const noexcept {
+        if constexpr (std::signed_integral<T>) {
+            return Rational(std::abs(num_), den_);
+        } else {
+            return *this;
+        }
+    }
+
+    template <std::integral U>
+    [[nodiscard]] constexpr Rational pow(U exponent) const {
+        if (exponent == U{}) {
+            if (*this == T{}) {
+                throw std::invalid_argument("Rational::pow: 0^0 is undefined");
+            }
+            return Rational(T{1});
+        }
+        if (exponent < U{}) {
+            return reciprocal().pow(-exponent);
+        }
+        return Rational(ipow(num_, exponent), ipow(den_, exponent));
+    }
 
   private:
     constexpr void normalize() noexcept {
@@ -558,6 +598,10 @@ class Rational {
     T den_{1};
 };
 
+// CTAD: allow constructing Rational objects from mixed types
+template <std::integral NUM, std::integral DEN>
+Rational(NUM, DEN) -> Rational<std::common_type_t<NUM, DEN>>;
+
 // Combined concept for number-like types
 template <typename T>
 concept number = std::integral<T> || std::floating_point<T> || requires { typename T::number_tag; };
@@ -568,24 +612,404 @@ constexpr T sign(T x) {
     return (x > T{}) - (x < T{});
 }
 
-}  // namespace helper
+// Matrix type in row-major order, dynamically sized
+template <number T>
+class Matrix {
+  public:
+    using value_type = T;
+
+    // Default ctor: constructs an empty 0x0 matrix
+    Matrix() = default;
+
+    // 3-param ctor: constructs nrows x ncols matrix filled with `value`
+    explicit Matrix(std::size_t nrows, std::size_t ncols, T value = T{})
+        : nrows_(nrows), ncols_(ncols), data_(nrows * ncols, value) {}
+
+    // Cross-type ctor
+    template <number U>
+    explicit Matrix(Matrix<U> const& other) : Matrix(other.nrows(), other.ncols()) {
+        auto& mat = *this;
+        for (std::size_t i = 0; i < nrows_; i++) {
+            auto dst = mat.row(i);
+            auto src = other.row(i);
+            for (std::size_t j = 0; j < ncols_; j++) {
+                dst[j] = src[j];
+            }
+        }
+    }
+
+    // Construct from columns
+    template <typename Cols>
+    static Matrix from_cols(Cols const& cols) {
+        std::span outer{cols};
+        if (outer.empty()) {
+            return Matrix{};
+        }
+        auto first = std::span{outer[0]};
+        using U = typename decltype(first)::value_type;
+        const std::size_t ncols = outer.size();
+        const std::size_t nrows = first.size();
+        std::vector<std::span<const U>> colspans;
+        colspans.reserve(ncols);
+        for (std::size_t j = 0; j < ncols; j++) {
+            std::span col{outer[j]};
+            if (col.size() != nrows) {
+                throw std::invalid_argument(
+                    std::format("Matrix::from_cols: column {} has size {}, expected {}", j, col.size(), nrows)
+                );
+            }
+            colspans.push_back(col);
+        }
+        Matrix mat(nrows, ncols);
+        for (std::size_t i = 0; i < nrows; i++) {
+            auto rr = mat.row(i);
+            for (std::size_t j = 0; j < ncols; j++) {
+                rr[j] = colspans[j][i];  // T ← U conversion
+            }
+        }
+        return mat;
+    }
+
+    // Construct from single column
+    template <typename Col>
+    static Matrix from_col(Col const& col) {
+        const std::array cols{std::span{col}};
+        return from_cols(cols);
+    }
+
+    // Construct from rows
+    template <typename Rows>
+    static Matrix from_rows(Rows const& rows) {
+        std::span outer{rows};
+        if (outer.empty()) {
+            return Matrix{};
+        }
+        auto first = std::span{outer[0]};
+        using U = typename decltype(first)::value_type;
+        const std::size_t nrows = outer.size();
+        const std::size_t ncols = first.size();
+        std::vector<std::span<const U>> rowspans;
+        rowspans.reserve(nrows);
+        for (std::size_t i = 0; i < nrows; i++) {
+            std::span row{outer[i]};
+            if (row.size() != ncols) {
+                throw std::invalid_argument(
+                    std::format("Matrix::from_rows: row {} has size {}, expected {}", i, row.size(), ncols)
+                );
+            }
+            rowspans.push_back(row);
+        }
+        Matrix mat(nrows, ncols);
+        for (std::size_t i = 0; i < nrows; i++) {
+            auto rr = mat.row(i);
+            auto src = rowspans[i];
+            for (std::size_t j = 0; j < ncols; j++) {
+                rr[j] = src[j];  // T ← U conversion
+            }
+        }
+        return mat;
+    }
+
+    // Construct from single row
+    template <typename Row>
+    static Matrix from_row(Row const& row) {
+        const std::array rows{std::span{row}};
+        return from_rows(rows);
+    }
+
+    [[nodiscard]] constexpr std::size_t nrows() const noexcept { return nrows_; }
+    [[nodiscard]] constexpr std::size_t ncols() const noexcept { return ncols_; }
+    [[nodiscard]] constexpr bool empty() const noexcept { return nrows_ == 0 || ncols_ == 0; }
+    [[nodiscard]] std::size_t size() const noexcept { return data_.size(); }
+
+    // Element access: (i, j) in row-major order
+    [[nodiscard]] T& operator()(std::size_t i, std::size_t j) noexcept {
+        assert(i < nrows_ && j < ncols_);
+        return data_[i * ncols_ + j];
+    }
+    [[nodiscard]] T const& operator()(std::size_t i, std::size_t j) const noexcept {
+        assert(i < nrows_ && j < ncols_);
+        return data_[i * ncols_ + j];
+    }
+
+    // Row view
+    [[nodiscard]] std::span<T> row(std::size_t i) noexcept {
+        assert(i < nrows_);
+        return std::span<T>(data_).subspan(i * ncols_, ncols_);
+    }
+    [[nodiscard]] std::span<const T> row(std::size_t i) const noexcept {
+        assert(i < nrows_);
+        return std::span<const T>(data_).subspan(i * ncols_, ncols_);
+    }
+
+    // Raw data access
+    [[nodiscard]] std::vector<T> const& data() const noexcept { return data_; }
+    [[nodiscard]] std::vector<T>& data() noexcept { return data_; }
+
+    // ---------------
+    // Math operations
+    // ---------------
+
+    // Matrix-matrix multiplication
+    template <number U>
+    [[nodiscard]] auto operator*(Matrix<U> const& rhs) const {
+        using V = decltype(T{} * U{});
+        const auto& lhs = *this;
+        if (lhs.ncols_ != rhs.nrows()) {
+            throw std::invalid_argument(
+                std::format(
+                    "Matrix::operator*: dimension mismatch ({}x{}) * ({}x{})",
+                    lhs.nrows_,
+                    lhs.ncols_,
+                    rhs.nrows(),
+                    rhs.ncols()
+                )
+            );
+        }
+        Matrix<V> out(lhs.nrows_, rhs.ncols(), V{});
+        const std::size_t rhs_ncols = rhs.ncols();
+        for (std::size_t i = 0; i < lhs.nrows_; i++) {
+            auto out_row = out.row(i);
+            auto lhs_row = lhs.row(i);
+            for (std::size_t k = 0; k < lhs.ncols_; k++) {
+                const T lhsik = lhs_row[k];
+                if (lhsik == T{}) {
+                    continue;
+                }
+                auto rhs_row = rhs.row(k);
+                for (std::size_t j = 0; j < rhs_ncols; j++) {
+                    out_row[j] += lhsik * rhs_row[j];
+                }
+            }
+        }
+        return out;
+    }
+
+    // In-place matrix-matrix multiplication
+    template <number U>
+    Matrix& operator*=(Matrix<U> const& rhs) {
+        const auto& lhs = *this;
+        *this = Matrix<T>(lhs * rhs);
+        return *this;
+    }
+
+    // Matrix-scalar multiplication
+    template <number S>
+    [[nodiscard]] auto operator*(S scalar) const {
+        using V = decltype(T{} * S{});
+        const auto& lhs = *this;
+        Matrix<V> out(lhs.nrows_, lhs.ncols_, V{});
+        for (std::size_t i = 0; i < lhs.nrows_; i++) {
+            auto out_row = out.row(i);
+            auto lhs_row = lhs.row(i);
+            for (std::size_t j = 0; j < lhs.ncols_; j++) {
+                out_row[j] = lhs_row[j] * scalar;
+            }
+        }
+        return out;
+    }
+
+    // Scalar-matrix multiplication
+    template <number S>
+    [[nodiscard]] friend auto operator*(S scalar, Matrix const& rhs) {
+        return rhs * scalar;
+    }
+
+    // In-place multiplication by scalar
+    template <number S>
+    Matrix& operator*=(S scalar) {
+        const T factor{scalar};
+        for (T& x : data_) {
+            x *= factor;
+        }
+        return *this;
+    }
+
+    // --------------------------------
+    // Other matrix specific operations
+    // -------------------------------
+
+    // Return autmented matrix [*this | other]
+    template <number U>
+    [[nodiscard]] Matrix augment_right(Matrix<U> const& other) const {
+        const auto& mat = *this;
+        if (mat.nrows_ != other.nrows()) {
+            throw std::invalid_argument(
+                std::format("Matrix::augment_right: nrows mismatch ({} vs {})", mat.nrows_, other.nrows())
+            );
+        }
+        Matrix out(mat.nrows_, mat.ncols_ + other.ncols(), T{});
+        const std::size_t lhs_ncols = mat.ncols_;
+        const std::size_t rhs_ncols = other.ncols();
+        for (std::size_t i = 0; i < mat.nrows_; i++) {
+            auto dst = out.row(i);
+            auto lhs = mat.row(i);
+            auto rhs = other.row(i);
+            for (std::size_t j = 0; j < lhs_ncols; j++) {
+                dst[j] = lhs[j];
+            }
+            for (std::size_t j = 0; j < rhs_ncols; j++) {
+                dst[lhs_ncols + j] = rhs[j];  // T ← U conversion
+            }
+        }
+        return out;
+    }
+
+    // ------------------------
+    // Reduced row echelon form
+    // ------------------------
+
+    struct PivotInfo {
+        static constexpr std::size_t npos = std::numeric_limits<std::size_t>::max();
+        std::size_t rank{};
+        std::vector<std::size_t> pivot_col_of_row{};  // size = nrows, npos if no pivot in row
+        std::vector<std::size_t> pivot_row_of_col{};  // size = ncols, npos if column is free
+        PivotInfo() = default;
+        explicit PivotInfo(std::size_t nrows, std::size_t ncols)
+            : pivot_col_of_row(nrows, npos), pivot_row_of_col(ncols, npos) {}
+    };
+
+    // Swap two rows
+    void swap_rows(std::size_t i_a, std::size_t i_b) noexcept {
+        assert(i_a < nrows_ && i_b < nrows_);
+        if (i_a == i_b) {
+            return;
+        }
+        auto row_a = row(i_a);
+        auto row_b = row(i_b);
+        for (std::size_t j = 0; j < ncols_; j++) {
+            std::swap(row_a[j], row_b[j]);
+        }
+    }
+
+    // Multiply row by factor (throws if factor == 0)
+    void scale_row(std::size_t i, T factor) {
+        assert(i < nrows_);
+        if (factor == T{}) {
+            throw std::invalid_argument("Matrix::scale_row: factor cannot be zero");
+        }
+        for (T& x : row(i)) {
+            x *= factor;
+        }
+    }
+
+    // Add scaled row to another row
+    void add_scaled_row(std::size_t dst, std::size_t src, T factor) noexcept {
+        assert(dst < nrows_ && src < nrows_);
+        if (factor == T{}) {
+            return;
+        }
+        auto d = row(dst);
+        auto s = row(src);
+        for (std::size_t j = 0; j < ncols_; j++) {
+            d[j] += s[j] * factor;
+        }
+    }
+
+    // In-place RREF (Gauss–Jordan), returns pivot metadata
+    [[nodiscard]] PivotInfo rref() {
+        static_assert(!std::integral<T>, "Matrix::rref requires non-truncating division; prefer Matrix<Rational<...>>");
+        PivotInfo info(nrows_, ncols_);
+        if (empty()) {
+            return info;
+        }
+        auto& mat = *this;
+        std::size_t i{};
+        for (std::size_t j = 0; j < ncols_ && i < nrows_; j++) {
+            // Find pivot row i_p >= i with mat(i_p, j) != 0
+            std::size_t i_p = i;
+            while (i_p < nrows_ && mat(i_p, j) == T{}) {
+                i_p++;
+            }
+            if (i_p == nrows_) {
+                continue;  // free column
+            }
+            swap_rows(i, i_p);
+            // Normalize pivot to 1
+            const T pivot = mat(i, j);
+            scale_row(i, T{1} / pivot);
+            assert(mat(i, j) == T{1});
+            // Eliminate column j in all other rows
+            for (std::size_t ii = 0; ii < nrows_; ii++) {
+                if (ii == i) {
+                    continue;
+                }
+                const T f = mat(ii, j);
+                if (f != T{}) {
+                    add_scaled_row(ii, i, -f);
+                    assert(mat(ii, j) == T{});
+                }
+            }
+            info.pivot_col_of_row[i] = j;
+            info.pivot_row_of_col[j] = i;
+            info.rank++;
+            i++;
+        }
+        return info;
+    }
+
+  private:
+    std::size_t nrows_{};
+    std::size_t ncols_{};
+    std::vector<T> data_{};
+};
+
+}  // namespace aoc
 
 // Specializations of std templates
 namespace std {
 
 // Hashing of Rational objects
 template <std::integral T>
-struct hash<helper::Rational<T>> {
-    [[nodiscard]] constexpr std::size_t operator()(helper::Rational<T> const& rational) const noexcept {
-        return helper::ArrayHash{}({rational.num(), rational.den()});
+struct hash<aoc::Rational<T>> {
+    [[nodiscard]] constexpr std::size_t operator()(aoc::Rational<T> const& rational) const noexcept {
+        return aoc::ArrayHash{}({rational.num(), rational.den()});
     }
 };
 
 // Formatting of Rational objects
-template <class T>
-struct formatter<helper::Rational<T>> : std::formatter<std::string> {
-    auto format(helper::Rational<T> const& rational, auto& ctx) const {
-        return std::formatter<std::string>::format(rational.to_string(), ctx);
+template <std::integral T>
+struct formatter<aoc::Rational<T>> {
+    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    template <typename FormatContext>
+    auto format(aoc::Rational<T> const& r, FormatContext& ctx) const {
+        if (r.den() == T{1}) {
+            return std::format_to(ctx.out(), "{}", r.num());
+        }
+        return std::format_to(ctx.out(), "{}/{}", r.num(), r.den());
+    }
+};
+
+template <aoc::number T>
+struct formatter<aoc::Matrix<T>> {
+    constexpr auto parse(std::format_parse_context& ctx) { return ctx.begin(); }
+    template <typename FormatContext>
+    auto format(aoc::Matrix<T> const& mat, FormatContext& ctx) const {
+        const std::size_t nrows = mat.nrows();
+        const std::size_t ncols = mat.ncols();
+        if (nrows == 0 || ncols == 0) {
+            return std::format_to(ctx.out(), "[]");
+        }
+        auto out = ctx.out();
+        out = std::format_to(out, "[");
+        for (std::size_t i = 0; i < nrows; i++) {
+            if (i != 0) {
+                out = std::format_to(out, "\n ");
+            }
+            out = std::format_to(out, "[");
+            for (std::size_t j = 0; j < ncols; j++) {
+                if (j != 0) {
+                    out = std::format_to(out, ", ");
+                }
+                out = std::format_to(out, "{}", mat(i, j));
+            }
+            out = std::format_to(out, "]");
+            if (i + 1 != nrows) {
+                out = std::format_to(out, ",");
+            }
+        }
+        out = std::format_to(out, "]");
+        return out;
     }
 };
 

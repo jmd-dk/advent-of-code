@@ -126,8 +126,8 @@ Int solve_two(const Data& data) {
         }
         // Perpendicular direction, pointing away from polygon (CCW assumes)
         std::array<Int, 2> perp{
-            +helper::sign(dy_next),
-            -helper::sign(dx_next),
+            +aoc::sign(dy_next),
+            -aoc::sign(dx_next),
         };
         // Determine which dimension is fixed
         std::size_t fixed_dim = (perp[0] == 0);
@@ -139,10 +139,10 @@ Int solve_two(const Data& data) {
         Int cross = dx_prev * dy_next - dy_prev * dx_next;
         if (cross < 0) {
             Stripe& curr = invalid_stripes[fixed_dim].back();
-            curr.min += helper::sign(curr.max - curr.min);
+            curr.min += aoc::sign(curr.max - curr.min);
             if (!invalid_stripes[range_dim].empty()) {
                 Stripe& prev = invalid_stripes[range_dim].back();
-                prev.max += helper::sign(prev.min - prev.max);
+                prev.max += aoc::sign(prev.min - prev.max);
             }
         }
     }
@@ -178,16 +178,15 @@ Int solve_two(const Data& data) {
                 Int x_max = std::max(xi, xj);
                 Int y_min = std::min(yi, yj);
                 Int y_max = std::max(yi, yj);
-                bool invalid = (
-                       intersects_stripes(invalid_stripes[0], y_min, x_min, x_max)  // bottom side
-                    || intersects_stripes(invalid_stripes[0], y_max, x_min, x_max)  // top side
-                    || intersects_stripes(invalid_stripes[1], x_min, y_min, y_max)  // left side
-                    || intersects_stripes(invalid_stripes[1], x_max, y_min, y_max)  // right side
+                bool invalid = (intersects_stripes(invalid_stripes[0], y_min, x_min, x_max)     // bottom side
+                                || intersects_stripes(invalid_stripes[0], y_max, x_min, x_max)  // top side
+                                || intersects_stripes(invalid_stripes[1], x_min, y_min, y_max)  // left side
+                                || intersects_stripes(invalid_stripes[1], x_max, y_min, y_max)  // right side
                 );
                 if (!invalid) {
                     Int width = (x_max - x_min) + 1;
                     Int hight = (y_max - y_min) + 1;
-                    co_yield width * hight;
+                    co_yield width* hight;
                 }
             }
         }
@@ -196,6 +195,6 @@ Int solve_two(const Data& data) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

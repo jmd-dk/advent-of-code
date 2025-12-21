@@ -77,6 +77,6 @@ Int solve_two(Data data) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

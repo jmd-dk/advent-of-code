@@ -45,7 +45,7 @@ Int solve_one(const Data& banks) {
 Int solve_two(const Data& banks) {
     constexpr Int num_batteries{12};
     using Key = std::array<std::size_t, 2>;
-    using Cache = std::unordered_map<Key, Int, helper::ArrayHash>;
+    using Cache = std::unordered_map<Key, Int, aoc::ArrayHash>;
     auto compute_max_joltage =
         [](this const auto& self, const Bank& bank, Cache& cache, std::size_t remaining, std::size_t index = 0) -> Int {
         if (remaining == 0) {
@@ -62,7 +62,7 @@ Int solve_two(const Data& banks) {
             return it->second;
         }
         // Option A: Accept digit at this index
-        Int pow10 = helper::ipow(Int{10}, remaining - 1);
+        Int pow10 = aoc::ipow(Int{10}, remaining - 1);
         Int joltageA = bank[index] * pow10 + self(bank, cache, remaining - 1, index + 1);
         // Option B: Skip this index
         Int joltageB = self(bank, cache, remaining, index + 1);
@@ -81,6 +81,6 @@ Int solve_two(const Data& banks) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

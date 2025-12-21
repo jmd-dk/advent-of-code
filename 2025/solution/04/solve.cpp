@@ -10,7 +10,7 @@
 
 using Int = std::int32_t;
 using Coord = std::array<Int, 2>;
-using Data = std::unordered_set<Coord, helper::ArrayHash>;
+using Data = std::unordered_set<Coord, aoc::ArrayHash>;
 
 // Reading in data
 Data read() {
@@ -90,6 +90,6 @@ Int solve_two(Data map) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }

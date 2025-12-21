@@ -89,7 +89,7 @@ Int solve_one(const Data& data) {
         auto nums = problem.digit_blocks | std::views::transform(interpret_digits);
         return std::ranges::fold_left(std::views::drop(nums, 1), *std::ranges::begin(nums), problem.operation);
     };
-    return helper::sum(data | std::views::transform(solve_problem));
+    return aoc::sum(data | std::views::transform(solve_problem));
 }
 
 // Solution to part two
@@ -119,6 +119,6 @@ Int solve_two(Data data) {
 
 // Solve
 int main() {
-    helper::analyze(read, solve_one);
-    helper::analyze(read, solve_two);
+    aoc::analyze(read, solve_one);
+    aoc::analyze(read, solve_two);
 }
