@@ -170,9 +170,9 @@ Int solve_two(const Data& data) {
         return false;
     };
     return std::ranges::max([&]() -> std::generator<Int> {
-        for (std::size_t i = 0; i < data.size(); i++) {
+        for (std::size_t i{}; i < data.size(); i++) {
             auto [xi, yi] = data[i];
-            for (std::size_t j = i + 1; j < data.size(); j++) {
+            for (std::size_t j{i + 1}; j < data.size(); j++) {
                 auto [xj, yj] = data[j];
                 Int x_min = std::min(xi, xj);
                 Int x_max = std::max(xi, xj);

@@ -59,8 +59,8 @@ std::size_t solve_one(const Data& data) {
     constexpr std::size_t num_largest = 3;
     // Heapify all coordinate pairs over their (squared) distances
     aoc::MaxHeap<CoordPair> heap(num_connections);
-    for (std::size_t i = 0; i < data.size(); i++) {
-        for (std::size_t j = i + 1; j < data.size(); j++) {
+    for (std::size_t i{}; i < data.size(); i++) {
+        for (std::size_t j{i + 1}; j < data.size(); j++) {
             heap.emplace(i, j, data);
         }
     }
@@ -81,8 +81,8 @@ Int solve_two(const Data& data) {
     std::vector<CoordPair> coord_pairs{};
     assert(!data.empty());
     coord_pairs.reserve(data.size() * (data.size() - 1) / 2);
-    for (std::size_t i = 0; i < data.size(); i++) {
-        for (std::size_t j = i + 1; j < data.size(); j++) {
+    for (std::size_t i{}; i < data.size(); i++) {
+        for (std::size_t j{i + 1}; j < data.size(); j++) {
             coord_pairs.emplace_back(i, j, data);
         }
     }

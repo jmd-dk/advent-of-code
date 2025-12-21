@@ -103,9 +103,9 @@ Int solve_two(Data data) {
         for (auto& digits : digit_blocks_transposed) {
             digits.resize(num_rows);
         }
-        for (std::size_t i = 0; i < num_rows; i++) {
+        for (std::size_t i{}; i < num_rows; i++) {
             const Digits& digits{problem.digit_blocks[i]};
-            for (std::size_t j = 0; j < digits.size(); j++) {
+            for (std::size_t j{}; j < digits.size(); j++) {
                 digit_blocks_transposed[j][i] = digits[j];
             }
         }

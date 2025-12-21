@@ -99,10 +99,10 @@ Int solve_two(const Data& data) {
         const std::size_t ncols = buttons.size();
         std::vector<std::vector<Int>> cols;
         cols.reserve(ncols);
-        for (std::size_t j = 0; j < ncols; j++) {
+        for (std::size_t j{}; j < ncols; j++) {
             std::vector<Int> col(nrows);
             for (std::size_t i : buttons[j]) {
-                col[i] = Int{1};
+                col[i] = 1;
             }
             cols.push_back(std::move(col));
         }
@@ -113,7 +113,7 @@ Int solve_two(const Data& data) {
             const std::size_t ncols = buttons.size();
             std::vector<std::size_t> free_cols{};
             std::unordered_map<std::size_t, Int> free_max{};
-            for (std::size_t j = 0; j < ncols; j++) {
+            for (std::size_t j{}; j < ncols; j++) {
                 if (pivot_info.pivot_row_of_col[j] == Matrix::PivotInfo::npos) {
                     free_cols.push_back(j);
                     Int max_value = std::numeric_limits<Int>::max();
@@ -146,7 +146,7 @@ Int solve_two(const Data& data) {
             }
         };
         // Check whether any general (rational) solution exists
-        for (std::size_t i = 0; i < mat_aug.nrows(); i++) {
+        for (std::size_t i{}; i < mat_aug.nrows(); i++) {
             std::size_t j = pivot_info.pivot_col_of_row[i];
             if ((j >= ncols || j == Matrix::PivotInfo::npos) && mat_aug(i, ncols) != Rational{}) {
                 return std::nullopt;
@@ -155,7 +155,7 @@ Int solve_two(const Data& data) {
         // Collect pivots (row, col)
         std::vector<std::pair<std::size_t, std::size_t>> pivots{};
         pivots.reserve(pivot_info.rank);
-        for (std::size_t i = 0; i < mat_aug.nrows(); i++) {
+        for (std::size_t i{}; i < mat_aug.nrows(); i++) {
             std::size_t j_p = pivot_info.pivot_col_of_row[i];
             if (j_p < ncols && j_p != Matrix::PivotInfo::npos) {
                 pivots.emplace_back(i, j_p);
@@ -174,12 +174,12 @@ Int solve_two(const Data& data) {
                 return std::nullopt;
             }
             std::ranges::fill(solution, 0);
-            for (std::size_t k = 0; k < free_cols.size(); k++) {
+            for (std::size_t k{}; k < free_cols.size(); k++) {
                 solution[free_cols[k]] = free_values[k];
             }
             for (const auto [i, j_p] : pivots) {
                 Rational x = mat_aug(i, ncols);
-                for (std::size_t k = 0; k < free_cols.size(); k++) {
+                for (std::size_t k{}; k < free_cols.size(); k++) {
                     x -= mat_aug(i, free_cols[k]) * free_values[k];
                 }
                 if (!x.is_integral() || x < Int{}) {

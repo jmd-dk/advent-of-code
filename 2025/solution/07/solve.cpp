@@ -25,7 +25,7 @@ Data read() {
     Coord start{};
     std::ifstream file{"input"};
     std::string line{};
-    for (Int i = 0; std::getline(file, line); i++) {
+    for (Int i{}; std::getline(file, line); i++) {
         for (auto [_j, c] : std::views::enumerate(line)) {
             Int j = static_cast<Int>(_j);
             switch (c) {
@@ -50,7 +50,7 @@ Int solve_one(const Data& data) {
     CoordSet splitters_visited{};
     auto emit_tachyon_beam = [&](this const auto& self, const Coord& start_coord) {
         Int j = start_coord[1];
-        for (Int i = start_coord[0]; i < map.shape[0]; i++) {
+        for (Int i{start_coord[0]}; i < map.shape[0]; i++) {
             Coord coord{i, j};
             if (map.splitters.contains(coord)) {
                 if (splitters_visited.contains(coord)) {
@@ -74,7 +74,7 @@ Int solve_two(const Data& data) {
     std::unordered_map<Int, Int> beams{
         {start[1], 1},
     };
-    for (Int i = start[0]; i < map.shape[0]; i++) {
+    for (Int i{start[0]}; i < map.shape[0]; i++) {
         std::unordered_map<Int, Int> beams_next{};
         for (auto [j, multiplicity] : beams) {
             if (map.splitters.contains({i, j})) {

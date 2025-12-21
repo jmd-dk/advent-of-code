@@ -53,7 +53,7 @@ Int solve_two(const Data& ranges) {
     for (const Range& range : ranges) {
         for (Int id{range.first}; id <= range.second; id++) {
             std::string str = std::to_string(id);
-            for (std::size_t i = 1; i <= str.size() / 2; i++) {
+            for (std::size_t i{1}; i <= str.size() / 2; i++) {
                 if (str.size() % i) {
                     continue;
                 }
