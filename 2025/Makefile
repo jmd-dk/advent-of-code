@@ -34,7 +34,7 @@ $(puzzles):
 docker = $(addprefix docker-,$(puzzles))
 docker: $(docker)
 $(docker):
-	@docker run --rm -v "$$PWD:/mnt" -w /mnt gcc make $(subst docker-,,$@)
+	@docker run --rm -v "$$PWD:/mnt" -w /mnt gcc:15.2 make $(subst docker-,,$@)
 
 format_cmd := clang-format -i -style='{BasedOnStyle: LLVM, IndentWidth: 4, ContinuationIndentWidth: 4, AccessModifierOffset: -2, ColumnLimit: 120, PointerAlignment: Left, AlwaysBreakTemplateDeclarations: true, AlignAfterOpenBracket: BlockIndent, BinPackArguments: false, BinPackParameters: false, Cpp11BracedListStyle: true, IndentCaseLabels: true, InsertTrailingCommas: Wrapped, SpacesBeforeTrailingComments: 2, PenaltyBreakAssignment: 250, PenaltyBreakBeforeFirstCallParameter: 400, PenaltyBreakString: 300}'
 format = $(addprefix format-,$(puzzles))
