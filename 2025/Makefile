@@ -1,3 +1,5 @@
+SHELL = /usr/bin/env bash
+
 MAKEFLAGS += --no-print-directory
 
 ifeq ($(origin CXX),default)
@@ -22,12 +24,17 @@ all: puzzles
 
 puzzles: $(addprefix puzzle-,$(puzzles))
 puzzle-%: solution/%/solve
-	@cd $(dir $<) && ./$(notdir $<)
+	@( cd $(dir $<) && ./$(notdir $<); ) || { rm -f $< && $(MAKE) $@; }
 .PRECIOUS: solution/%/solve
 solution/%/solve: solution/%/solve.cpp helper.hpp $(MAKEFILE_LIST)
-	$(CXX) $(CXXFLAGS) -I. $< -o $@
+	@$(CXX) $(CXXFLAGS) -I. $< -o $@
 $(puzzles):
 	@$(MAKE) puzzle-$@
+
+docker = $(addprefix docker-,$(puzzles))
+docker: $(docker)
+$(docker):
+	@docker run --rm -v "$$PWD:/mnt" -w /mnt gcc make $(subst docker-,,$@)
 
 format_cmd := clang-format -i -style='{BasedOnStyle: LLVM, IndentWidth: 4, ContinuationIndentWidth: 4, AccessModifierOffset: -2, ColumnLimit: 120, PointerAlignment: Left, AlwaysBreakTemplateDeclarations: true, AlignAfterOpenBracket: BlockIndent, BinPackArguments: false, BinPackParameters: false, Cpp11BracedListStyle: true, IndentCaseLabels: true, InsertTrailingCommas: Wrapped, SpacesBeforeTrailingComments: 2, PenaltyBreakAssignment: 250, PenaltyBreakBeforeFirstCallParameter: 400, PenaltyBreakString: 300}'
 format = $(addprefix format-,$(puzzles))

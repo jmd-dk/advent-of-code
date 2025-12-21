@@ -48,8 +48,11 @@ can also be [retrieved automatically](#-makefile).
 
 ## 🤖 Makefile
 With the [`Makefile`](Makefile) you can do the following:
-* `make`: Run all solutions.
-  * `make <n>`: Run solution for day `n`.
+* `make`: Build and run all solutions.
+  * `make <n>`: Build and run solution for day `n`.
+* `make docker`: Build and run all solutions
+  through a pre-specified Docker image.
+  * `make docker-<n>`: Build and run solution for day `n` through Docker.
 * `make input`: Download all `input` files from
   [adventofcode.com](https://adventofcode.com/2025/). For this to work, you
   need to have logged into [Advent of Code](https://adventofcode.com)
@@ -64,25 +67,7 @@ With the [`Makefile`](Makefile) you can do the following:
 > In the above commands, valid values of `<n>` always use two digits
 > (so `01` instead of just `1`).
 
-
-</br>
-
-## 🐋 Docker
-The solutions may be run through [Docker](https://www.docker.com/). Before
-doing so, make sure to [download](#-makefile) the `input` files.
-
-To e.g. run day 1:
-```bash
-cd advent-of-code/2025/
-docker run --rm -v "${PWD}:/mnt" -w /mnt gcc make 01
-```
-To run all puzzles:
-```bash
-cd advent-of-code/2025/
-docker run --rm -v "${PWD}:/mnt" -w /mnt gcc make
-```
-
 > [!NOTE]
-> Remember to [clean](#-makefile) when switching between
+> Remember to `clean` when switching between
 > building with and without Docker.
 
