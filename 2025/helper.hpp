@@ -12,6 +12,7 @@
 #include <generator>
 #include <iostream>
 #include <limits>
+#include <memory>
 #include <numeric>
 #include <ostream>
 #include <print>
@@ -121,6 +122,15 @@ auto analyze(
     );
     std::cout << std::flush;
     return result;
+}
+
+// Lookup functions for std::unordered_map and std::map
+template <typename Map, typename Key>
+auto lookup(Map& map, const Key& key) -> decltype(std::addressof(map.begin()->second)) {
+    if (auto it = map.find(key); it != map.end()) {
+        return std::addressof(it->second);
+    }
+    return nullptr;
 }
 
 // Hash function for std::array
