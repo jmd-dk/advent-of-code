@@ -14,6 +14,8 @@
 
 #include "helper.hpp"
 
+namespace day10 {
+
 using Int = std::int32_t;
 using Lights = std::vector<std::uint8_t>;
 using Button = std::vector<std::size_t>;
@@ -226,8 +228,10 @@ Int solve_two(const Data& data) {
     return aoc::sum(data | std::views::transform(find_minimum_button_presses));
 }
 
+}  // namespace day10
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day10::read, day10::solve_one);
+    aoc::analyze(day10::read, day10::solve_two);
 }

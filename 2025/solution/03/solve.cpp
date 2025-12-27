@@ -10,6 +10,8 @@
 
 #include "helper.hpp"
 
+namespace day03 {
+
 using Int = std::uint64_t;
 using Bank = std::vector<Int>;
 using Data = std::vector<Bank>;
@@ -79,8 +81,10 @@ Int solve_two(const Data& banks) {
     return sum;
 }
 
+}  // namespace day03
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day03::read, day03::solve_one);
+    aoc::analyze(day03::read, day03::solve_two);
 }

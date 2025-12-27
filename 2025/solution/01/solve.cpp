@@ -8,6 +8,8 @@
 
 #include "helper.hpp"
 
+namespace day01 {
+
 using Int = std::int32_t;
 using Data = std::vector<Int>;
 
@@ -66,8 +68,10 @@ Int solve_two(const Data& rotations) {
     return zeros;
 }
 
+}  // namespace day01
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day01::read, day01::solve_one);
+    aoc::analyze(day01::read, day01::solve_two);
 }

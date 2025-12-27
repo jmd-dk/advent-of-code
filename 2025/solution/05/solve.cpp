@@ -8,6 +8,8 @@
 
 #include "helper.hpp"
 
+namespace day05 {
+
 using Int = std::int64_t;
 struct Range {
     Int bgn{};
@@ -75,8 +77,10 @@ Int solve_two(Data data) {
     return num_fresh;
 }
 
+}  // namespace day05
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day05::read, day05::solve_one);
+    aoc::analyze(day05::read, day05::solve_two);
 }

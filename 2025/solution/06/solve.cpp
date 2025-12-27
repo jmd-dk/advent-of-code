@@ -11,6 +11,8 @@
 
 #include "helper.hpp"
 
+namespace day06 {
+
 using Int = std::int64_t;
 using Operation = std::function<Int(Int, Int)>;
 using DigitPlaceholder = std::optional<Int>;
@@ -117,8 +119,10 @@ Int solve_two(Data data) {
     return solve_one(data);
 }
 
+}  // namespace day06
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day06::read, day06::solve_one);
+    aoc::analyze(day06::read, day06::solve_two);
 }

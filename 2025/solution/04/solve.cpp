@@ -8,6 +8,8 @@
 
 #include "helper.hpp"
 
+namespace day04 {
+
 using Int = std::int32_t;
 using Coord = std::array<Int, 2>;
 using Data = std::unordered_set<Coord, aoc::ArrayHash>;
@@ -88,8 +90,10 @@ Int solve_two(Data map) {
     return numOri - static_cast<Int>(map.size());
 }
 
+}  // namespace day04
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day04::read, day04::solve_one);
+    aoc::analyze(day04::read, day04::solve_two);
 }

@@ -14,6 +14,8 @@
 
 #include "helper.hpp"
 
+namespace day09 {
+
 using Int = std::int64_t;
 using Coord = std::array<Int, 2>;
 using Data = std::vector<Coord>;
@@ -193,8 +195,10 @@ Int solve_two(const Data& data) {
     }());
 }
 
+}  // namespace day09
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day09::read, day09::solve_one);
+    aoc::analyze(day09::read, day09::solve_two);
 }

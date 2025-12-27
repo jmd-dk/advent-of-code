@@ -11,6 +11,8 @@
 
 #include "helper.hpp"
 
+namespace day02 {
+
 using Int = std::uint64_t;
 using Range = std::pair<Int, Int>;
 using Data = std::vector<Range>;
@@ -67,8 +69,10 @@ Int solve_two(const Data& ranges) {
     return sum;
 }
 
+}  // namespace day02
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day02::read, day02::solve_one);
+    aoc::analyze(day02::read, day02::solve_two);
 }

@@ -10,6 +10,8 @@
 
 #include "helper.hpp"
 
+namespace day07 {
+
 using Int = std::int64_t;
 using Coord = std::array<Int, 2>;
 using CoordSet = std::unordered_set<Coord, aoc::ArrayHash>;
@@ -89,8 +91,10 @@ Int solve_two(const Data& data) {
     return aoc::sum(std::views::values(beams));
 }
 
+}  // namespace day07
+
 // Solve
 int main() {
-    aoc::analyze(read, solve_one);
-    aoc::analyze(read, solve_two);
+    aoc::analyze(day07::read, day07::solve_one);
+    aoc::analyze(day07::read, day07::solve_two);
 }
