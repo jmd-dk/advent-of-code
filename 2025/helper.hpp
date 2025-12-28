@@ -101,7 +101,7 @@ auto analyze(
         }
     }
     // Print out results
-    constexpr int width{34};
+    constexpr int width{33};
     std::string checkmark{" "};
     if (0 < part && part - 1 < answers.size()) {
         if (std::format("{}", result) == answers[part - 1]) {

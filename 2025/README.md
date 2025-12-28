@@ -13,7 +13,7 @@ puzzles, written in **C++** (≥ 26)*
 [🌟](solution/09/solve.cpp)
 [🌟](solution/10/solve.cpp)
 [🌟](solution/11/solve.cpp)
-[⚫](solution/12/solve.cpp)
+[🌟](solution/12/solve.cpp)
 
 <img width="330" alt="screenshot" src="https://github.com/user-attachments/assets/29d14906-a016-42ad-85e9-4af96bea1177" />
 
